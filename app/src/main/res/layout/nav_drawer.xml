@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <!--    android:paddingTop="32dp">-->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:background="@drawable/headerbackground">
+
+        <ImageView
+            android:id="@+id/ivProfileImage"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="bottom"
+            android:background="@drawable/logo_background"
+            android:src="@drawable/eatwelllogo"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.08"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.275"
+            android:contentDescription="@string/profile_picture" />
+
+        <TextView
+            android:id="@+id/tvUserName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginStart="10dp"
+            android:autoSizeMaxTextSize="20sp"
+            android:autoSizeMinTextSize="16sp"
+            android:autoSizeStepGranularity="2sp"
+            android:autoSizeTextType="uniform"
+            android:fontFamily="@font/lora_font"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@+id/ivProfileImage"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.23"
+            app:layout_constraintWidth="wrap_content"
+            tools:targetApi="o" />
+
+        <TextView
+            android:id="@+id/tvUserEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:autoSizeMaxTextSize="20sp"
+            android:autoSizeMinTextSize="12sp"
+            android:autoSizeStepGranularity="2sp"
+            android:autoSizeTextType="uniform"
+            android:fontFamily="@font/lora_font"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@+id/ivProfileImage"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.47"
+            app:layout_constraintWidth="wrap_content"
+            tools:targetApi="o" />
+
+        <!--        <ImageView-->
+        <!--            android:id="@+id/imageView2"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginEnd="8dp"-->
+        <!--            android:src="@drawable/ic_close"-->
+        <!--            android:tint="@color/white"-->
+        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="parent"-->
+        <!--            app:layout_constraintVertical_bias="0.5" />-->
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/nav_profile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="14dp"
+        android:layout_marginTop="14dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:drawablePadding="8dp"
+            android:fontFamily="@font/lora_font"
+            android:text="@string/profile"
+            android:textColor="@color/gray"
+            app:drawableStartCompat="@drawable/ic_user" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/nav_settings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="14dp"
+        android:layout_marginTop="14dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:drawablePadding="8dp"
+            android:fontFamily="@font/lora_font"
+            android:text="@string/settings"
+            android:textColor="@color/gray"
+            app:drawableStartCompat="@drawable/ic_settings" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/nav_share"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="14dp"
+        android:layout_marginTop="14dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:drawablePadding="8dp"
+            android:fontFamily="@font/lora_font"
+            android:text="@string/share"
+            android:textColor="@color/gray"
+            app:drawableStartCompat="@drawable/ic_share" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/nav_about"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="14dp"
+        android:layout_marginTop="14dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:drawablePadding="8dp"
+            android:fontFamily="@font/lora_font"
+            android:text="@string/about_us"
+            android:textColor="@color/gray"
+            app:drawableStartCompat="@drawable/ic_about" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="14dp"
+        android:background="@color/gray"/>
+
+    <LinearLayout
+        android:id="@+id/nav_logout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="14dp"
+        android:layout_marginTop="14dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:drawablePadding="8dp"
+            android:fontFamily="@font/lora_font"
+            android:text="@string/logout"
+            android:textColor="@color/gray"
+            app:drawableStartCompat="@drawable/ic_logout" />
+    </LinearLayout>
+
+</LinearLayout>

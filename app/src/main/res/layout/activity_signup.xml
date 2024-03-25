@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="24dp"
+    android:orientation="vertical"
+    tools:context=".ContinueActivity">
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnContinue"
+        android:layout_width="297dp"
+        android:layout_height="48dip"
+        android:layout_margin="24dp"
+        android:background="@drawable/button_animation"
+        android:fontFamily="@font/lora_font"
+        android:maxWidth="78dip"
+        android:minHeight="48dip"
+        android:nestedScrollingEnabled="false"
+        android:onClick="onContinueToSignUp"
+        android:text="@string/continue_text"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/big_text_size"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvWelcome" />
+
+    <TextView
+        android:id="@+id/tvWelcome"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lora_font"
+        android:text="@string/welcome_text"
+        android:textAlignment="center"
+        android:textColor="@color/gray"
+        android:textSize="@dimen/big_text_size"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.277" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

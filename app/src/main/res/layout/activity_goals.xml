@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".GoalsActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/eatwellgreen"
+        android:elevation="4dp"
+        android:foregroundTint="@color/white"
+        android:popupTheme="@style/Theme.CalorieCounter"
+        android:theme="@style/Theme.AppCompat.Light"
+        app:subtitleTextColor="@color/white"
+        app:title="Edit Your Goals"
+        app:titleMarginStart="100dp"
+        app:titleTextAppearance="@style/Theme.CalorieCounter"
+        app:titleTextColor="@color/white" />
+    <!--        app:navigationIcon="@drawable/ic_back"-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!--   calorie goal   -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="28dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:autofillHints=""
+                android:background="@drawable/custom_input_text"
+                android:drawablePadding="8dp"
+                android:fontFamily="@font/lora_font"
+                android:gravity="start|center_vertical"
+                android:hint="@string/daily_calorie_goal"
+                android:minHeight="48dp"
+                android:padding="8dp"
+                android:text="@string/daily_calorie_goal"
+                android:textColor="@color/gray"
+                android:textColorHint="@color/gray"
+                android:textSize="18sp"
+                app:drawableStartCompat="@drawable/ic_calories_g"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="0.55" />
+
+            <TextView
+                android:id="@+id/tvCalorieGoal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_weight="0.3"
+                android:autofillHints=""
+                android:background="@drawable/custom_input_text"
+                android:drawablePadding="8dp"
+                android:fontFamily="@font/lora_font"
+                android:gravity="end|center_vertical"
+                android:hint="@string/daily_calorie_goal"
+                android:minHeight="48dp"
+                android:padding="8dp"
+                android:text="2000kcal"
+                android:textColor="@color/gray"
+                android:textSize="@dimen/text_size"
+                app:drawableEndCompat="@drawable/ic_edit"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="0.5" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!--    exercise goal    -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="28dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:autofillHints=""
+                android:background="@drawable/custom_input_text"
+                android:drawablePadding="8dp"
+                android:fontFamily="@font/lora_font"
+                android:gravity="start|center_vertical"
+                android:hint="@string/daily_calorie_goal"
+                android:minHeight="48dp"
+                android:padding="8dp"
+                android:text="@string/exercise_goal"
+                android:textColor="@color/gray"
+                android:textColorHint="@color/gray"
+                android:textSize="@dimen/text_size"
+                app:drawableStartCompat="@drawable/ic_exercise_g"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="0.55" />
+
+            <TextView
+                android:id="@+id/tvExerciseGoal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_weight="0.3"
+                android:autofillHints=""
+                android:background="@drawable/custom_input_text"
+                android:drawablePadding="8dp"
+                android:fontFamily="@font/lora_font"
+                android:gravity="end|center_vertical"
+                android:hint="@string/daily_calorie_goal"
+                android:minHeight="48dp"
+                android:padding="8dp"
+                android:text="30min"
+                android:textColor="@color/gray"
+                android:textSize="@dimen/text_size"
+                app:drawableEndCompat="@drawable/ic_edit"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="0.5" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!--    weight goal   -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="28dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:autofillHints=""
+                android:background="@drawable/custom_input_text"
+                android:drawablePadding="8dp"
+                android:fontFamily="@font/lora_font"
+                android:gravity="start|center_vertical"
+                android:hint="@string/daily_calorie_goal"
+                android:minHeight="48dp"
+                android:padding="8dp"
+                android:text="Weight Goal"
+                android:textColor="@color/gray"
+                android:textColorHint="@color/gray"
+                android:textSize="@dimen/text_size"
+                app:drawableStartCompat="@drawable/ic_scale_g"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="0.55" />
+
+            <TextView
+                android:id="@+id/tvWeightGoal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_weight="0.3"
+                android:autofillHints=""
+                android:background="@drawable/custom_input_text"
+                android:drawablePadding="8dp"
+                android:fontFamily="@font/lora_font"
+                android:gravity="end|center_vertical"
+                android:hint="@string/daily_calorie_goal"
+                android:minHeight="48dp"
+                android:padding="8dp"
+                android:text="54kg"
+                android:textColor="@color/gray"
+                android:textSize="@dimen/text_size"
+                app:drawableEndCompat="@drawable/ic_edit"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="0.5" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <!--    water goal    -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="28dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="0dp"
+                android:layout_weight="0.5"
+                android:background="@drawable/custom_input_text"
+                android:drawablePadding="8dp"
+                android:fontFamily="@font/lora_font"
+                android:gravity="start|center_vertical"
+                android:hint="@string/daily_calorie_goal"
+                android:minHeight="48dp"
+                android:padding="8dp"
+                android:text="@string/water_goal"
+                android:textColor="@color/gray"
+                android:textColorHint="@color/gray"
+                android:textSize="@dimen/text_size"
+                app:drawableStartCompat="@drawable/ic_water_g"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="0.55" />
+
+            <TextView
+                android:id="@+id/tvWaterGoal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:background="@drawable/custom_input_text"
+                android:drawablePadding="8dp"
+                android:fontFamily="@font/lora_font"
+                android:gravity="end|center_vertical"
+                android:hint="@string/daily_calorie_goal"
+                android:minHeight="48dp"
+                android:padding="8dp"
+                android:text="2000ml"
+                android:textColor="@color/gray"
+                android:textSize="@dimen/text_size"
+                app:drawableEndCompat="@drawable/ic_edit"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="0.5" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!--    step goal    -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="28dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:autofillHints=""
+                android:background="@drawable/custom_input_text"
+                android:drawablePadding="8dp"
+                android:fontFamily="@font/lora_font"
+                android:gravity="start|center_vertical"
+                android:hint="@string/daily_calorie_goal"
+                android:minHeight="48dp"
+                android:padding="8dp"
+                android:text="Step Goal"
+                android:textColor="@color/gray"
+                android:textColorHint="@color/gray"
+                android:textSize="@dimen/text_size"
+                app:drawableStartCompat="@drawable/ic_step_g"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="0.55" />
+
+            <TextView
+                android:id="@+id/tvStepGoal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_weight="0.3"
+                android:autofillHints=""
+                android:background="@drawable/custom_input_text"
+                android:drawablePadding="8dp"
+                android:fontFamily="@font/lora_font"
+                android:gravity="end|center_vertical"
+                android:hint="@string/daily_calorie_goal"
+                android:minHeight="48dp"
+                android:padding="8dp"
+                android:text="6000st"
+                android:textColor="@color/gray"
+                android:textSize="@dimen/text_size"
+                app:drawableEndCompat="@drawable/ic_edit"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="0.5" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnSave"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="48dp"
+            android:background="@drawable/button_animation"
+            android:fontFamily="@font/lora_font"
+            android:maxWidth="78dip"
+            android:minWidth="48dip"
+            android:onClick="onSaveProfileData"
+            android:text="Save"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size" />
+
+    </LinearLayout>
+</LinearLayout>

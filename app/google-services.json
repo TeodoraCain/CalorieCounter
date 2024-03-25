@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "446774772113",
+    "project_id": "eatwell-285c9",
+    "storage_bucket": "eatwell-285c9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:446774772113:android:bdf72d5076a4834e431a30",
+        "android_client_info": {
+          "package_name": "com.example.caloriecounter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "446774772113-qhs9sst5bubr3tc5icsl63vjkd8erjnj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC44Ru6ZwB9WkMQ0xaPPMvO21RDgrJftaU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "446774772113-qhs9sst5bubr3tc5icsl63vjkd8erjnj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

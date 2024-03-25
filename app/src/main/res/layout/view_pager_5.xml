@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:padding="8dp"
+    tools:visibility="visible">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="56dp"
+        android:layout_marginBottom="14dp"
+        android:backgroundTint="@color/eatwellgreenlight"
+        android:fontFamily="@font/lora_font"
+        android:padding="24dp"
+        android:text="@string/create_account_text"
+        android:textAlignment="center"
+        android:textColor="@color/gray"
+        android:textSize="@dimen/big_text_size" />
+
+    <!--    name    -->
+    <EditText
+        android:id="@+id/etName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="50dp"
+        android:autofillHints=""
+        android:background="@drawable/custom_input_text"
+        android:drawableStart="@drawable/ic_user"
+        android:drawablePadding="8dp"
+        android:fontFamily="@font/lora_font"
+        android:hint="@string/name"
+        android:inputType="text"
+        android:minHeight="48dp"
+        android:padding="8dp"
+        android:textColor="@color/gray"
+        android:textColorHint="@color/gray"
+        android:textSize="@dimen/text_size" />
+
+    <!--    email   -->
+    <EditText
+        android:id="@+id/etEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="50dp"
+        android:autofillHints=""
+        android:background="@drawable/custom_input_text"
+        android:drawableStart="@drawable/ic_email"
+        android:drawablePadding="8dp"
+        android:fontFamily="@font/lora_font"
+        android:hint="@string/email"
+        android:inputType="textEmailAddress"
+        android:minHeight="48dp"
+        android:padding="8dp"
+        android:textColor="@color/gray"
+        android:textColorHint="@color/gray"
+        android:textSize="@dimen/text_size" />
+
+    <!--    password    -->
+    <EditText
+        android:id="@+id/etPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="50dp"
+        android:autofillHints=""
+        android:background="@drawable/custom_input_text"
+        android:drawableStart="@drawable/ic_password"
+        android:drawableEnd="@drawable/ic_visibility_off"
+        android:drawablePadding="8dp"
+        android:fontFamily="@font/lora_font"
+        android:hint="@string/password"
+        android:inputType="textPassword"
+        android:longClickable="false"
+        android:minHeight="48dp"
+        android:padding="8dp"
+        android:textColor="@color/gray"
+        android:textColorHint="@color/gray"
+        android:textSize="@dimen/text_size" />
+
+    <LinearLayout
+        android:id="@+id/grPasswordRules"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="16dp"
+            android:animateLayoutChanges="true"
+            android:orientation="horizontal">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardOne"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                app:cardBackgroundColor="@color/lightgray"
+                app:cardCornerRadius="25dp">
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/ic_check"
+                    android:contentDescription="@string/check" />
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="8dp"
+                android:fontFamily="@font/lora_font"
+                android:gravity="center|start"
+                android:text="@string/at_least_8_characters"
+                android:textColor="@color/gray" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="24dp"
+            android:orientation="horizontal">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardTwo"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                app:cardBackgroundColor="@color/lightgray"
+                app:cardCornerRadius="25dp">
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/ic_check"
+                    android:contentDescription="@string/check" />
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="8dp"
+                android:fontFamily="@font/lora_font"
+
+                android:gravity="center|start"
+                android:text="@string/at_least_one_uppercase"
+                android:textColor="@color/gray" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="24dp"
+            android:orientation="horizontal">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardThree"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                app:cardBackgroundColor="@color/lightgray"
+                app:cardCornerRadius="25dp">
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/ic_check"
+                    android:contentDescription="@string/check" />
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="8dp"
+                android:fontFamily="@font/lora_font"
+                android:gravity="center|start"
+                android:text="@string/at_least_one_number"
+                android:textColor="@color/gray" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="24dp"
+            android:orientation="horizontal">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardFour"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                app:cardBackgroundColor="@color/lightgray"
+                app:cardCornerRadius="25dp">
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/ic_check"
+                    android:contentDescription="@string/check" />
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="8dp"
+                android:fontFamily="@font/lora_font"
+                android:gravity="center|start"
+                android:text="@string/at_least_one_symbol"
+                android:textColor="@color/gray" />
+
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

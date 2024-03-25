@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:padding="8dp"
+    tools:visibility="visible">
+<!--    tools:context=".onboarding.ViewPagerFragment"-->
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="56dp"
+        android:layout_marginBottom="14dp"
+        android:backgroundTint="@color/eatwellgreenlight"
+        android:fontFamily="@font/lora_font"
+        android:padding="24dp"
+        android:text="@string/gender_text"
+        android:textAlignment="center"
+        android:textColor="@color/gray"
+        android:textSize="@dimen/big_text_size" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp">
+
+        <RadioGroup
+            android:id="@+id/rgGenderInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.5">
+
+            <RadioButton
+                android:id="@+id/rbFemale"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="4dp"
+                android:layout_weight="0.4"
+                android:background="@drawable/select_button"
+                android:button="@color/eatwellgreenlight"
+                android:clickable="true"
+                android:focusable="true"
+                android:fontFamily="@font/lora_font"
+                android:text="@string/female_text"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size" />
+
+            <RadioButton
+                android:id="@+id/rbMale"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="4dp"
+                android:layout_weight="0.4"
+                android:background="@drawable/select_button"
+                android:button="@color/eatwellgreenlight"
+                android:fontFamily="@font/lora_font"
+                android:text="@string/male_text"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size" />
+        </RadioGroup>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:layout_marginBottom="14dp"
+        android:backgroundTint="@color/eatwellgreenlight"
+        android:fontFamily="@font/lora_font"
+        android:padding="16dp"
+        android:text="@string/age_question"
+        android:textAlignment="center"
+        android:textColor="@color/gray"
+        android:textSize="@dimen/big_text_size" />
+
+    <EditText
+        android:id="@+id/etDOB"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:autofillHints=""
+        android:background="@drawable/custom_input_text"
+        android:ems="10"
+        android:focusable="false"
+        android:hint="@string/age_hint"
+        android:inputType="date"
+        android:minHeight="48dp"
+        android:textAlignment="center"
+        android:textColor="@color/gray" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:layout_marginBottom="14dp"
+        android:backgroundTint="@color/eatwellgreenlight"
+        android:fontFamily="@font/lora_font"
+        android:padding="16dp"
+        android:text="@string/country_text"
+        android:textAlignment="center"
+        android:textColor="@color/gray"
+        android:textSize="@dimen/big_text_size" />
+
+    <Spinner
+        android:id="@+id/spCountryInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="16dp"
+        android:background="@drawable/spinner_style"
+        android:contentDescription="@string/choose_your_country"
+        android:fadeScrollbars="true"
+        android:focusable="auto"
+        android:gravity="center"
+        android:minHeight="48dp"
+        android:padding="16dp"
+        android:prompt="@string/choose_your_country"
+        android:textAlignment="center" />
+
+</LinearLayout>

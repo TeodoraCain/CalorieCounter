@@ -1,0 +1,29 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.CalorieCounter" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/eatwellgreen</item>
+        <item name="colorPrimaryVariant">@color/eatwellgreenlight</item>
+        <item name="colorOnPrimary">@color/eatwellgreen</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/eatwellgreenmediumlight</item>
+        <item name="colorSecondaryVariant">@color/eatwellgreenlight</item>
+        <item name="colorOnSecondary">@color/eatwellgreen</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">@color/eatwellgreen</item>
+        <!-- Customize your theme here. -->
+        <item name="android:fontFamily">@font/lora_font</item>
+        <item name="android:textSize">@dimen/text_size</item>
+        <item name="bottomAppBarStyle">@style/BottomAppBarLight</item>
+        <item name="cardViewStyle">@style/CardView.DarkTheme</item>
+    </style>
+
+    <style name="TextAppearance.Button" parent="TextAppearance.AppCompat.Button">
+
+    </style>
+
+    <style name="DialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_in</item>
+        <item name="android:windowExitAnimation">@anim/slide_out</item>
+    </style>
+</resources>

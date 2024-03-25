@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:padding="8dp"
+    tools:visibility="visible">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="56dp"
+        android:layout_marginBottom="14dp"
+        android:backgroundTint="@color/eatwellgreenlight"
+        android:fontFamily="@font/lora_font"
+        android:padding="24dp"
+        android:text="@string/height_question"
+        android:textAlignment="center"
+        android:textColor="@color/gray"
+        android:textSize="@dimen/big_text_size" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp">
+
+        <EditText
+            android:id="@+id/etHeightInput"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="16dp"
+            android:layout_weight="0.4"
+            android:autofillHints=""
+            android:background="@drawable/custom_input_text"
+            android:ems="10"
+            android:fontFamily="@font/lora_font"
+            android:hint="@string/height_hint"
+            android:inputType="numberDecimal"
+            android:minHeight="48dp"
+            android:textAlignment="center"
+            android:textColor="@color/gray"
+            android:textColorHint="@color/gray"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/spHeightUnit"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.6" />
+
+        <Spinner
+            android:id="@+id/spHeightUnit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="16dp"
+            android:layout_weight="0.2"
+            android:autofillHints=""
+            android:background="@drawable/custom_simple_spinner"
+            android:contentDescription="@string/height"
+            android:inputType="text"
+            android:minHeight="48dp"
+            android:textAlignment="center"
+            android:textColor="@color/gray"
+            android:textColorHint="@color/lightgray"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.2"
+            app:layout_constraintStart_toEndOf="@+id/etHeightInput"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="72dp"
+        android:layout_marginBottom="14dp"
+        android:backgroundTint="@color/eatwellgreenlight"
+        android:fontFamily="@font/lora_font"
+        android:padding="16dp"
+        android:text="@string/weight_question"
+        android:textAlignment="center"
+        android:textColor="@color/gray"
+        android:textSize="@dimen/big_text_size" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="14dp"
+        android:padding="8dp">
+
+        <EditText
+            android:id="@+id/etWeightInput"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="16dp"
+            android:layout_weight="0.4"
+            android:autofillHints=""
+            android:background="@drawable/custom_input_text"
+            android:ems="10"
+            android:fontFamily="@font/lora_font"
+            android:hint="@string/weight_hint"
+            android:inputType="numberDecimal"
+            android:minHeight="48dp"
+            android:textAlignment="center"
+            android:textColor="@color/gray"
+            android:textColorHint="@color/gray"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/spWeightUnit"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.6" />
+
+        <Spinner
+            android:id="@+id/spWeightUnit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="16dp"
+            android:layout_weight="0.2"
+            android:background="@drawable/custom_simple_spinner"
+            android:contentDescription="@string/weight"
+            android:inputType="text"
+            android:minHeight="48dp"
+            android:textAlignment="center"
+            android:textColor="@color/gray"
+            android:textColorHint="@color/lightgray"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.2"
+            app:layout_constraintStart_toEndOf="@+id/etWeightInput"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>

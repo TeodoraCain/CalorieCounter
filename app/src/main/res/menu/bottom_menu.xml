@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:iconTint="@color/eatwellgreenlight"
+        android:id="@+id/home"
+        android:title="Home"
+        android:icon="@drawable/ic_home"/>
+
+<!--    <item-->
+<!--        android:iconTint="@color/eatwellgreenlight"-->
+<!--        android:id="@+id/shorts"-->
+<!--        android:title="Shorts"-->
+<!--        android:icon="@drawable/ic_about"-->
+<!--        />-->
+
+    <item
+        android:iconTint="@color/eatwellgreenlight"
+        android:title=""/>
+
+    <item
+        android:id="@+id/diary"
+        android:iconTint="@color/eatwellgreenlight"
+        android:title="Diary"
+        android:icon="@drawable/ic_about" />
+<!--    <item-->
+<!--        android:iconTint="@color/eatwellgreenlight"-->
+<!--        android:id="@+id/library"-->
+<!--        android:title="Library"-->
+<!--        android:icon="@drawable/ic_check" />-->
+
+</menu>

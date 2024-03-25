@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="encountry">España</string>
+    <string name="choose_your_gender">Elige tu sexo</string>
+    <string name="choose_your_language">Elige tu idioma</string>
+    <string name="fr">FR</string>
+    <string name="ro">RO</string>
+    <string name="es">ES</string>
+    <string name="us">EN</string>
+    <string name="female">Femenino</string>
+    <string name="male">Masculino</string>
+</resources>

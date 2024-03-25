@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.fragments.exercise.ExerciseRecordFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="16dp">
+
+        <!--    <TextView-->
+        <!--        android:id="@+id/tvExercise"-->
+        <!--        android:layout_width="match_parent"-->
+        <!--        android:layout_height="wrap_content"-->
+        <!--        android:layout_gravity="center"-->
+        <!--        android:layout_marginHorizontal="16dp"-->
+        <!--        android:autofillHints=""-->
+        <!--        android:layout_marginTop="50dp"-->
+        <!--        android:drawablePadding="8dp"-->
+        <!--        android:fontFamily="@font/lora_font"-->
+        <!--        android:gravity="center"-->
+        <!--        android:minHeight="48dp"-->
+        <!--        android:padding="8dp"-->
+        <!--        android:text="Exercise name"-->
+        <!--        android:textColor="@color/gray"-->
+        <!--        android:textColorHint="@color/gray"-->
+        <!--        android:visibility="invisible"-->
+        <!--        android:textSize="18sp"-->
+        <!--        app:layout_constraintEnd_toEndOf="parent"-->
+        <!--        app:layout_constraintStart_toStartOf="parent"-->
+        <!--        app:layout_constraintTop_toTopOf="parent"-->
+        <!--        app:layout_constraintVertical_bias="0.5" />-->
+
+        <TextView
+            android:id="@+id/tvMinutes"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_weight="0.1"
+            android:autofillHints=""
+            android:background="@drawable/custom_input_text"
+            android:drawablePadding="8dp"
+            android:fontFamily="@font/lora_font"
+            android:gravity="start|center_vertical"
+            android:minHeight="48dp"
+            android:padding="8dp"
+            android:text="@string/minutes_performed"
+            android:textColor="@color/gray"
+            android:textColorHint="@color/gray"
+            android:textSize="@dimen/text_size"
+            app:drawableStartCompat="@drawable/ic_time"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.039"
+            app:layout_constraintWidth_percent="0.7" />
+
+        <EditText
+            android:id="@+id/etMinutes"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="16dp"
+            android:layout_weight="0.1"
+            android:autofillHints=""
+            android:background="@drawable/custom_input_text"
+            android:drawablePadding="8dp"
+            android:inputType="number"
+            android:fontFamily="@font/lora_font"
+            android:gravity="end|center_vertical"
+            android:hint="@string/e_g_30"
+            android:minHeight="48dp"
+            android:padding="8dp"
+            android:textColor="@color/gray"
+            android:textSize="@dimen/text_size"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.039"
+            app:layout_constraintWidth_percent="0.5" />
+
+        <TextView
+            android:id="@+id/tvCalories"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_weight="0.1"
+            android:autofillHints=""
+            android:background="@drawable/custom_input_text"
+            android:drawablePadding="8dp"
+            android:fontFamily="@font/lora_font"
+            android:gravity="start|center_vertical"
+            android:minHeight="48dp"
+            android:padding="8dp"
+            android:text="@string/calories_burned"
+            android:textColor="@color/gray"
+            android:textColorHint="@color/gray"
+            android:textSize="@dimen/text_size"
+            app:drawableStartCompat="@drawable/ic_calories"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvMinutes"
+            app:layout_constraintWidth_percent="0.7" />
+
+        <TextView
+            android:id="@+id/tvCaloriesBurned"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_weight="0.3"
+            android:autofillHints=""
+            android:background="@drawable/custom_input_text"
+            android:drawablePadding="8dp"
+            android:fontFamily="@font/lora_font"
+            android:gravity="end|center_vertical"
+            android:minHeight="48dp"
+            android:padding="8dp"
+            android:text="@string/_0"
+            android:textColor="@color/gray"
+            android:textSize="@dimen/text_size"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvMinutes"
+            app:layout_constraintWidth_percent="0.55" />
+
+<!--        <ImageView-->
+<!--            android:layout_width="50dp"-->
+<!--            android:layout_height="50dp"-->
+<!--            android:layout_marginEnd="16dp"-->
+<!--            android:layout_marginTop="16dp"-->
+<!--            android:src="@drawable/ic_check_ewg"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/tvWeightGoal">-->
+
+<!--        </ImageView>-->
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawerLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".DashboardActivity">
+    <!--    tools:openDrawer="start">-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <include layout="@layout/toolbar" />
+        <!--        <androidx.appcompat.widget.Toolbar-->
+        <!--            android:id="@+id/toolbar"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="56dp"-->
+        <!--            android:background="@color/eatwellgreen"-->
+        <!--            android:elevation="4dp"-->
+        <!--            android:foregroundTint="@color/white"-->
+        <!--            android:popupTheme="@style/Theme.CalorieCounter"-->
+        <!--            android:theme="@style/Theme.AppCompat.Light"-->
+        <!--            app:subtitleTextColor="@color/white"-->
+        <!--            app:titleMarginStart="100dp"-->
+        <!--            app:titleTextColor="@color/white">-->
+
+        <!--            <ImageView-->
+        <!--                android:id="@+id/ivNotifications"-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_gravity="end"-->
+        <!--                android:layout_margin="16dp"-->
+        <!--                android:layout_marginEnd="20dp"-->
+        <!--                android:src="@drawable/ic_notifications"-->
+        <!--                android:contentDescription="@string/notifications" />-->
+
+        <!--        </androidx.appcompat.widget.Toolbar>-->
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:id="@+id/frameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginVertical="55dp"
+            android:backgroundTint="@color/white" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.material.bottomappbar.BottomAppBar
+                android:id="@+id/bottomAppBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|start"
+                android:background="@color/eatwellgreenlight"
+                app:fabCradleMargin="10dp"
+                app:fabCradleRoundedCornerRadius="50dp">
+
+                <com.google.android.material.bottomnavigation.BottomNavigationView
+                    android:id="@+id/bottomNavigationView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="21dp"
+                    android:layout_marginEnd="20dp"
+                    android:backgroundTintMode="screen"
+                    android:paddingHorizontal="10dp"
+                    app:itemIconTint="@color/eatwellgreen"
+                    app:itemTextColor="@color/eatwellgreen"
+                    app:labelVisibilityMode="labeled"
+                    app:menu="@menu/bottom_menu" />
+
+            </com.google.android.material.bottomappbar.BottomAppBar>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/white"
+                android:contentDescription="@string/add"
+                android:src="@drawable/ic_add"
+                app:layout_anchor="@id/bottomAppBar"
+                app:maxImageSize="40dp"
+                app:tint="@color/eatwellgreen" />
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </LinearLayout>
+    <!--    <com.google.android.material.navigation.NavigationView-->
+    <!--        android:id="@+id/nav_view"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        android:layout_gravity="start"-->
+    <!--        app:headerLayout="@layout/nav_header"-->
+    <!--        app:itemIconTint="@color/eatwellgreen"-->
+    <!--        app:itemTextColor="@color/gray"-->
+    <!--        app:menu="@menu/nav_menu" />-->
+
+    <RelativeLayout
+        android:layout_width="280dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@color/white">
+
+        <include layout="@layout/nav_drawer" />
+    </RelativeLayout>
+
+
+    <!--        &lt;!&ndash;        style="@style/BottomNavigationDrawerStyle"&ndash;&gt;-->
+
+
+</androidx.drawerlayout.widget.DrawerLayout>
+
+

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ExerciseActivity"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/eatwellgreen"
+        android:elevation="4dp"
+        android:foregroundTint="@color/white"
+        android:popupTheme="@style/Theme.CalorieCounter"
+        android:theme="@style/Theme.AppCompat.Light"
+        app:subtitleTextColor="@color/white"
+        app:title="@string/add_workout"
+        app:titleMarginStart="100dp"
+        app:titleTextAppearance="@style/Theme.CalorieCounter"
+        app:titleTextColor="@color/white" />
+
+    <EditText
+        android:id="@+id/etSearchExercise"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="21dp"
+        android:autofillHints=""
+        android:background="@drawable/custom_input_text"
+        android:drawableStart="@drawable/ic_search"
+        android:drawablePadding="8dp"
+        android:fontFamily="@font/lora_font"
+        android:hint="@string/search_for_exercises"
+        android:inputType="text"
+        android:minHeight="48dp"
+        android:padding="8dp"
+        android:textColor="@color/gray"
+        android:textColorHint="@color/gray"
+        android:textSize="@dimen/text_size"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.12" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvExercises"
+        android:layout_width="409dp"
+        android:layout_height="740dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="21dp"
+        android:layout_marginEnd="1dp"
+        android:layout_marginBottom="1dp" />
+
+
+</LinearLayout>
