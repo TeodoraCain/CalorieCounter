@@ -1,5 +1,6 @@
 package com.example.caloriecounter.model.DAO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Recipe {
@@ -9,6 +10,10 @@ public class Recipe {
     private double calories;
 
     public Recipe() {
+        this.name = "";
+        this.ingredients = new ArrayList<>();
+        this.serving_size = 0;
+        this.calories = 0;
     }
 
     public Recipe(String name, List<Food> ingredients, double serving_size, double calories) {

@@ -11,14 +11,13 @@ import java.util.Calendar;
 
 public class DailyDataDAOImpl implements DailyDataDAO {
     private final DatabaseReference dailyDataDatabaseReference;
-    private final FirebaseAuth firebaseAuth;
-    private final FirebaseUser firebaseUser;
+    private String userID;
 
     public DailyDataDAOImpl() {
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseUser = firebaseAuth.getCurrentUser();
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
         assert firebaseUser != null;
-        String userID = firebaseUser.getUid();
+        userID = firebaseUser.getUid();
         dailyDataDatabaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(userID).child("daily_data").child(getCurrentDate());
     }
 
@@ -49,4 +48,41 @@ public class DailyDataDAOImpl implements DailyDataDAO {
     public Task<Void> delete() {
         return dailyDataDatabaseReference.removeValue();
     }
+
+    @Override
+    public DatabaseReference get(String date) {
+        return FirebaseDatabase.getInstance().getReference().child("users").child(userID).child("daily_data").child(date);
+    }
+
+    @Override
+    public Task<Void> add(DailyData dailyData, String date) {
+        return FirebaseDatabase.getInstance().getReference()
+                .child("users")
+                .child(userID)
+                .child("daily_data")
+                .child(date)
+                .setValue(dailyData);
+    }
+
+    @Override
+    public Task<Void> update(DailyData dailyData, String date) {
+        return FirebaseDatabase.getInstance().getReference()
+                .child("users")
+                .child(userID)
+                .child("daily_data")
+                .child(date)
+                .setValue(dailyData);
+    }
+
+    @Override
+    public Task<Void> delete(DailyData dailyData, String date) {
+        return FirebaseDatabase.getInstance().getReference()
+                .child("users")
+                .child(userID)
+                .child("daily_data")
+                .child(date)
+                .removeValue();
+    }
+
+
 }

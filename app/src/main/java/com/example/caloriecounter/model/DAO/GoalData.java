@@ -12,6 +12,8 @@ public class GoalData {
     private final String RECOMMENDED_EXERCISE_TIME_GOAL = "30";
 
     public GoalData() {
+        this.calorieGoal = "";
+        this.weightGoal = "";
         this.exerciseTimeGoal = RECOMMENDED_EXERCISE_TIME_GOAL;
         this.stepGoal = RECOMMENDED_STEP_GOAL;
         this.waterIntakeGoal = RECOMMENDED_WATER_INTAKE;

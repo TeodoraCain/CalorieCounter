@@ -8,6 +8,9 @@ public class Workout {
     private int minutes;
 
     public Workout() {
+        this.name = "";
+        this.caloriesBurned = 0;
+        this.minutes = 0;
     }
 
     public Workout(String name, int minutes, int caloriesBurned) {

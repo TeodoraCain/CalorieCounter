@@ -94,7 +94,7 @@ public class RegisterActivity extends AppCompatActivity implements ViewPager.OnP
                 assert firebaseUser != null;
                 firebaseUser.updateProfile(profileUpdates);
 
-                UserDetails writeUserDetails = new UserDetails(userInputs);
+                UserDetails writeUserDetails = new UserDetails(userInputs, String.valueOf(calculateBMI()));
                 UserDAO userDao = new UserDAOImpl();
                 userDao.add(writeUserDetails).addOnCompleteListener(task1 -> {
 
@@ -133,6 +133,23 @@ public class RegisterActivity extends AppCompatActivity implements ViewPager.OnP
             }
         });
 
+    }
+
+    private double calculateBMI() {
+        int height =  Integer.parseInt(Objects.requireNonNull(userInputs.get(getString(R.string.height))));
+        double weight = Double.parseDouble(Objects.requireNonNull(userInputs.get(getString(R.string.weight))));
+        String heightUnit = userInputs.get(getString(R.string.heightUnit));
+        String weightUnit = userInputs.get(getString(R.string.weightUnit));
+
+        if (heightUnit.equals("cm") && weightUnit.equals("kg")) {
+            double heightMeters = height / 100.0;
+            return weight / (heightMeters * heightMeters);
+        }
+        if (heightUnit.equals("in") && weightUnit.equals("lbs")) {
+            double heightMeters = height * 0.0254;
+            return (weight / (heightMeters * heightMeters)) * 703;
+        }
+        return 0;
     }
 
     private void calculateGoals(GoalData goalData) {

@@ -2,14 +2,16 @@ package com.example.caloriecounter.model.DAO;
 
 public class Exercise {
     private String name;
-    private String calories;
+    private int calories;
 
     public Exercise() {
+        this.name = "";
+        this.calories = 0;
     }
 
-    public Exercise( String name, int calories) {
+    public Exercise(String name, int calories) {
         this.name = name;
-        this.calories = String.valueOf(calories);
+        this.calories = calories;
     }
 
     public String getName() {
@@ -21,10 +23,10 @@ public class Exercise {
     }
 
     public int getCalories() {
-        return Integer.parseInt(calories);
+        return calories;
     }
 
     public void setCalories(int calories) {
-        this.calories = String.valueOf(calories);
+        this.calories = calories;
     }
 }

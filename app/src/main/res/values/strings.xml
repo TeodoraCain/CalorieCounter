@@ -425,4 +425,8 @@
     <string name="vitamin_a">Vitamin A (IU)</string>
     <string name="vitamin_b6">Vitamin B6 (mg)</string>
     <string name="vitamin_b12">Vitamin B12 (mcg)</string>
+    <string name="previous">Previous</string>
+    <string name="add_food">ADD FOOD</string>
+    <string name="snacks">Snacks</string>
+    <string name="add_exercise">ADD EXERCISE</string>
 </resources>

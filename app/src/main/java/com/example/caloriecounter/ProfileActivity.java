@@ -147,9 +147,9 @@ public class ProfileActivity extends AppCompatActivity implements ChangeProfileI
         if (userDetails != null) {
             String name = user.getDisplayName();
             String email = user.getEmail();
-            String doB = userDetails.dob;
-            gender = userDetails.gender;
-            String country = userDetails.country;
+            String doB = userDetails.getDob();
+            gender = userDetails.getGender();
+            String country = userDetails.getCountry();
 
             tvName.setText(name);
             tvEmail.setText(email);

@@ -22,8 +22,10 @@
             android:layout_height="match_parent">
 
             <ImageView
+                android:id="@+id/ivPrevious"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:contentDescription="@string/previous"
                 android:src="@drawable/ic_previous"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -36,20 +38,242 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:padding="8dp"
-                android:text="04-05-2024"
+                android:textColor="@color/gray"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
+                android:id="@+id/ivNext"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:contentDescription="@string/next"
                 android:src="@drawable/ic_next"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:background="@drawable/custom_input_text"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="10dp"
+        app:cardUseCompatPadding="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginVertical="8dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:text="Calories"
+                    android:textColor="@color/gray"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvTotalCalorieCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="24dp"
+                    android:text="1000/2000 kcal"
+                    android:textColor="@color/gray"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <ProgressBar
+                android:id="@+id/pbTotalCalories"
+                android:layout_width="match_parent"
+                android:layout_height="16dp"
+                android:layout_marginHorizontal="16dp"
+                android:indeterminate="false"
+                android:padding="4dp"
+                android:indeterminateOnly="false"
+                android:progressBackgroundTint="@color/eatwellgreenlight"
+                android:progressDrawable="@drawable/progress_bar" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:text="Protein"
+                    android:textColor="@color/gray"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvTotalProteinCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="24dp"
+                    android:text="85.7/135.0 g"
+                    android:textColor="@color/gray"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <ProgressBar
+                android:id="@+id/pbTotalProtein"
+                android:layout_width="match_parent"
+                android:layout_height="16dp"
+                android:layout_marginHorizontal="16dp"
+                android:indeterminate="false"
+                android:padding="4dp"
+                android:indeterminateOnly="false"
+                android:progress="20"
+                android:progressBackgroundTint="@color/eatwellgreenlight"
+                android:progressDrawable="@drawable/progress_bar" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:text="Carbs"
+                    android:textColor="@color/gray"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvTotalCarbsCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="24dp"
+                    android:text="107.4 / 235.0 g"
+                    android:textColor="@color/gray"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <ProgressBar
+                android:id="@+id/pbTotalCarbs"
+                android:layout_width="match_parent"
+                android:layout_height="16dp"
+                android:layout_marginHorizontal="16dp"
+                android:indeterminate="false"
+                android:padding="4dp"
+                android:indeterminateOnly="false"
+                android:progressBackgroundTint="@color/eatwellgreenlight"
+                android:progressDrawable="@drawable/progress_bar" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:text="Fat"
+                    android:textColor="@color/gray"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvTotalFatCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="24dp"
+                    android:text="50.9 / 80.0 g"
+                    android:textColor="@color/gray"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <ProgressBar
+                android:id="@+id/pbTotalFat"
+                android:layout_width="match_parent"
+                android:layout_height="16dp"
+                android:layout_marginHorizontal="16dp"
+                android:indeterminate="false"
+                android:padding="4dp"
+                android:indeterminateOnly="false"
+                android:progressBackgroundTint="@color/eatwellgreenlight"
+                android:progressDrawable="@drawable/progress_bar" />
+
+        </LinearLayout>
+
+        <!--        <androidx.constraintlayout.widget.ConstraintLayout-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="match_parent">-->
+
+        <!--            <TextView-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_marginStart="10dp"-->
+        <!--                android:layout_marginBottom="8dp"-->
+        <!--                android:text="Fat"-->
+        <!--                android:textColor="@color/gray"-->
+        <!--                android:textSize="14sp"-->
+        <!--                app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--                app:layout_constraintEnd_toEndOf="parent"-->
+        <!--                app:layout_constraintHorizontal_bias=".2"-->
+        <!--                app:layout_constraintStart_toStartOf="parent" />-->
+
+        <!--            <TextView-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_marginStart="5dp"-->
+        <!--                android:layout_marginBottom="8dp"-->
+        <!--                android:text="Protein"-->
+        <!--                android:textColor="@color/gray"-->
+        <!--                android:textSize="14sp"-->
+        <!--                app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--                app:layout_constraintEnd_toEndOf="parent"-->
+        <!--                app:layout_constraintHorizontal_bias=".5"-->
+        <!--                app:layout_constraintStart_toStartOf="parent" />-->
+        <!--           -->
+
+        <!--            <TextView-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_marginStart="5dp"-->
+        <!--                android:layout_marginBottom="8dp"-->
+        <!--                android:text="Sugars"-->
+        <!--                android:textColor="@color/gray"-->
+        <!--                android:textSize="14sp"-->
+        <!--                app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--                app:layout_constraintEnd_toEndOf="parent"-->
+        <!--                app:layout_constraintHorizontal_bias=".8"-->
+        <!--                app:layout_constraintStart_toStartOf="parent" />-->
+        <!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
+
     </androidx.cardview.widget.CardView>
 
     <ScrollView
@@ -89,7 +313,7 @@
 
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="Breakfast"
+                            android:text="@string/breakfast"
                             android:textColor="@color/gray"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -98,6 +322,7 @@
                             android:id="@+id/tvTotalBreakfastCalories"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
+                            android:gravity="end"
                             android:text="@string/_0"
                             android:textColor="@color/gray"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -108,14 +333,16 @@
                     <ListView
                         android:id="@+id/lvBreakfast"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        tools:ignore="NestedScrolling" />
 
                     <TextView
+                        android:id="@+id/addBreakfast"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginVertical="8dp"
                         android:padding="8dp"
-                        android:text="ADD FOOD"
+                        android:text="@string/add_food"
                         android:textColor="@color/eatwellgreen"
                         android:textSize="16sp" />
                 </LinearLayout>
@@ -146,7 +373,7 @@
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="Lunch"
+                            android:text="@string/lunch"
                             android:textColor="@color/gray"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -155,6 +382,7 @@
                             android:id="@+id/tvTotalLunchCalories"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
+                            android:gravity="end"
                             android:text="@string/_0"
                             android:textColor="@color/gray"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -165,14 +393,16 @@
                     <ListView
                         android:id="@+id/lvLunch"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        tools:ignore="NestedScrolling" />
 
                     <TextView
+                        android:id="@+id/addLunch"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginVertical="8dp"
                         android:padding="8dp"
-                        android:text="ADD FOOD"
+                        android:text="@string/add_food"
                         android:textColor="@color/eatwellgreen"
                         android:textSize="16sp" />
                 </LinearLayout>
@@ -203,7 +433,7 @@
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="Dinner"
+                            android:text="@string/dinner"
                             android:textColor="@color/gray"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -212,6 +442,7 @@
                             android:id="@+id/tvTotalDinnerCalories"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
+                            android:gravity="end"
                             android:text="@string/_0"
                             android:textColor="@color/gray"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -222,14 +453,16 @@
                     <ListView
                         android:id="@+id/lvDinner"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        tools:ignore="NestedScrolling" />
 
                     <TextView
+                        android:id="@+id/addDinner"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginVertical="8dp"
                         android:padding="8dp"
-                        android:text="ADD FOOD"
+                        android:text="@string/add_food"
                         android:textColor="@color/eatwellgreen"
                         android:textSize="16sp" />
                 </LinearLayout>
@@ -260,7 +493,7 @@
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="Snacks"
+                            android:text="@string/snacks"
                             android:textColor="@color/gray"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -269,6 +502,7 @@
                             android:id="@+id/tvTotalSnacksCalories"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
+                            android:gravity="end"
                             android:text="@string/_0"
                             android:textColor="@color/gray"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -279,14 +513,16 @@
                     <ListView
                         android:id="@+id/lvSnacks"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        tools:ignore="NestedScrolling" />
 
                     <TextView
+                        android:id="@+id/addSnacks"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginVertical="8dp"
                         android:padding="8dp"
-                        android:text="ADD FOOD"
+                        android:text="@string/add_food"
                         android:textColor="@color/eatwellgreen"
                         android:textSize="16sp" />
                 </LinearLayout>
@@ -326,6 +562,7 @@
                             android:id="@+id/tvTotalExerciseCalories"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
+                            android:gravity="end"
                             android:text="@string/_0"
                             android:textColor="@color/gray"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -335,14 +572,16 @@
                     <ListView
                         android:id="@+id/lvWorkoutHistory"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        tools:ignore="NestedScrolling" />
 
                     <TextView
+                        android:id="@+id/addExercise"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginVertical="8dp"
                         android:padding="8dp"
-                        android:text="ADD EXERCISE"
+                        android:text="@string/add_exercise"
                         android:textColor="@color/eatwellgreen"
                         android:textSize="16sp" />
                 </LinearLayout>

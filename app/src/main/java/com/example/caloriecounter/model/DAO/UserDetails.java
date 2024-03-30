@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 public class UserDetails {
 
-    public String fitnessGoal, activityLevel, height, heightUnit,
+    private String fitnessGoal, activityLevel, height, heightUnit,
             weight, weightUnit, gender, dob, country, bmi, imageUrl;
 
     public UserDetails() {
@@ -26,7 +26,7 @@ public class UserDetails {
         this.imageUrl = imageUrl;
     }
 
-    public UserDetails(HashMap<String, String> userInputs) {
+    public UserDetails(HashMap<String, String> userInputs, String bmi) {
         this.fitnessGoal = userInputs.get("Fitness Goal");
         this.activityLevel = userInputs.get("Activity Level");
         this.height = userInputs.get("Height");
@@ -36,7 +36,7 @@ public class UserDetails {
         this.gender = userInputs.get("Gender");
         this.dob = userInputs.get("DOB");
         this.country = userInputs.get("Country");
-        this.bmi = String.valueOf(calculateBMI());
+        this.bmi = bmi;
     }
 
     public String getImageUrl() {
@@ -45,21 +45,6 @@ public class UserDetails {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
-    }
-
-    private double calculateBMI() {
-        int height = Integer.getInteger(getHeight());
-        double weight = Double.parseDouble(getWeight());
-
-        if (heightUnit.equals("cm") && weightUnit.equals("kg")) {
-            double heightMeters = height / 100.0;
-            return weight / (heightMeters * heightMeters);
-        }
-        if (heightUnit.equals("in") && weightUnit.equals("lbs")) {
-            double heightMeters = height * 0.0254;
-            return (weight / (heightMeters * heightMeters)) * 703;
-        }
-        return 0;
     }
 
     public String getBmi() {

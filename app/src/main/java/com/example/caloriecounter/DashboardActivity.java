@@ -8,8 +8,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
-import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
@@ -25,8 +25,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.caloriecounter.R.id;
-import com.example.caloriecounter.model.DAO.GoalData;
-import com.example.caloriecounter.model.DAO.UserDetails;
 import com.example.caloriecounter.view.fragments.dashboard.DiaryFragment;
 import com.example.caloriecounter.view.fragments.dashboard.HomeFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -39,8 +37,6 @@ public class DashboardActivity extends AppCompatActivity {
     private LinearLayout menu, profile, settings, share, about_us, logout;
     private FirebaseAuth mAuth;
 
-    //data
-    private GoalData goalData;
     // Drawer activity
     private FloatingActionButton floatingActionButton;
     private DrawerLayout drawerLayout;
@@ -54,10 +50,22 @@ public class DashboardActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
+        boolean fragment_flag = getIntent().getBooleanExtra("NAVIGATE_TO_DIARY_FRAGMENT", false);
+        Log.d("NAVGATE", String.valueOf(fragment_flag));
+
         mAuth = FirebaseAuth.getInstance();
 
         init();
         setOnClickListeners();
+        changeDrawerHeader();
+        setBottomNavigation();
+        if (fragment_flag) {
+            replaceFragment(new DiaryFragment());
+        } else {
+            replaceFragment(new HomeFragment());
+        }
+
+
 //        Toolbar toolbar = findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbar);
 
@@ -65,7 +73,6 @@ public class DashboardActivity extends AppCompatActivity {
 //        navigationView.setNavigationItemSelectedListener(this);
         // Initialize Firebase Auth
 
-        changeDrawerHeader();
 
 //        toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_nav, R.string.close_nav);
 //        toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.white));
@@ -76,8 +83,6 @@ public class DashboardActivity extends AppCompatActivity {
 //            getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new HomeFragment()).commit();
 //            navigationView.setCheckedItem(R.id.nav_home);
 //        }
-
-        setBottomNavigation();
 
 
 //        mAuth.signInWithCustomToken(mCustomToken)
@@ -98,11 +103,10 @@ public class DashboardActivity extends AppCompatActivity {
 //                        }
 //                    }
 //                });
-        replaceFragment(new HomeFragment());
+        //
+
+
     }
-
-    private UserDetails userDetails;
-
 
     private void setBottomNavigation() {
         bottomNavigationView.setBackground(null);
@@ -157,39 +161,39 @@ public class DashboardActivity extends AppCompatActivity {
 
         });
 
-        share.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(DashboardActivity.this, FoodItemDisplayActivity.class);
-                startActivity(intent);
-            }
-        });
+//        share.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(DashboardActivity.this, FoodItemDisplayActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
-        LinearLayout eim2 = findViewById(id.nav_eimRss);
-        eim2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(DashboardActivity.this, RssFeederActivity.class);
-                startActivity(intent);
-            }
-        });
-        LinearLayout eim3 = findViewById(id.nav_eimLanguage);
-        eim3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(DashboardActivity.this, LanguageActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        LinearLayout eim4 = findViewById(id.nav_eimFragment);
-        eim4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(DashboardActivity.this, SecondFragment.class);
-                startActivity(intent);
-            }
-        });
+//        LinearLayout eim2 = findViewById(id.nav_eimRss);
+//        eim2.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(DashboardActivity.this, RssFeederActivity.class);
+//                startActivity(intent);
+//            }
+//        });
+//        LinearLayout eim3 = findViewById(id.nav_eimLanguage);
+//        eim3.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(DashboardActivity.this, LanguageActivity.class);
+//                startActivity(intent);
+//            }
+//        });
+//
+//        LinearLayout eim4 = findViewById(id.nav_eimFragment);
+//        eim4.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(DashboardActivity.this, SecondFragment.class);
+//                startActivity(intent);
+//            }
+//        });
 
     }
 
@@ -260,22 +264,22 @@ public class DashboardActivity extends AppCompatActivity {
 
         breakfastLayout.setOnClickListener(v -> {
             dialog.dismiss();
-            startFoodActivity("BREAKFAST");
+            startFoodActivity("Breakfast");
         });
 
         lunchLayout.setOnClickListener(v -> {
             dialog.dismiss();
-            startFoodActivity("LUNCH");
+            startFoodActivity("Lunch");
         });
 
         dinnerLayout.setOnClickListener(v -> {
             dialog.dismiss();
-            startFoodActivity("DINNER");
+            startFoodActivity("Dinner");
         });
 
         snackLayout.setOnClickListener(v -> {
             dialog.dismiss();
-            startFoodActivity("SNACK");
+            startFoodActivity("Snacks");
         });
 
         cancelButton.setOnClickListener(view -> dialog.dismiss());

@@ -1,5 +1,6 @@
 package com.example.caloriecounter.model.DAO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DailyData {
@@ -14,6 +15,14 @@ public class DailyData {
     private List<Workout> workouts;
 
     public DailyData() {
+        this.waterDrank = 0;
+        this.caloriesConsumed = 0;
+        this.caloriesBurned = 0;
+        this.breakfast = new ArrayList<>();
+        this.lunch = new ArrayList<>();
+        this.dinner = new ArrayList<>();
+        this.snacks = new ArrayList<>();
+        this.workouts = new ArrayList<>();
     }
 
     public DailyData(int waterDrank, int caloriesConsumed, int caloriesBurned, int steps, List<Recipe> breakfast, List<Recipe> lunch, List<Recipe> dinner, List<Recipe> snacks, List<Workout> workouts) {
@@ -102,6 +111,8 @@ public class DailyData {
 
     public int getWorkoutCalories(){
         int calories = 0;
+        if(workouts == null)
+            return 0;
         for (Workout workout : workouts) {
             calories+= workout.getCaloriesBurned();
         }
@@ -110,6 +121,8 @@ public class DailyData {
 
     public int getWorkoutTime(){
         int minutes = 0;
+        if(workouts == null)
+            return 0;
         for (Workout workout : workouts) {
             minutes += workout.getMinutes();
         }

@@ -22,15 +22,15 @@
         app:titleTextAppearance="@style/Theme.CalorieCounter"
         app:titleTextColor="@color/white" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="Recipe"
-        android:background="@drawable/custom_input_text"
-        android:textAlignment="center">
+<!--    <TextView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="24dp"-->
+<!--        android:text="Recipe"-->
+<!--        android:background="@drawable/custom_input_text"-->
+<!--        android:textAlignment="center">-->
 
-    </TextView>
+<!--    </TextView>-->
 
     <EditText
         android:id="@+id/etSearchFoods"
@@ -56,17 +56,10 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.12" />
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone"/>
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvFoods"
         android:layout_width="409dp"
-        android:layout_height="740dp"
+        android:layout_height="650dp"
         android:layout_marginStart="1dp"
         android:layout_marginTop="21dp"
         android:layout_marginEnd="1dp"

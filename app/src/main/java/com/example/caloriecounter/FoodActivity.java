@@ -118,7 +118,10 @@ public class FoodActivity extends AppCompatActivity {
 //        saveImageView.setOnClickListener(v -> save());
     }
 
-
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+    }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -131,9 +134,11 @@ public class FoodActivity extends AppCompatActivity {
     }
 
     public void onItemClick(Food food) {
+        String date = this.getIntent().getStringExtra("DATE");
         Intent intent = new Intent(FoodActivity.this, NutritionDisplayActivity.class);
         intent.putExtra("MEAL", meal);
         intent.putExtra("FOOD", food);
+        intent.putExtra("DATE", date);
         Log.d("Info", food.getName());
         startActivity(intent);
     }

@@ -24,7 +24,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 
@@ -33,20 +32,12 @@ import com.example.caloriecounter.R;
 import com.example.caloriecounter.model.DAO.DailyData;
 import com.example.caloriecounter.model.DAO.DailyDataDAO;
 import com.example.caloriecounter.model.DAO.DailyDataDAOImpl;
-import com.example.caloriecounter.model.DAO.Food;
-import com.example.caloriecounter.model.DAO.FoodDAO;
-import com.example.caloriecounter.model.DAO.FoodDAOImpl;
-import com.example.caloriecounter.model.DAO.GoalDAOImpl;
 import com.example.caloriecounter.model.DAO.GoalData;
-import com.example.caloriecounter.model.DAO.GoalDataDAO;
-import com.example.caloriecounter.model.DAO.UserDAO;
-import com.example.caloriecounter.model.DAO.UserDAOImpl;
+import com.example.caloriecounter.model.DAO.Recipe;
 import com.example.caloriecounter.model.DAO.UserDetails;
 import com.example.caloriecounter.model.dataHolder.DailyDataHolder;
-import com.example.caloriecounter.model.dataHolder.FoodListHolder;
 import com.example.caloriecounter.model.dataHolder.GoalDataHolder;
 import com.example.caloriecounter.model.dataHolder.UserDetailsHolder;
-import com.example.caloriecounter.model.dataHolder.WorkoutListHolder;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
@@ -57,12 +48,10 @@ import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -90,7 +79,9 @@ public class HomeFragment extends Fragment implements SensorEventListener {
 
     private TextView tvGoalCalories, tvStepGoal,
             tvTotalCalories, tvTotalFoodCalories, tvTotalExerciseCalories,
-            tvCaloriesConsumedExercise, tvTimeElapsedExercise;
+            tvCaloriesConsumedExercise, tvTimeElapsedExercise,
+            tvBreakfastCalories, tvLunchCalories,
+            tvDinnerCalories, tvSnacksCalories;
 
     private View addWaterIntake;
     private ProgressBar pbTotalCalories;
@@ -110,10 +101,11 @@ public class HomeFragment extends Fragment implements SensorEventListener {
 
         view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        initAppData();
         init();
+        setDataToView();
         setWaterIntake();
         resetSteps();
+
 
         addWaterIntake.setOnClickListener(v -> {
             waterIntake += waterUnits;
@@ -123,16 +115,25 @@ public class HomeFragment extends Fragment implements SensorEventListener {
             } else
                 Toast.makeText(container.getContext(), MessageFormat.format("Good job! {0}ml added", waterUnits), Toast.LENGTH_SHORT).show();
 
+            dailyData.setWaterDrank(waterIntake);
+            DailyDataDAO dailyDataDAO = new DailyDataDAOImpl();
+            dailyDataDAO.update(dailyData);
             setWaterIntake();
         });
 
-        loadData();
+        loadStepData();
 
         ImageView ivAddExercise = view.findViewById(R.id.ivAddExercise);
         ivAddExercise.setOnClickListener(v -> goToExerciseActivity());
 
         // Inflate the layout for this fragment
         return view;
+    }
+
+    private void setDataToView() {
+        setUserData();
+        setDailyDataToView();
+        setWaterIntake();
     }
 
     private void initStepper() {
@@ -164,20 +165,39 @@ public class HomeFragment extends Fragment implements SensorEventListener {
 
             pbSteps.setMax(Integer.parseInt(goalData.getStepGoal().replaceAll("[^0-9]", "")));
             pbSteps.setProgress(currentSteps);
+
+            waterGoal = Integer.parseInt(goalData.getWaterIntakeGoal().replaceAll("[^0-9]", ""));
+        }
+        if (userDetails != null) {
+            weight = Double.parseDouble(userDetails.getWeight());
+            weightUnit = userDetails.getWeightUnit();
+            height = Integer.parseInt(userDetails.getHeight());
+            heightUnit = userDetails.getHeightUnit();
+            bmi = calculateBMI(height, weight);
+            setWeightChart();
         }
     }
 
     private void init() {
         tvStepGoal = view.findViewById(R.id.tvStepGoal);
         tvGoalCalories = view.findViewById(R.id.tvGoalCalories);
-        addWaterIntake = view.findViewById(R.id.ivAddWater);
-        pbTotalCalories = view.findViewById(R.id.pbTotalCalories);
         tvTotalCalories = view.findViewById(R.id.tvTotalCalories);
         tvTotalFoodCalories = view.findViewById(R.id.tvTotalFoodCalories);
         tvTotalExerciseCalories = view.findViewById(R.id.tvTotalExerciseCalories);
         tvCaloriesConsumedExercise = view.findViewById(R.id.tvCaloriesConsumedExercise);
         tvTimeElapsedExercise = view.findViewById(R.id.tvTimeElapsedExercise);
+        tvBreakfastCalories = view.findViewById(R.id.tvBreakfastCalories);
+        tvLunchCalories = view.findViewById(R.id.tvLunchCalories);
+        tvDinnerCalories = view.findViewById(R.id.tvDinnerCalories);
+        tvSnacksCalories = view.findViewById(R.id.tvSnacksCalories);
+
+        addWaterIntake = view.findViewById(R.id.ivAddWater);
+        pbTotalCalories = view.findViewById(R.id.pbTotalCalories);
         initStepper();
+
+        goalData = GoalDataHolder.getInstance().getData() != null ? GoalDataHolder.getInstance().getData() : new GoalData();
+        dailyData = DailyDataHolder.getInstance().getData() != null ? DailyDataHolder.getInstance().getData() : new DailyData();
+        userDetails = UserDetailsHolder.getInstance().getData() != null ? UserDetailsHolder.getInstance().getData() : new UserDetails();
     }
 
     @Override
@@ -189,6 +209,9 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         dailyData = DailyDataHolder.getInstance().getData();
         if (dailyData != null) {
             setDailyDataToView();
+        } else {
+            dailyData = new DailyData();
+            DailyDataHolder.getInstance().setData(dailyData);
         }
         sensorManager.registerListener(this, stepSensor, SensorManager.SENSOR_DELAY_NORMAL);
     }
@@ -246,9 +269,7 @@ public class HomeFragment extends Fragment implements SensorEventListener {
                         weightCategory.setText(R.string.obese_categ_message);
                         break;
                 }
-
             }
-
             @Override
             public void onNothingSelected() {
                 selectBMICategory(weightChart);
@@ -276,30 +297,30 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         weightCategory.setTextSize(16.0f);
     }
 
-    private void retrieveUserProfilePicture() {
-        UserDAO userDAO = new UserDAOImpl();
-        userDAO.get().child("imageUrl").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    String imageUrl = dataSnapshot.getValue(String.class);
-
-                    if (imageUrl != null && !imageUrl.isEmpty() && isAdded()) {
-                        SharedPreferences sharedPreferences = Objects.requireNonNull(HomeFragment.this.getActivity()).getSharedPreferences(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid(), Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-                        editor.putString("imageUrl", imageUrl);
-                        editor.apply();
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Handle errors
-            }
-        });
-    }
+//    private void retrieveUserProfilePicture() {
+//        UserDAO userDAO = new UserDAOImpl();
+//        userDAO.get().child("imageUrl").addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                if (dataSnapshot.exists()) {
+//                    String imageUrl = dataSnapshot.getValue(String.class);
+//
+//                    if (imageUrl != null && !imageUrl.isEmpty() && isAdded()) {
+//                        SharedPreferences sharedPreferences = Objects.requireNonNull(HomeFragment.this.getActivity()).getSharedPreferences(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid(), Context.MODE_PRIVATE);
+//                        SharedPreferences.Editor editor = sharedPreferences.edit();
+//
+//                        editor.putString("imageUrl", imageUrl);
+//                        editor.apply();
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//                // Handle errors
+//            }
+//        });
+//    }
 
     private void setChartData(int count, PieChart chart, String[] categories) {
         ArrayList<PieEntry> values = new ArrayList<>();
@@ -363,75 +384,59 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         }
     }
 
-    private void initAppData() {
-        initUserDetails();
-        initGoalData();
-        initDailyData();
-        initFoodList();
-    }
-    ArrayList<Food> foodList;
-    private void initFoodList() {
-        FoodDAO foodDAO = new FoodDAOImpl();
-        foodList = new ArrayList<>();
-        foodDAO.get().addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
-                    Food food = dataSnapshot.getValue(Food.class);
-                    foodList.add(food);
-                }
-                FoodListHolder.getInstance().setData(foodList);
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
-
-    private void initDailyData() {
-        DailyDataDAO dailyDataDAO = new DailyDataDAOImpl();
-        dailyData = new DailyData();
-        dailyDataDAO.get().addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                dailyData = snapshot.getValue(DailyData.class);
-                if (dailyData != null) {
-                    DailyDataHolder.getInstance().setData(dailyData);
-                    waterIntake = dailyData.getWaterDrank();
-                    setWaterIntake();
-
-                    setDailyDataToView();
-                    WorkoutListHolder.getInstance().setData(dailyData.getWorkouts());
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
-
     private void setDailyDataToView() {
         int caloriesConsumed = dailyData.getCaloriesConsumed();
         int caloriesBurned = dailyData.getWorkoutCalories();
-        int totalCalories = caloriesConsumed - caloriesBurned;
         int minutes = dailyData.getWorkoutTime();
+
+        int breakfastCalories = 0;
+        List<Recipe> breakfast = dailyData.getBreakfast();
+        if (breakfast != null)
+            for (Recipe recipe : breakfast) {
+                breakfastCalories += recipe.getCalories();
+            }
+
+        int lunchCalories = 0;
+        List<Recipe> lunch = dailyData.getLunch();
+        if (lunch != null)
+            for (Recipe recipe : lunch) {
+                lunchCalories += recipe.getCalories();
+            }
+
+        int dinnerCalories = 0;
+        List<Recipe> dinner = dailyData.getDinner();
+        if (dinner != null)
+            for (Recipe recipe : dinner) {
+                dinnerCalories += recipe.getCalories();
+            }
+
+        int snackCalories = 0;
+        List<Recipe> snacks = dailyData.getSnacks();
+        if (snacks != null)
+            for (Recipe recipe : snacks) {
+                snackCalories += recipe.getCalories();
+            }
+        if (caloriesConsumed == 0) {
+            caloriesConsumed = breakfastCalories + lunchCalories + dinnerCalories + snackCalories;
+        }
+        int totalCalories = caloriesConsumed - caloriesBurned;
 
         tvTotalCalories.setText(String.valueOf(totalCalories));
         tvCaloriesConsumedExercise.setText(MessageFormat.format("{0} kcal", caloriesBurned));
         tvTimeElapsedExercise.setText(MessageFormat.format("{0} minutes", minutes));
-        tvTotalFoodCalories.setText(MessageFormat.format("Food: {0}kcal", caloriesConsumed));
-        tvTotalExerciseCalories.setText(MessageFormat.format("Exercise: {0}kcal", caloriesBurned));
+        tvTotalFoodCalories.setText(MessageFormat.format("Food: {0} kcal", caloriesConsumed));
+        tvTotalExerciseCalories.setText(MessageFormat.format("Exercise: {0} kcal", caloriesBurned));
+        tvBreakfastCalories.setText(MessageFormat.format("Breakfast: {0} kcal", breakfastCalories));
+        tvLunchCalories.setText(MessageFormat.format("Lunch: {0} kcal", lunchCalories));
+        tvDinnerCalories.setText(MessageFormat.format("Dinner: {0} kcal", dinnerCalories));
+        tvSnacksCalories.setText(MessageFormat.format("Snacks: {0} kcal", snackCalories));
         pbTotalCalories.setProgress(totalCalories);
+        waterIntake = dailyData.getWaterDrank();
     }
 
     @Override
     public void onDestroyView() {
-        saveDailyData();
+       // saveDailyData();
         super.onDestroyView();
     }
 
@@ -441,55 +446,6 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         dailyDataDAO.update(dailyData);
     }
 
-    private void initGoalData() {
-        GoalDataDAO goalDataDAO = new GoalDAOImpl();
-        goalData = new GoalData();
-        goalDataDAO.get().addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                goalData = snapshot.getValue(GoalData.class);
-                if (goalData != null) {
-
-                    waterGoal = Integer.parseInt(goalData.getWaterIntakeGoal().replaceAll("[^0-9]", ""));
-                    GoalDataHolder.getInstance().setData(goalData);
-                    setUserData();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(HomeFragment.this.getContext(), "Something went wrong!", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-    }
-
-    private void initUserDetails() {
-        UserDAO userDAO = new UserDAOImpl();
-        userDetails = new UserDetails();
-        userDAO.get().addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                userDetails = snapshot.getValue(UserDetails.class);
-                if (userDetails != null) {
-                    UserDetailsHolder.getInstance().setData(userDetails);
-                    weight = Double.parseDouble(userDetails.getWeight());
-                    weightUnit = userDetails.getWeightUnit();
-                    height = Integer.parseInt(userDetails.getHeight());
-                    heightUnit = userDetails.getHeightUnit();
-                    bmi = calculateBMI(height, weight);
-                    setWeightChart();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(HomeFragment.this.getContext(), "Something went wrong!", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        retrieveUserProfilePicture();
-    }
 
     private double calculateBMI(int height, double weight) {
 
@@ -529,7 +485,7 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         editor.apply();
     }
 
-    private void loadData() {
+    private void loadStepData() {
         SharedPreferences sharedPreferences = Objects.requireNonNull(this.getContext()).getSharedPreferences(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid(), Context.MODE_PRIVATE);
         String savedSteps = sharedPreferences.getString("steps", "0");
         previousTotalSteps = Integer.parseInt(savedSteps);

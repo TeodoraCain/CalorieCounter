@@ -72,7 +72,7 @@ public class LoginActivity extends AppCompatActivity {
         authProfile.signInWithEmailAndPassword(emailTxt, passwordTxt).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 Toast.makeText(LoginActivity.this, "Welcome", Toast.LENGTH_SHORT).show();
-                Intent login = new Intent(LoginActivity.this, DashboardActivity.class);
+                Intent login = new Intent(LoginActivity.this, SplashActivity.class);
                 startActivity(login);
             } else {
                 try {
