@@ -9,8 +9,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="140dp"
-        android:paddingVertical="14dp"
-        android:background="@drawable/headerbackground">
+        android:background="@drawable/headerbackground"
+        android:paddingVertical="14dp">
 
         <ImageView
             android:id="@+id/ivProfileImage"
@@ -18,14 +18,14 @@
             android:layout_height="60dp"
             android:layout_gravity="bottom"
             android:background="@drawable/logo_background"
+            android:contentDescription="@string/profile_picture"
             android:src="@drawable/eatwelllogo"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.08"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.275"
-            android:contentDescription="@string/profile_picture" />
+            app:layout_constraintVertical_bias="0.275" />
 
         <TextView
             android:id="@+id/tvUserName"
@@ -58,6 +58,7 @@
             android:autoSizeStepGranularity="1sp"
             android:autoSizeTextType="uniform"
             android:fontFamily="@font/lora_font"
+            android:maxLines="1"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -65,8 +66,7 @@
             app:layout_constraintStart_toEndOf="@+id/ivProfileImage"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.57"
-            app:layout_constraintWidth="170dp"
-            android:maxLines="1" />
+            app:layout_constraintWidth="170dp" />
 
         <!--        <ImageView-->
         <!--            android:id="@+id/imageView2"-->
@@ -99,7 +99,7 @@
             android:fontFamily="@font/lora_font"
             android:text="Profile"
             android:textColor="@color/gray"
-            android:textSize="18sp"/>
+            android:textSize="18sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -119,92 +119,92 @@
             android:fontFamily="@font/lora_font"
             android:text="@string/goals"
             android:textColor="@color/gray"
-            android:textSize="18sp"/>
+            android:textSize="18sp" />
     </LinearLayout>
 
-<!--    <LinearLayout-->
-<!--        android:id="@+id/nav_share"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginHorizontal="18dp"-->
-<!--        android:layout_marginTop="28dp"-->
-<!--        android:orientation="horizontal">-->
+    <LinearLayout
+        android:id="@+id/nav_share"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="18dp"
+        android:layout_marginTop="28dp"
+        android:orientation="horizontal">
 
-<!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_gravity="start"-->
-<!--            android:drawableStart="@drawable/ic_share"-->
-<!--            android:drawablePadding="8dp"-->
-<!--            android:fontFamily="@font/lora_font"-->
-<!--            android:text="EIM 1+2"-->
-<!--            android:textColor="@color/gray"-->
-<!--            android:textSize="18sp"/>-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:drawableStart="@drawable/ic_share"
+            android:drawablePadding="8dp"
+            android:fontFamily="@font/lora_font"
+            android:text="EIM 1+2"
+            android:textColor="@color/gray"
+            android:textSize="18sp" />
 
-<!--    </LinearLayout>-->
+    </LinearLayout>
 
-<!--    <LinearLayout-->
-<!--        android:id="@+id/nav_eimRss"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginHorizontal="18dp"-->
-<!--        android:layout_marginTop="28dp"-->
-<!--        android:orientation="horizontal">-->
+    <LinearLayout
+        android:id="@+id/nav_eimRss"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="18dp"
+        android:layout_marginTop="28dp"
+        android:orientation="horizontal">
 
-<!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_gravity="start"-->
-<!--            android:drawableStart="@drawable/ic_share"-->
-<!--            android:drawablePadding="8dp"-->
-<!--            android:fontFamily="@font/lora_font"-->
-<!--            android:text="EIM Rss"-->
-<!--            android:textColor="@color/gray"-->
-<!--            android:textSize="18sp"/>-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:drawableStart="@drawable/ic_share"
+            android:drawablePadding="8dp"
+            android:fontFamily="@font/lora_font"
+            android:text="EIM Rss"
+            android:textColor="@color/gray"
+            android:textSize="18sp" />
 
-<!--    </LinearLayout>-->
+    </LinearLayout>
 
-<!--    <LinearLayout-->
-<!--        android:id="@+id/nav_eimLanguage"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginHorizontal="18dp"-->
-<!--        android:layout_marginTop="28dp"-->
-<!--        android:orientation="horizontal">-->
+    <LinearLayout
+        android:id="@+id/nav_eimLanguage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="18dp"
+        android:layout_marginTop="28dp"
+        android:orientation="horizontal">
 
-<!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_gravity="start"-->
-<!--            android:drawableStart="@drawable/ic_share"-->
-<!--            android:drawablePadding="8dp"-->
-<!--            android:fontFamily="@font/lora_font"-->
-<!--            android:text="EIM Language"-->
-<!--            android:textColor="@color/gray"-->
-<!--            android:textSize="18sp"/>-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:drawableStart="@drawable/ic_share"
+            android:drawablePadding="8dp"
+            android:fontFamily="@font/lora_font"
+            android:text="EIM Language"
+            android:textColor="@color/gray"
+            android:textSize="18sp" />
 
-<!--    </LinearLayout>-->
+    </LinearLayout>
 
-<!--    <LinearLayout-->
-<!--        android:id="@+id/nav_eimFragment"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginHorizontal="18dp"-->
-<!--        android:layout_marginTop="28dp"-->
-<!--        android:orientation="horizontal">-->
+    <LinearLayout
+        android:id="@+id/nav_eimFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="18dp"
+        android:layout_marginTop="28dp"
+        android:orientation="horizontal">
 
-<!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_gravity="start"-->
-<!--            android:drawableStart="@drawable/ic_share"-->
-<!--            android:drawablePadding="8dp"-->
-<!--            android:fontFamily="@font/lora_font"-->
-<!--            android:text="EIM Fragment"-->
-<!--            android:textColor="@color/gray"-->
-<!--            android:textSize="18sp"/>-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:drawableStart="@drawable/ic_share"
+            android:drawablePadding="8dp"
+            android:fontFamily="@font/lora_font"
+            android:text="EIM Fragment"
+            android:textColor="@color/gray"
+            android:textSize="18sp" />
 
-<!--    </LinearLayout>-->
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/nav_about"
@@ -223,14 +223,14 @@
             android:fontFamily="@font/lora_font"
             android:text="About Us"
             android:textColor="@color/gray"
-            android:textSize="18sp"/>
+            android:textSize="18sp" />
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="28dp"
-        android:background="@color/gray"/>
+        android:background="@color/gray" />
 
     <LinearLayout
         android:id="@+id/nav_logout"
@@ -249,8 +249,7 @@
             android:fontFamily="@font/lora_font"
             android:text="Logout"
             android:textColor="@color/gray"
-            android:textSize="18sp"
-            />
+            android:textSize="18sp" />
     </LinearLayout>
 
 </LinearLayout>

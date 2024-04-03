@@ -97,7 +97,6 @@ public class RegisterActivity extends AppCompatActivity implements ViewPager.OnP
                 UserDetails writeUserDetails = new UserDetails(userInputs, String.valueOf(calculateBMI()));
                 UserDAO userDao = new UserDAOImpl();
                 userDao.add(writeUserDetails).addOnCompleteListener(task1 -> {
-
                     if (task1.isSuccessful()) {
                         //Send verification email
                         Objects.requireNonNull(firebaseUser).sendEmailVerification();
@@ -109,10 +108,10 @@ public class RegisterActivity extends AppCompatActivity implements ViewPager.OnP
                         goalDataDAO.add(goalData);
                         Toast.makeText(RegisterActivity.this, "User registered successfully. Please verify your email", Toast.LENGTH_SHORT).show();
 
-                        Intent intent = new Intent(RegisterActivity.this, DashboardActivity.class);
-                        // intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        Intent intent = new Intent(RegisterActivity.this, SplashActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
-                        finish();
+                        //finish();
                     } else {
                         Toast.makeText(RegisterActivity.this, "Registration failed! Please try again", Toast.LENGTH_SHORT).show();
                     }

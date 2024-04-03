@@ -10,6 +10,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
@@ -161,39 +162,39 @@ public class DashboardActivity extends AppCompatActivity {
 
         });
 
-//        share.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(DashboardActivity.this, FoodItemDisplayActivity.class);
-//                startActivity(intent);
-//            }
-//        });
+        share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DashboardActivity.this, FoodItemDisplayActivity.class);
+                startActivity(intent);
+            }
+        });
 
-//        LinearLayout eim2 = findViewById(id.nav_eimRss);
-//        eim2.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(DashboardActivity.this, RssFeederActivity.class);
-//                startActivity(intent);
-//            }
-//        });
-//        LinearLayout eim3 = findViewById(id.nav_eimLanguage);
-//        eim3.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(DashboardActivity.this, LanguageActivity.class);
-//                startActivity(intent);
-//            }
-//        });
-//
-//        LinearLayout eim4 = findViewById(id.nav_eimFragment);
-//        eim4.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(DashboardActivity.this, SecondFragment.class);
-//                startActivity(intent);
-//            }
-//        });
+        LinearLayout eim2 = findViewById(id.nav_eimRss);
+        eim2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DashboardActivity.this, RssFeederActivity.class);
+                startActivity(intent);
+            }
+        });
+        LinearLayout eim3 = findViewById(id.nav_eimLanguage);
+        eim3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DashboardActivity.this, LanguageActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        LinearLayout eim4 = findViewById(id.nav_eimFragment);
+        eim4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DashboardActivity.this, SecondFragment.class);
+                startActivity(intent);
+            }
+        });
 
     }
 

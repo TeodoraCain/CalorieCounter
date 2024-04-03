@@ -1,22 +1,28 @@
 package com.example.caloriecounter;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.MessageFormat;
 
 // O lista cu 6 obiecte (pot fi din clasa creata la tema anterioara),
 // se vor citi in interfata 2 conditii
 // si se vor afisa doar obiectele din lista care corespund celor doua conditii.
 
 /**
- This class applies filters on a list of food items based on certain criteria.
-
- @author cc458
+ * This class applies filters on a list of food items based on certain criteria.
+ *
+ * @author cc458
  */
 
 public class FilterResultsActivity extends AppCompatActivity {
@@ -25,34 +31,53 @@ public class FilterResultsActivity extends AppCompatActivity {
     private EditText etMaxProtein;
     private CheckBox cbVegetarian;
 
+    private Context context;
+    private final String FILENAME = "filter_values.txt";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter_results);
 
+        context = this.getApplicationContext();
         etMaxProtein = findViewById(R.id.etMaxProtein);
         etMinProtein = findViewById(R.id.etMinProtein);
         cbVegetarian = findViewById(R.id.cbVegetarian);
 
 
-
         Button btnFilter = findViewById(R.id.btnFilter);
-        btnFilter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean isVegetarian = cbVegetarian.isChecked();
-                String minProtein = String.valueOf(etMinProtein.getText());
-                String maxProtein = String.valueOf(etMaxProtein.getText());
+        btnFilter.setOnClickListener(v -> {
+            boolean isVegetarian = cbVegetarian.isChecked();
+            String minProteinString = String.valueOf(etMinProtein.getText());
+            String maxProteinString = String.valueOf(etMaxProtein.getText());
 
-                Intent intent = new Intent(FilterResultsActivity.this, FoodItemDisplayActivity.class);
-                intent.putExtra("ISVEGETARIAN", isVegetarian);
-                intent.putExtra("MINPROTEIN", minProtein);
-                intent.putExtra("MAXPROTEIN", maxProtein);
-                startActivity(intent);
+            float minProtein = minProteinString.isEmpty() ? 0 : Float.parseFloat(minProteinString);
+            float maxProtein = maxProteinString.isEmpty() ? 0 : Float.parseFloat(maxProteinString);
+
+            String textToWrite = MessageFormat.format("{0},{1},{2}", isVegetarian, minProtein, maxProtein);
+
+            try {
+                writeToFile(textToWrite);
+            } catch (IOException e) {
+                Toast.makeText(context, "Scrierea fisierului nu a putut fi realizata", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
             }
+
+            startIntentFilter();
         });
+    }
 
+    private void writeToFile(String text) throws IOException {
+        File path = context.getFilesDir();
+        FileOutputStream writer = new FileOutputStream(new File(path, FILENAME));
+        writer.write(text.getBytes());
+        writer.close();
+    }
 
+    private void startIntentFilter() {
+        Intent intent = new Intent(FilterResultsActivity.this, ShowFoodsActivity.class);
+        intent.putExtra("SHOW", "FILTER");
+        startActivity(intent);
     }
 
 

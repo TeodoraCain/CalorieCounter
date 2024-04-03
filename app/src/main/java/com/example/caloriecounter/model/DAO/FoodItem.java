@@ -60,4 +60,5 @@ public class FoodItem {
     public void setProtein(float protein) {
         this.protein = protein;
     }
+
 }
