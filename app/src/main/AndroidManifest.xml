@@ -18,14 +18,28 @@
         android:theme="@style/Theme.CalorieCounter"
         tools:targetApi="31">
         <activity
-            android:name=".ShowFoodsActivity"
+            android:name=".WeightLogActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".WriteFoodToFileActivity"
+            android:name=".AddWeightActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".ShowFoodsActivityEIM"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".WriteFoodToFileActivityEIM"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -60,35 +74,35 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".SecondFragment"
+            android:name=".SecondFragmentEIM"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".LanguageActivity"
+            android:name=".LanguageActivityEIM"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".RssFeederActivity"
+            android:name=".RssFeederActivityEIM"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".FilterResultsActivity"
+            android:name=".FilterResultsActivityEIM"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".FoodItemDisplayActivity"
+            android:name=".FoodItemDisplayActivityEIM"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

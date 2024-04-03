@@ -47,11 +47,13 @@
         app:tabTextAppearance="@style/Theme.CalorieCounter">
 
         <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabTimeYourself"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="Time Yourself" />
 
         <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabRecord"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Add Record" />

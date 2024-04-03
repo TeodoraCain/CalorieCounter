@@ -3,6 +3,7 @@ package com.example.caloriecounter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Chronometer;
 import android.widget.EditText;
@@ -25,9 +26,16 @@ import com.example.caloriecounter.model.dataHolder.DailyDataHolder;
 import com.example.caloriecounter.view.fragments.exercise.ExerciseRecordFragment;
 import com.example.caloriecounter.view.fragments.exercise.ExerciseTimerFragment;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 public class ExerciseRecorderActivity extends AppCompatActivity {
@@ -35,6 +43,8 @@ public class ExerciseRecorderActivity extends AppCompatActivity {
     private TabLayout exerciseTabs;
     private ViewPager2 viewPager;
     private String exercise;
+    private boolean fromDiary;
+    private String date;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +53,11 @@ public class ExerciseRecorderActivity extends AppCompatActivity {
         setToolbar();
 
         exerciseTabs = findViewById(R.id.tabExercise);
+        if (fromDiary) {
+            exerciseTabs.removeTabAt(0);
+        }
         viewPager = findViewById(R.id.viewPager);
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this);
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this, fromDiary);
         viewPager.setAdapter(viewPagerAdapter);
 
         exerciseTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -77,8 +90,12 @@ public class ExerciseRecorderActivity extends AppCompatActivity {
     private void setToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         final String EXERCISE = "EXERCISE";
+        final String FROMDIARY = "FROMDIARY";
+        final String DATE = "DATE";
 
+        fromDiary = this.getIntent().getBooleanExtra(FROMDIARY, false);
         exercise = this.getIntent().getStringExtra(EXERCISE);
+        date = this.getIntent().getStringExtra(DATE);
         toolbar.setTitle(exercise);
         setSupportActionBar(toolbar);
 
@@ -94,31 +111,77 @@ public class ExerciseRecorderActivity extends AppCompatActivity {
     private void save() {
         int currentItem = viewPager.getCurrentItem();
         Workout workout = null;
-        if (currentItem == 0) {
-            Chronometer timer = findViewById(R.id.timer);
-            TextView tvCalories = findViewById(R.id.tvCalories);
+        if (!fromDiary) {
+            if (currentItem == 0) {
+                Chronometer timer = findViewById(R.id.timer);
+                TextView tvCalories = findViewById(R.id.tvCalories);
 
-            timer.stop();
-            long elapsedSeconds = (SystemClock.elapsedRealtime() - timer.getBase()) / 1000;
-            long minutes = elapsedSeconds / 60;
+                timer.stop();
+                long elapsedSeconds = (SystemClock.elapsedRealtime() - timer.getBase()) / 1000;
+                long minutes = elapsedSeconds / 60;
 
-            workout = new Workout(exercise, (int) minutes, Integer.parseInt(tvCalories.getText().toString().replaceAll("[^0-9]", "")));
+                workout = new Workout(exercise, (int) minutes, Integer.parseInt(tvCalories.getText().toString().replaceAll("[^0-9]", "")));
 
-        } else if (currentItem == 1) {
+            } else if (currentItem == 1) {
+                EditText etMinutes = findViewById(R.id.etMinutes);
+                TextView tvCalories = findViewById(R.id.tvCaloriesBurned);
+                if (etMinutes.getText() != null || etMinutes.getText().toString().isEmpty()) {
+                    workout = new Workout(exercise, Integer.parseInt(etMinutes.getText().toString()), Integer.parseInt(tvCalories.getText().toString().replaceAll("[^0-9]", "")));
+                }
+            }
+            if (workout != null) {
+                saveToDailyData(workout);
+            }
+
+        } else {
             EditText etMinutes = findViewById(R.id.etMinutes);
             TextView tvCalories = findViewById(R.id.tvCaloriesBurned);
             if (etMinutes.getText() != null || etMinutes.getText().toString().isEmpty()) {
                 workout = new Workout(exercise, Integer.parseInt(etMinutes.getText().toString()), Integer.parseInt(tvCalories.getText().toString().replaceAll("[^0-9]", "")));
             }
+            if (workout != null && date != null) {
+                saveToDailyData(workout, date);
+            }
         }
-        if (workout != null) {
-            saveToDailyData(workout);
-        }
-
 
         this.finish();
         Intent intent = new Intent(ExerciseRecorderActivity.this, DashboardActivity.class);
         startActivity(intent);
+    }
+
+    private void saveToDailyData(Workout newWorkout, String date) {
+        DailyDataDAO dailyDataDAO = new DailyDataDAOImpl();
+        dailyDataDAO.get(date).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                DailyData dailyData = snapshot.getValue(DailyData.class);
+                List<Workout> workouts = new ArrayList<>();
+                if (dailyData == null) {
+                    dailyData = new DailyData();
+                    workouts = dailyData.getWorkouts();
+                }
+                workouts.add(newWorkout);
+                dailyData.setWorkouts(workouts);
+
+                Calendar calendar = Calendar.getInstance();
+                Date todaysDate = calendar.getTime();
+                String currentDate = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH).format(todaysDate);
+
+                if (date.equals(currentDate)) {
+                    DailyDataHolder.getInstance().setData(dailyData);
+                    DailyDataDAO dailyDataDAO = new DailyDataDAOImpl();
+                    dailyDataDAO.update(dailyData);
+                }
+
+                saveDailyDataToDatabase(dailyData, date);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
     }
 
     private void saveToDailyData(Workout workout) {
@@ -148,22 +211,46 @@ public class ExerciseRecorderActivity extends AppCompatActivity {
     }
 
     public static class ViewPagerAdapter extends FragmentStateAdapter {
+        private boolean fromDiary;
 
-        public ViewPagerAdapter(@NonNull FragmentActivity fragmentActivity) {
+        public ViewPagerAdapter(@NonNull FragmentActivity fragmentActivity, boolean fromDiary) {
             super(fragmentActivity);
+            this.fromDiary = fromDiary;
         }
 
         @NonNull
         @Override
         public Fragment createFragment(int position) {
+            if (fromDiary) {
+                if (position == 0) return new ExerciseRecordFragment();
+            }
+
             if (position == 0) return new ExerciseTimerFragment();
             else return new ExerciseRecordFragment();
         }
 
         @Override
         public int getItemCount() {
+            if (fromDiary)
+                return 1;
             return 2;
         }
 
+    }
+
+    private void saveDailyDataToDatabase(DailyData dailyData, String date) {
+        DailyDataDAO dailyDataDAO = new DailyDataDAOImpl();
+        dailyDataDAO.update(dailyData, date).addOnCompleteListener(task -> {
+
+            if (task.isSuccessful()) {
+                Log.d("SaveData", "Data updated successfully");
+                Intent intent = new Intent(ExerciseRecorderActivity.this, DashboardActivity.class);
+                intent.putExtra("NAVIGATE_TO_DIARY_FRAGMENT", true);
+                startActivity(intent);
+                //finish();
+            } else {
+                Log.e("SaveData", "Failed to update data", task.getException());
+            }
+        });
     }
 }

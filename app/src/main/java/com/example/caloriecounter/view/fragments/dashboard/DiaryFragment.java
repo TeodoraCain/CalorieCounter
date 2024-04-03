@@ -18,6 +18,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.example.caloriecounter.ExerciseActivity;
 import com.example.caloriecounter.FoodActivity;
 import com.example.caloriecounter.R;
 import com.example.caloriecounter.controller.RecipeAdapter;
@@ -112,6 +113,14 @@ public class DiaryFragment extends Fragment {
         tvAddLunch.setOnClickListener(v -> addFood("Lunch"));
         tvAddDinner.setOnClickListener(v -> addFood("Dinner"));
         tvAddSnacks.setOnClickListener(v -> addFood("Snacks"));
+        tvAddExercise.setOnClickListener(v -> addExercise());
+    }
+
+    private void addExercise() {
+        Intent intent = new Intent(mContext, ExerciseActivity.class);
+        intent.putExtra("FROMDIARY", true);
+        intent.putExtra("DATE", diaryDate);
+        startActivity(intent);
     }
 
     private void addFood(String meal) {

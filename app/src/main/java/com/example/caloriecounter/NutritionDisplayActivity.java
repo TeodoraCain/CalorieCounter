@@ -310,8 +310,6 @@ public class NutritionDisplayActivity extends AppCompatActivity {
             } else {
                 Log.e("SaveData", "Failed to update data", task.getException());
             }
-
-
         });
     }
 }

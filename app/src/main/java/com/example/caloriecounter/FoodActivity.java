@@ -59,40 +59,27 @@ public class FoodActivity extends AppCompatActivity {
     }
 
     private void searchByListQuery(String query) {
-        if (query.length() > 0) {
-            query = query.substring(0, 1).toUpperCase() + query.substring(1);
-        }
         List<Food> queryResult = new ArrayList<>();
+        String[] queryWords = query.toLowerCase().split("\\s+");
 
         for(Food food : foods){
             if (food.getName().toLowerCase().contains(query.toLowerCase())) {
                 queryResult.add(food);
             }
+            for (String word : queryWords) {
+                if (food.getName().toLowerCase().contains(word)) {
+                    queryResult.add(food);
+                }
+            }
         }
 
         updateRecyclerView(queryResult);
-
     }
 
     private void updateRecyclerView(List<Food> foods) {
-        // Create a new adapter with the filtered list of foods
         FoodRecyclerViewAdapter rvAdapter = new FoodRecyclerViewAdapter(foods, this::onItemClick);
-
-        // Set the adapter to the RecyclerView
         rvFoods.setAdapter(rvAdapter);
     }
-
-
-//        rvAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-//            @Override
-//            public void onItemRangeInserted(int positionStart, int itemCount) {
-//                super.onItemRangeInserted(positionStart, itemCount);
-//                if (itemCount > 0)
-//                    progressBar.setVisibility(View.GONE);
-//            }
-//
-//        });
-//    }
 
     private void init() {
         setToolbar();
@@ -114,8 +101,6 @@ public class FoodActivity extends AppCompatActivity {
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-//        ImageView saveImageView = findViewById(R.id.ivSave);
-//        saveImageView.setOnClickListener(v -> save());
     }
 
     @Override

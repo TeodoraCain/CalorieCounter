@@ -8,12 +8,12 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.caloriecounter.view.fragments.dashboard.HomeFragment;
 
-public class SecondFragment extends AppCompatActivity {
+public class SecondFragmentEIM extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_second_fragment);
+        setContentView(R.layout.activity_second_fragment_eim);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

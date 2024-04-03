@@ -109,9 +109,12 @@ public class ExerciseActivity extends AppCompatActivity implements RecyclerViewI
     public void onItemClick(int position) {
         final String EXERCISE = "EXERCISE";
         final String CALORIES = "CALORIES";
+        final String FROMDIARY = "FROMDIARY";
+        final String DATE = "DATE";
 
         Intent intent = new Intent(ExerciseActivity.this, ExerciseRecorderActivity.class);
-
+        intent.putExtra(FROMDIARY, this.getIntent().getBooleanExtra(FROMDIARY, false));
+        intent.putExtra("DATE", this.getIntent().getStringExtra(DATE));
         intent.putExtra(EXERCISE, rvAdapter.getItem(position).getName());
         intent.putExtra(CALORIES, String.valueOf(rvAdapter.getItem(position).getCalories()));
 

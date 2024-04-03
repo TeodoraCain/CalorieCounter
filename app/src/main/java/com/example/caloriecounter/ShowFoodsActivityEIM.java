@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShowFoodsActivity extends AppCompatActivity {
+public class ShowFoodsActivityEIM extends AppCompatActivity {
 
     private RecyclerView rvFoodItemList;
     private List<FoodItem> foodItemList;
@@ -35,7 +35,7 @@ public class ShowFoodsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_show_foods);
+        setContentView(R.layout.activity_show_foods_eim);
 
         context = getApplicationContext();
         show = getIntent().getStringExtra("SHOW");

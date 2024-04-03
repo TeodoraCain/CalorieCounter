@@ -165,7 +165,7 @@ public class DashboardActivity extends AppCompatActivity {
         share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(DashboardActivity.this, FoodItemDisplayActivity.class);
+                Intent intent = new Intent(DashboardActivity.this, FoodItemDisplayActivityEIM.class);
                 startActivity(intent);
             }
         });
@@ -174,7 +174,7 @@ public class DashboardActivity extends AppCompatActivity {
         eim2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(DashboardActivity.this, RssFeederActivity.class);
+                Intent intent = new Intent(DashboardActivity.this, RssFeederActivityEIM.class);
                 startActivity(intent);
             }
         });
@@ -182,7 +182,7 @@ public class DashboardActivity extends AppCompatActivity {
         eim3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(DashboardActivity.this, LanguageActivity.class);
+                Intent intent = new Intent(DashboardActivity.this, LanguageActivityEIM.class);
                 startActivity(intent);
             }
         });
@@ -191,7 +191,7 @@ public class DashboardActivity extends AppCompatActivity {
         eim4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(DashboardActivity.this, SecondFragment.class);
+                Intent intent = new Intent(DashboardActivity.this, SecondFragmentEIM.class);
                 startActivity(intent);
             }
         });

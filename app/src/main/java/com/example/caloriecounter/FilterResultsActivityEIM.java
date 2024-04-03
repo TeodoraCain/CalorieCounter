@@ -25,7 +25,7 @@ import java.text.MessageFormat;
  * @author cc458
  */
 
-public class FilterResultsActivity extends AppCompatActivity {
+public class FilterResultsActivityEIM extends AppCompatActivity {
 
     private EditText etMinProtein;
     private EditText etMaxProtein;
@@ -37,7 +37,7 @@ public class FilterResultsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_filter_results);
+        setContentView(R.layout.activity_filter_results_eim);
 
         context = this.getApplicationContext();
         etMaxProtein = findViewById(R.id.etMaxProtein);
@@ -75,7 +75,7 @@ public class FilterResultsActivity extends AppCompatActivity {
     }
 
     private void startIntentFilter() {
-        Intent intent = new Intent(FilterResultsActivity.this, ShowFoodsActivity.class);
+        Intent intent = new Intent(FilterResultsActivityEIM.this, ShowFoodsActivityEIM.class);
         intent.putExtra("SHOW", "FILTER");
         startActivity(intent);
     }

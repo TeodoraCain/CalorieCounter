@@ -30,7 +30,7 @@ import java.util.List;
  *
  * @author cc458
  */
-public class RssFeederActivity extends AppCompatActivity {
+public class RssFeederActivityEIM extends AppCompatActivity {
 
     private List<String> healines;
     private List<String> links;
@@ -38,7 +38,7 @@ public class RssFeederActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_rss_feeder);
+        setContentView(R.layout.activity_rss_feeder_eim);
         new MyAsyncTask().execute();
     }
 
@@ -83,7 +83,7 @@ public class RssFeederActivity extends AppCompatActivity {
         }
 
         protected void onPostExecute(ArrayAdapter<String> adapter){
-            adapter = new ArrayAdapter<>(RssFeederActivity.this, android.R.layout.simple_list_item_1, healines);
+            adapter = new ArrayAdapter<>(RssFeederActivityEIM.this, android.R.layout.simple_list_item_1, healines);
             setListAdapter(adapter);
         }
 

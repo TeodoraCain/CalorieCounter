@@ -19,25 +19,25 @@ import androidx.appcompat.app.AppCompatActivity;
  * @author cc458
  */
 
-public class FoodItemDisplayActivity extends AppCompatActivity {
+public class FoodItemDisplayActivityEIM extends AppCompatActivity {
 
     private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_food_item_display);
+        setContentView(R.layout.activity_food_item_display_eim);
         context = this.getApplicationContext();
 
         Button btnFilter = findViewById(R.id.btnFilter);
         btnFilter.setOnClickListener(v -> {
-            Intent intent = new Intent(FoodItemDisplayActivity.this, FilterResultsActivity.class);
+            Intent intent = new Intent(FoodItemDisplayActivityEIM.this, FilterResultsActivityEIM.class);
             startActivity(intent);
         });
 
         Button btnAdd = findViewById(R.id.btnAdd);
         btnAdd.setOnClickListener(v -> {
-            Intent intent = new Intent(FoodItemDisplayActivity.this, WriteFoodToFileActivity.class);
+            Intent intent = new Intent(FoodItemDisplayActivityEIM.this, WriteFoodToFileActivityEIM.class);
             startActivity(intent);
         });
 
@@ -45,7 +45,7 @@ public class FoodItemDisplayActivity extends AppCompatActivity {
         tvShowAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(FoodItemDisplayActivity.this, ShowFoodsActivity.class);
+                Intent intent = new Intent(FoodItemDisplayActivityEIM.this, ShowFoodsActivityEIM.class);
                 intent.putExtra("SHOW", "ALL");
                 startActivity(intent);
             }

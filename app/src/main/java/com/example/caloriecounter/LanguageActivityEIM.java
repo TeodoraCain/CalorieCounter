@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Locale;
 
-public class LanguageActivity extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener{
+public class LanguageActivityEIM extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener{
 
     RadioGroup radioGroup;
     ImageView ivFlag;
@@ -17,7 +17,7 @@ public class LanguageActivity extends AppCompatActivity implements RadioGroup.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_language);
+        setContentView(R.layout.activity_language_eim);
 
         radioGroup = findViewById(R.id.rgChooseLanguage);
         radioGroup.setOnCheckedChangeListener(this);

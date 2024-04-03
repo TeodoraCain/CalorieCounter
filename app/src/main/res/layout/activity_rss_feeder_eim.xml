@@ -3,14 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SecondFragment">
+    tools:context=".RssFeederActivityEIM">
 
-
-    <FrameLayout
-        android:id="@+id/frameLayout"
+    <ListView
+        android:id="@+id/lvRssFeed"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:backgroundTint="@color/white" />
-
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

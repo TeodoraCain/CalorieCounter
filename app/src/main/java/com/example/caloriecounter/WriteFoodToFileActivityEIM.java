@@ -13,7 +13,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class WriteFoodToFileActivity extends AppCompatActivity {
+public class WriteFoodToFileActivityEIM extends AppCompatActivity {
 
     private EditText etName;
     private EditText etServingSize;
@@ -24,7 +24,7 @@ public class WriteFoodToFileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_write_food_to_file);
+        setContentView(R.layout.activity_write_food_to_file_eim);
 
         etName = findViewById(R.id.etName);
         etServingSize = findViewById(R.id.etServingSize);
