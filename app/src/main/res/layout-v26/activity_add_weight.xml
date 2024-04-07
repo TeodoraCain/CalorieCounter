@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".AddWeightActivity">
+
+    <!--    toolbar    -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/eatwellgreen"
+        android:elevation="4dp"
+        android:foregroundTint="@color/white"
+        android:popupTheme="@style/Theme.CalorieCounter"
+        android:theme="@style/Theme.AppCompat.Light"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:subtitleTextColor="@color/white"
+        app:title="@string/add_weight"
+        app:titleMarginStart="100dp"
+        app:titleTextAppearance="@style/Theme.CalorieCounter"
+        app:titleTextColor="@color/white" />
+
+    <TextView
+        android:id="@+id/tvLogWeight"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/log_weight"
+        android:textColor="@color/gray"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+    <!--    date of weighing    -->
+    <EditText
+        android:id="@+id/etDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="8dp"
+        android:autofillHints=""
+        android:background="@drawable/custom_input_text_gray_round"
+        android:drawableEnd="@drawable/ic_edit_small"
+        android:ems="7"
+        android:focusable="false"
+        android:hint="@string/weighing_date"
+        android:inputType="date"
+        android:minHeight="24dp"
+        android:padding="5dp"
+        android:paddingStart="8dp"
+        android:textAlignment="center"
+        android:textColor="@color/gray"
+        android:textColorHint="#546E7A"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvLogWeight"
+        tools:ignore="LabelFor,RtlSymmetry,TouchTargetSizeCheck" />
+
+    <!--    weight    -->
+    <EditText
+        android:id="@+id/etWeight"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginVertical="36dp"
+        android:background="@drawable/custom_input_text_gray_round"
+        android:hint="@string/your_weight_here"
+        android:importantForAutofill="no"
+        android:inputType="numberDecimal"
+        android:padding="8dp"
+        android:textAlignment="center"
+        android:textColor="@color/gray"
+        android:textSize="@dimen/xxlarge_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etDate"
+        app:layout_constraintWidth_percent=".5"
+        tools:ignore="LabelFor,TextContrastCheck" />
+
+    <TextView
+        android:id="@+id/tvWeightUnit"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:text="@string/unit_kg"
+        android:textColor="@color/gray"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toBottomOf="@+id/etWeight"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/etWeight" />
+
+    <TextView
+        android:id="@+id/tvAddPhotos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginVertical="36dp"
+        android:text="@string/add_photos"
+        android:textColor="@color/gray"
+        android:textSize="@dimen/text_size"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etWeight" />
+
+    <!--    photos    -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvAddPhotos">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/front"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/ivPhotoFront"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/ivPhotoFront"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1"
+            app:layout_constraintWidth_percent=".3" />
+
+        <ImageView
+            android:id="@+id/ivPhotoFront"
+            android:layout_width="0dp"
+            android:layout_height="200dp"
+            android:layout_marginBottom="32dp"
+            android:background="@color/white"
+            android:contentDescription="@string/front_picture"
+            android:src="@drawable/woman_front"
+            android:tooltipText="Front"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.03"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent=".3"
+            tools:ignore="ImageContrastCheck" />
+
+        <ImageView
+            android:id="@+id/ivDeleteFrontPic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:contentDescription="@string/close"
+            android:src="@drawable/ic_camera"
+            app:layout_constraintEnd_toEndOf="@+id/ivPhotoFront"
+            app:layout_constraintTop_toTopOf="@+id/ivPhotoFront" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/side"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/ivPhotoSide"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/ivPhotoSide"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1"
+            app:layout_constraintWidth_percent=".3" />
+
+        <ImageView
+            android:id="@+id/ivPhotoSide"
+            android:layout_width="0dp"
+            android:layout_height="200dp"
+            android:layout_marginBottom="32dp"
+            android:background="@color/white"
+            android:contentDescription="@string/side_picture"
+            android:src="@drawable/woman_side"
+            android:tooltipText="Side"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.49"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent=".3" />
+
+        <ImageView
+            android:id="@+id/ivDeleteSidePic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:contentDescription="@string/close"
+            android:src="@drawable/ic_camera"
+            app:layout_constraintEnd_toEndOf="@+id/ivPhotoSide"
+            app:layout_constraintTop_toTopOf="@+id/ivPhotoSide" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/back"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/ivPhotoBack"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/ivPhotoBack"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1"
+            app:layout_constraintWidth_percent=".3" />
+
+        <ImageView
+            android:id="@+id/ivPhotoBack"
+            android:layout_width="0dp"
+            android:layout_height="200dp"
+            android:layout_marginBottom="32dp"
+            android:background="@color/white"
+            android:contentDescription="@string/back_picture"
+            android:src="@drawable/woman_back"
+            android:tooltipText="Back"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.95"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent=".3" />
+
+        <ImageView
+            android:id="@+id/ivDeleteBackPic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:contentDescription="@string/close"
+            android:src="@drawable/ic_camera"
+            app:layout_constraintEnd_toEndOf="@+id/ivPhotoBack"
+            app:layout_constraintTop_toTopOf="@+id/ivPhotoBack" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnSave"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="48dp"
+        android:background="@drawable/button_animation"
+        android:fontFamily="@font/lora_font"
+        android:maxWidth="78dip"
+        android:minWidth="48dip"
+        android:minHeight="48dp"
+        android:text="@string/save"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/big_text_size"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+        app:layout_constraintVertical_bias="0.8" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

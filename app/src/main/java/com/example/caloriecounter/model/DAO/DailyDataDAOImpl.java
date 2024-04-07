@@ -8,10 +8,11 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 public class DailyDataDAOImpl implements DailyDataDAO {
     private final DatabaseReference dailyDataDatabaseReference;
-    private String userID;
+    private final String userID;
 
     public DailyDataDAOImpl() {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
@@ -22,11 +23,7 @@ public class DailyDataDAOImpl implements DailyDataDAO {
     }
 
     private String getCurrentDate() {
-//        Date currentDate = new Date();
-//        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-//
-//        return dateFormat.format(currentDate);
-        return new SimpleDateFormat("dd-MM-yyyy").format(Calendar.getInstance().getTime());
+        return new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH).format(Calendar.getInstance().getTime());
     }
 
     @Override
@@ -56,32 +53,17 @@ public class DailyDataDAOImpl implements DailyDataDAO {
 
     @Override
     public Task<Void> add(DailyData dailyData, String date) {
-        return FirebaseDatabase.getInstance().getReference()
-                .child("users")
-                .child(userID)
-                .child("daily_data")
-                .child(date)
-                .setValue(dailyData);
+        return FirebaseDatabase.getInstance().getReference().child("users").child(userID).child("daily_data").child(date).setValue(dailyData);
     }
 
     @Override
     public Task<Void> update(DailyData dailyData, String date) {
-        return FirebaseDatabase.getInstance().getReference()
-                .child("users")
-                .child(userID)
-                .child("daily_data")
-                .child(date)
-                .setValue(dailyData);
+        return FirebaseDatabase.getInstance().getReference().child("users").child(userID).child("daily_data").child(date).setValue(dailyData);
     }
 
     @Override
     public Task<Void> delete(DailyData dailyData, String date) {
-        return FirebaseDatabase.getInstance().getReference()
-                .child("users")
-                .child(userID)
-                .child("daily_data")
-                .child(date)
-                .removeValue();
+        return FirebaseDatabase.getInstance().getReference().child("users").child(userID).child("daily_data").child(date).removeValue();
     }
 
 

@@ -1,4 +1,4 @@
-package com.example.caloriecounter;
+package com.example.caloriecounter.view.EIM;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -6,6 +6,8 @@ import android.widget.ImageView;
 import android.widget.RadioGroup;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.caloriecounter.R;
 
 import java.util.Locale;
 

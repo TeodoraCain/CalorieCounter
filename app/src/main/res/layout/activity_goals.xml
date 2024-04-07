@@ -7,6 +7,7 @@
     android:orientation="vertical"
     tools:context=".GoalsActivity">
 
+    <!--    toolbar    -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -21,7 +22,6 @@
         app:titleMarginStart="100dp"
         app:titleTextAppearance="@style/Theme.CalorieCounter"
         app:titleTextColor="@color/white" />
-    <!--        app:navigationIcon="@drawable/ic_back"-->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -73,7 +73,7 @@
                 android:hint="@string/daily_calorie_goal"
                 android:minHeight="48dp"
                 android:padding="8dp"
-                android:text="2000kcal"
+                android:text="@string/loading"
                 android:textColor="@color/gray"
                 android:textSize="@dimen/text_size"
                 app:drawableEndCompat="@drawable/ic_edit"
@@ -128,7 +128,7 @@
                 android:hint="@string/daily_calorie_goal"
                 android:minHeight="48dp"
                 android:padding="8dp"
-                android:text="30min"
+                android:text="@string/loading"
                 android:textColor="@color/gray"
                 android:textSize="@dimen/text_size"
                 app:drawableEndCompat="@drawable/ic_edit"
@@ -159,7 +159,7 @@
                 android:hint="@string/daily_calorie_goal"
                 android:minHeight="48dp"
                 android:padding="8dp"
-                android:text="Weight Goal"
+                android:text="@string/loading"
                 android:textColor="@color/gray"
                 android:textColorHint="@color/gray"
                 android:textSize="@dimen/text_size"
@@ -183,7 +183,7 @@
                 android:hint="@string/daily_calorie_goal"
                 android:minHeight="48dp"
                 android:padding="8dp"
-                android:text="54kg"
+                android:text="@string/loading"
                 android:textColor="@color/gray"
                 android:textSize="@dimen/text_size"
                 app:drawableEndCompat="@drawable/ic_edit"
@@ -193,7 +193,6 @@
                 app:layout_constraintWidth_percent="0.5" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
 
         <!--    water goal    -->
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -237,7 +236,7 @@
                 android:hint="@string/daily_calorie_goal"
                 android:minHeight="48dp"
                 android:padding="8dp"
-                android:text="2000ml"
+                android:text="@string/loading"
                 android:textColor="@color/gray"
                 android:textSize="@dimen/text_size"
                 app:drawableEndCompat="@drawable/ic_edit"
@@ -268,7 +267,7 @@
                 android:hint="@string/daily_calorie_goal"
                 android:minHeight="48dp"
                 android:padding="8dp"
-                android:text="Step Goal"
+                android:text="@string/loading"
                 android:textColor="@color/gray"
                 android:textColorHint="@color/gray"
                 android:textSize="@dimen/text_size"
@@ -292,7 +291,7 @@
                 android:hint="@string/daily_calorie_goal"
                 android:minHeight="48dp"
                 android:padding="8dp"
-                android:text="6000st"
+                android:text="@string/loading"
                 android:textColor="@color/gray"
                 android:textSize="@dimen/text_size"
                 app:drawableEndCompat="@drawable/ic_edit"
@@ -303,7 +302,7 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
+        <!--    save button    -->
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnSave"
             android:layout_width="match_parent"
@@ -314,7 +313,7 @@
             android:maxWidth="78dip"
             android:minWidth="48dip"
             android:onClick="onSaveProfileData"
-            android:text="Save"
+            android:text="@string/save"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="@dimen/text_size" />

@@ -1,4 +1,4 @@
-package com.example.caloriecounter.controller;
+package com.example.caloriecounter.controllers;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,14 +22,6 @@ public class FirebaseExerciseRecyclerViewerAdapter extends FirebaseRecyclerAdapt
         super(options);
         this.recyclerViewInterface = recyclerViewInterface;
     }
-
-    /**
-     * Initialize a {@link RecyclerView.Adapter} that listens to a Firebase query. See
-     * {@link FirebaseRecyclerOptions} for configuration options.
-     *
-     * @param options
-     */
-
 
     public FirebaseExerciseRecyclerViewerAdapter(@NonNull FirebaseRecyclerOptions<Exercise> options) {
         super(options);
@@ -55,16 +47,13 @@ public class FirebaseExerciseRecyclerViewerAdapter extends FirebaseRecyclerAdapt
 
             exercise = itemView.findViewById(R.id.tvExercise);
 
-            itemView.setOnClickListener(new View.OnClickListener() {//47min
-                @Override
-                public void onClick(View v) {
-                    if(recyclerViewInterface !=null){
-                        int position = getAbsoluteAdapterPosition();
+            itemView.setOnClickListener(v -> {
+                if(recyclerViewInterface !=null){
+                    int position = getAbsoluteAdapterPosition();
 
-                        if(position != RecyclerView.NO_POSITION){
-                            recyclerViewInterface.onItemClick(position);
-                            Log.d("interface click", String.valueOf(position));
-                        }
+                    if(position != RecyclerView.NO_POSITION){
+                        recyclerViewInterface.onItemClick(position);
+                        Log.d("interface click", String.valueOf(position));
                     }
                 }
             });

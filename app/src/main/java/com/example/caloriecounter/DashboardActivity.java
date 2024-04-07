@@ -1,9 +1,11 @@
 package com.example.caloriecounter;
 
+import static com.example.caloriecounter.R.id.*;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.DialogInterface;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -26,15 +28,20 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.caloriecounter.R.id;
+import com.example.caloriecounter.view.EIM.FoodItemDisplayActivityEIM;
+import com.example.caloriecounter.view.EIM.LanguageActivityEIM;
+import com.example.caloriecounter.view.EIM.RssFeederActivityEIM;
+import com.example.caloriecounter.view.EIM.SecondFragmentEIM;
 import com.example.caloriecounter.view.fragments.dashboard.DiaryFragment;
 import com.example.caloriecounter.view.fragments.dashboard.HomeFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.Objects;
+
 public class DashboardActivity extends AppCompatActivity {
 
-    private final String TAG = "Dashboard Activity";
     private LinearLayout menu, profile, settings, share, about_us, logout;
     private FirebaseAuth mAuth;
 
@@ -42,6 +49,9 @@ public class DashboardActivity extends AppCompatActivity {
     private FloatingActionButton floatingActionButton;
     private DrawerLayout drawerLayout;
     private BottomNavigationView bottomNavigationView;
+
+    private Context mContext;
+    private final String TAG = "DashboardActivity";
 
     public DashboardActivity() {
     }
@@ -51,20 +61,16 @@ public class DashboardActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
-        boolean fragment_flag = getIntent().getBooleanExtra("NAVIGATE_TO_DIARY_FRAGMENT", false);
-        Log.d("NAVGATE", String.valueOf(fragment_flag));
 
-        mAuth = FirebaseAuth.getInstance();
+        setUpFirebase();
+        setUpViews();
 
-        init();
         setOnClickListeners();
         changeDrawerHeader();
-        setBottomNavigation();
-        if (fragment_flag) {
-            replaceFragment(new DiaryFragment());
-        } else {
-            replaceFragment(new HomeFragment());
-        }
+        setUpBottomNavigation();
+
+        setUpViewFragment();
+    }
 
 
 //        Toolbar toolbar = findViewById(R.id.toolbar);
@@ -72,7 +78,7 @@ public class DashboardActivity extends AppCompatActivity {
 
 //        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
 //        navigationView.setNavigationItemSelectedListener(this);
-        // Initialize Firebase Auth
+    // Initialize Firebase Auth
 
 
 //        toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_nav, R.string.close_nav);
@@ -104,20 +110,33 @@ public class DashboardActivity extends AppCompatActivity {
 //                        }
 //                    }
 //                });
-        //
+    //
+//    }
 
+    private void setUpViewFragment() {
+        boolean fragment_flag = getIntent().getBooleanExtra("NAVIGATE_TO_DIARY_FRAGMENT", false);
 
+        if (fragment_flag) {
+            replaceFragment(new DiaryFragment());
+        } else {
+            replaceFragment(new HomeFragment());
+        }
     }
 
-    private void setBottomNavigation() {
+    private void setUpFirebase() {
+        mAuth = FirebaseAuth.getInstance();
+    }
+
+    @SuppressLint("NonConstantResourceId")
+    private void setUpBottomNavigation() {
         bottomNavigationView.setBackground(null);
         bottomNavigationView.setOnItemSelectedListener(item -> {
 
             switch (item.getItemId()) {
-                case id.home:
+                case home:
                     replaceFragment(new HomeFragment());
                     break;
-                case id.diary:
+                case diary:
                     replaceFragment(new DiaryFragment());
                     break;
 //                case R.id.subscriptions:
@@ -126,6 +145,8 @@ public class DashboardActivity extends AppCompatActivity {
 //                case R.id.library:
 //                    replaceFragment(new LibraryFragment());
 //                    break;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + item.getItemId());
             }
 
             return true;
@@ -136,106 +157,107 @@ public class DashboardActivity extends AppCompatActivity {
 
     private void setOnClickListeners() {
         menu.setOnClickListener(v -> openDrawer(drawerLayout));
-        profile.setOnClickListener(v -> {
-            goToUserProfile();
-            closeDrawer(drawerLayout);
-        });
-        settings.setOnClickListener(v -> {
-            goToGoalSettings();
-            closeDrawer(drawerLayout);
-        });
-        logout.setOnClickListener(v -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(DashboardActivity.this);
-            builder.setMessage("Are you sure you want to logout?");
-            builder.setPositiveButton("yes", (dialog, which) -> {
-                mAuth.signOut();
-                signOutUser();
-            });
-            builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
+        profile.setOnClickListener(this::goToUserProfile);
+        settings.setOnClickListener(this::goToGoalSettings);
+        logout.setOnClickListener(this::showLogoutConfirmation);
 
-                }
-            });
-
-            builder.show();
-
-        });
+        // ***************** EIM ************************
 
         share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(DashboardActivity.this, FoodItemDisplayActivityEIM.class);
+                Intent intent = new Intent(mContext, FoodItemDisplayActivityEIM.class);
                 startActivity(intent);
             }
         });
 
-        LinearLayout eim2 = findViewById(id.nav_eimRss);
+        LinearLayout eim2 = findViewById(nav_eimRss);
         eim2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(DashboardActivity.this, RssFeederActivityEIM.class);
+                Intent intent = new Intent(mContext, RssFeederActivityEIM.class);
                 startActivity(intent);
             }
         });
-        LinearLayout eim3 = findViewById(id.nav_eimLanguage);
+        LinearLayout eim3 = findViewById(nav_eimLanguage);
         eim3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(DashboardActivity.this, LanguageActivityEIM.class);
+                Intent intent = new Intent(mContext, LanguageActivityEIM.class);
                 startActivity(intent);
             }
         });
 
-        LinearLayout eim4 = findViewById(id.nav_eimFragment);
+        LinearLayout eim4 = findViewById(nav_eimFragment);
         eim4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(DashboardActivity.this, SecondFragmentEIM.class);
+                Intent intent = new Intent(mContext, SecondFragmentEIM.class);
                 startActivity(intent);
             }
         });
 
     }
 
-    private void init() {
+    private void goToGoalSettings(View v) {
+        Log.d(TAG, "Staring GoalsActivity..");
+        redirectActivity(this, GoalsActivity.class);
+        closeDrawer(drawerLayout);
+    }
+
+    private void goToUserProfile(View v) {
+        Log.d(TAG, "Staring ProfileActivity..");
+        redirectActivity(this, ProfileActivity.class);
+        closeDrawer(drawerLayout);
+    }
+
+    private void showLogoutConfirmation(View v) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setMessage("Are you sure you want to logout?");
+        builder.setPositiveButton("yes", (dialog, which) -> signOutUser());
+        builder.setNegativeButton("cancel", (dialog, which) -> {
+            //return
+        });
+
+        builder.show();
+    }
+
+    private void setUpViews() {
+        mContext = DashboardActivity.this;
         bottomNavigationView = findViewById(id.bottomNavigationView);
-        floatingActionButton = findViewById(id.fab);
+        floatingActionButton = findViewById(fab);
         drawerLayout = findViewById(id.drawerLayout);
-        menu = findViewById(id.toolbar);
-        profile = findViewById(id.nav_profile);
-        settings = findViewById(id.nav_settings);
-        logout = findViewById(id.nav_logout);
-        share = findViewById(id.nav_share);
+        menu = findViewById(toolbar);
+        profile = findViewById(nav_profile);
+        settings = findViewById(nav_settings);
+        logout = findViewById(nav_logout);
+        share = findViewById(nav_share);
     }
 
-    private void goToGoalSettings() {
-        Intent goalSettings = new Intent(DashboardActivity.this, GoalsActivity.class);
-        startActivity(goalSettings);
+    public static void redirectActivity(Activity activity, Class destinationActivity) {
+        Intent intent = new Intent(activity, destinationActivity);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        activity.startActivity(intent);
     }
-
 
     private void signOutUser() {
-        Intent mainActivity = new Intent(DashboardActivity.this, MainActivity.class);
+        Log.d(TAG, "Signing out..");
+        mAuth.signOut();
+
+        Intent mainActivity = new Intent(mContext, MainActivity.class);
         mainActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(mainActivity);
         finish();
     }
 
-    public void goToUserProfile() {
-        Intent userProfile = new Intent(DashboardActivity.this, ProfileActivity.class);
-        startActivity(userProfile);
-    }
-
     public void changeDrawerHeader() {
         //set user name in drawer header
-        TextView userName = (TextView) findViewById(R.id.tvUserName);
-        userName.setText(mAuth.getCurrentUser().getDisplayName());
+        TextView userName = findViewById(tvUserName);
+        userName.setText(Objects.requireNonNull(mAuth.getCurrentUser()).getDisplayName());
 
         //set user e-mail in drawer header
-        TextView email = (TextView) findViewById(R.id.tvUserEmail);
+        TextView email = findViewById(tvUserEmail);
         email.setText(mAuth.getCurrentUser().getEmail());
-
     }
 
     @Override
@@ -247,20 +269,19 @@ public class DashboardActivity extends AppCompatActivity {
     private void replaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.frameLayout, fragment);
+        fragmentTransaction.replace(frameLayout, fragment);
         fragmentTransaction.commit();
     }
 
     private void showBottomDialog() {
-
-        final Dialog dialog = new Dialog(this);
+        final Dialog dialog = new Dialog(mContext);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.bottom_sheet_layout);
 
-        LinearLayout breakfastLayout = dialog.findViewById(R.id.layoutBreakfast);
-        LinearLayout lunchLayout = dialog.findViewById(id.layoutLunch);
-        LinearLayout dinnerLayout = dialog.findViewById(id.layoutDinner);
-        LinearLayout snackLayout = dialog.findViewById(id.layoutSnack);
+        LinearLayout breakfastLayout = dialog.findViewById(layoutBreakfast);
+        LinearLayout lunchLayout = dialog.findViewById(layoutLunch);
+        LinearLayout dinnerLayout = dialog.findViewById(layoutDinner);
+        LinearLayout snackLayout = dialog.findViewById(layoutSnack);
         ImageView cancelButton = dialog.findViewById(R.id.cancelButton);
 
         breakfastLayout.setOnClickListener(v -> {
@@ -294,7 +315,8 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     private void startFoodActivity(String meal) {
-        Intent intent = new Intent(DashboardActivity.this, FoodActivity.class);
+        Log.d(TAG, "Starting FoodActivity..");
+        Intent intent = new Intent(mContext, AddFoodActivity.class);
         intent.putExtra("MEAL", meal);
         startActivity(intent);
     }
@@ -307,13 +329,6 @@ public class DashboardActivity extends AppCompatActivity {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
         }
-    }
-
-    public static void redirectActivity(Activity activity, Class destinationActivity) {
-        Intent intent = new Intent(activity, destinationActivity);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        activity.startActivity(intent);
-        activity.finish();
     }
 
     @Override

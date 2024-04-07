@@ -1,4 +1,4 @@
-package com.example.caloriecounter.controller;
+package com.example.caloriecounter.controllers;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;

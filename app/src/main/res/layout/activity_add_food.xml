@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".FoodActivity">
+    tools:context=".AddFoodActivity">
 
+    <!--    toolbar    -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -16,22 +17,16 @@
         android:foregroundTint="@color/white"
         android:popupTheme="@style/Theme.CalorieCounter"
         android:theme="@style/Theme.AppCompat.Light"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:subtitleTextColor="@color/white"
         app:title="Add Food"
         app:titleMarginStart="100dp"
         app:titleTextAppearance="@style/Theme.CalorieCounter"
         app:titleTextColor="@color/white" />
 
-<!--    <TextView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="24dp"-->
-<!--        android:text="Recipe"-->
-<!--        android:background="@drawable/custom_input_text"-->
-<!--        android:textAlignment="center">-->
-
-<!--    </TextView>-->
-
+    <!--   food search    -->
     <EditText
         android:id="@+id/etSearchFoods"
         android:layout_width="match_parent"
@@ -50,19 +45,24 @@
         android:textColor="@color/gray"
         android:textColorHint="@color/gray"
         android:textSize="@dimen/text_size"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
         app:layout_constraintVertical_bias="0.12" />
 
+    <!--    food list display    -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvFoods"
-        android:layout_width="409dp"
-        android:layout_height="650dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginStart="1dp"
         android:layout_marginTop="21dp"
         android:layout_marginEnd="1dp"
-        android:layout_marginBottom="1dp" />
+        android:layout_marginBottom="1dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etSearchFoods"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0"/>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

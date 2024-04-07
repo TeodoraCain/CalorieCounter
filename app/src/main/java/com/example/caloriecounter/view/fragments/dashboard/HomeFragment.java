@@ -27,7 +27,8 @@ import android.widget.Toast;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 
-import com.example.caloriecounter.ExerciseActivity;
+import com.example.caloriecounter.AddExerciseActivity;
+import com.example.caloriecounter.AddWeightActivity;
 import com.example.caloriecounter.R;
 import com.example.caloriecounter.model.DAO.DailyData;
 import com.example.caloriecounter.model.DAO.DailyDataDAO;
@@ -83,7 +84,7 @@ public class HomeFragment extends Fragment implements SensorEventListener {
             tvBreakfastCalories, tvLunchCalories,
             tvDinnerCalories, tvSnacksCalories;
 
-    private View addWaterIntake;
+    private ImageView addWaterIntake, addWeight;
     private ProgressBar pbTotalCalories;
 
     //step counter
@@ -106,6 +107,13 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         setWaterIntake();
         resetSteps();
 
+        addWeight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeFragment.this.getActivity(), AddWeightActivity.class);
+                startActivity(intent);
+            }
+        });
 
         addWaterIntake.setOnClickListener(v -> {
             waterIntake += waterUnits;
@@ -192,6 +200,7 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         tvSnacksCalories = view.findViewById(R.id.tvSnacksCalories);
 
         addWaterIntake = view.findViewById(R.id.ivAddWater);
+        addWeight = view.findViewById(R.id.ivAddWeight);
         pbTotalCalories = view.findViewById(R.id.pbTotalCalories);
         initStepper();
 
@@ -217,7 +226,7 @@ public class HomeFragment extends Fragment implements SensorEventListener {
     }
 
     private void goToExerciseActivity() {
-        Intent exerciseActivity = new Intent(this.getActivity(), ExerciseActivity.class);
+        Intent exerciseActivity = new Intent(this.getActivity(), AddExerciseActivity.class);
         startActivity(exerciseActivity);
     }
 

@@ -1,4 +1,4 @@
-package com.example.caloriecounter;
+package com.example.caloriecounter.view.EIM;
 
 import android.os.Bundle;
 
@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.caloriecounter.R;
 import com.example.caloriecounter.view.fragments.dashboard.HomeFragment;
 
 public class SecondFragmentEIM extends AppCompatActivity {

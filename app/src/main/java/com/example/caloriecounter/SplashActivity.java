@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -46,30 +47,44 @@ public class SplashActivity extends AppCompatActivity {
     private static final int TOTAL_DATA_RETRIEVAL_TASKS = 4;
     private ProgressBar progressBar;
 
+    private Context mContext;
+    private final String TAG = "SplashActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        progressBar = findViewById(R.id.progressBar);
 
+        setUpViews();
+        checkLoggedUser();
+    }
+
+    private void checkLoggedUser() {
         FirebaseAuth authProfile = FirebaseAuth.getInstance();
         if (authProfile.getCurrentUser() != null) {
+            Log.d(TAG, "User is connected..");
             initAppData();
         } else {
+            Log.d(TAG, "User is not connected. Starting MainActivity..");
             progressBar.setVisibility(View.GONE);
             new Handler().postDelayed(() -> {
-                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                Intent intent = new Intent(mContext, MainActivity.class);
                 startActivity(intent);
                 finish();
             }, 3000);
         }
     }
 
+    private void setUpViews() {
+        progressBar = findViewById(R.id.progressBar);
+        mContext = SplashActivity.this;
+    }
+
     private void checkAndStartNewIntent() {
         dataRetrievalCount++;
         if (dataRetrievalCount == TOTAL_DATA_RETRIEVAL_TASKS) {
             // All data retrieval tasks are completed, start the new intent
-            Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+            Intent intent = new Intent(mContext, MainActivity.class);
             startActivity(intent);
             finish(); // Finish the splash activity to prevent going back to it
         }
@@ -77,10 +92,10 @@ public class SplashActivity extends AppCompatActivity {
 
     private void initFoodList() {
         FoodDAO foodDAO = new FoodDAOImpl();
-
         foodDAO.get().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Log.d(TAG, "Food data initiated.");
                 List<Food> foodList = new ArrayList<>();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Food food = dataSnapshot.getValue(Food.class);
@@ -92,6 +107,7 @@ public class SplashActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+                Log.d(TAG, "Food data failed to initiate.");
             }
         });
     }
@@ -101,6 +117,7 @@ public class SplashActivity extends AppCompatActivity {
         goalDataDAO.get().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Log.d(TAG, "Goal data initiated.");
                 GoalData goalData = snapshot.getValue(GoalData.class);
                 if (goalData == null) {
                     goalData = new GoalData();
@@ -111,7 +128,8 @@ public class SplashActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(SplashActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "Something went wrong!", Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "Goal data failed to initiate.");
             }
         });
 
@@ -122,6 +140,7 @@ public class SplashActivity extends AppCompatActivity {
         userDAO.get().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Log.d(TAG, "User data initiated.");
                 UserDetails userDetails = snapshot.getValue(UserDetails.class);
                 if (userDetails != null) {
                     UserDetailsHolder.getInstance().setData(userDetails);
@@ -131,7 +150,8 @@ public class SplashActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(SplashActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "Something went wrong!", Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "User data failed to initiate.");
             }
         });
 
@@ -145,9 +165,9 @@ public class SplashActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     String imageUrl = dataSnapshot.getValue(String.class);
-
+                    Log.d(TAG, "User profile picture retrieved.");
                     if (imageUrl != null && !imageUrl.isEmpty()) {
-                        SharedPreferences sharedPreferences = Objects.requireNonNull(SplashActivity.this).getSharedPreferences(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid(), Context.MODE_PRIVATE);
+                        SharedPreferences sharedPreferences = Objects.requireNonNull(mContext).getSharedPreferences(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid(), Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
 
                         editor.putString("imageUrl", imageUrl);
@@ -158,7 +178,7 @@ public class SplashActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(SplashActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "User data failed to initialize.");
             }
         });
     }
@@ -169,6 +189,7 @@ public class SplashActivity extends AppCompatActivity {
         dailyDataDAO.get().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Log.d(TAG, "Daily data initiated.");
                 DailyData dailyData = snapshot.getValue(DailyData.class);
                 if (dailyData == null) {
                     dailyData = new DailyData();
@@ -180,7 +201,7 @@ public class SplashActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(SplashActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "Daily data failed to initialize.");
             }
         });
     }
@@ -190,6 +211,5 @@ public class SplashActivity extends AppCompatActivity {
         initGoalData();
         initFoodList();
         initDailyData();
-
     }
 }

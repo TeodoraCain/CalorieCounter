@@ -1,5 +1,6 @@
 package com.example.caloriecounter;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,6 +9,9 @@ import androidx.appcompat.widget.Toolbar;
 import java.util.Objects;
 
 public class WeightLogActivity extends AppCompatActivity {
+
+    private Context mContext;
+    private final String TAG = "WeightLogActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

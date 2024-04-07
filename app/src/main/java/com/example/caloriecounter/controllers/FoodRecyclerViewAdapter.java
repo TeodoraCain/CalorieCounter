@@ -1,4 +1,4 @@
-package com.example.caloriecounter.controller;
+package com.example.caloriecounter.controllers;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +15,8 @@ import java.text.MessageFormat;
 import java.util.List;
 
 public class FoodRecyclerViewAdapter extends RecyclerView.Adapter<FoodRecyclerViewAdapter.ViewHolder> {
-    private List<Food> foods;
-    private OnItemClickListener clickListener;
+    private final List<Food> foods;
+    private final OnItemClickListener clickListener;
 
     public FoodRecyclerViewAdapter(List<Food> foods, OnItemClickListener clickListener) {
         this.foods = foods;

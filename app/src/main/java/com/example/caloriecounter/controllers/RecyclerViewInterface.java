@@ -1,4 +1,4 @@
-package com.example.caloriecounter.controller;
+package com.example.caloriecounter.controllers;
 
 public interface RecyclerViewInterface {
 

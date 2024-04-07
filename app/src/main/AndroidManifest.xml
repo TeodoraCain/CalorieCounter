@@ -32,14 +32,14 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".ShowFoodsActivityEIM"
+            android:name=".view.EIM.ShowFoodsActivityEIM"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".WriteFoodToFileActivityEIM"
+            android:name=".view.EIM.WriteFoodToFileActivityEIM"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -67,42 +67,42 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".FoodActivity"
+            android:name=".AddFoodActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".SecondFragmentEIM"
+            android:name=".view.EIM.SecondFragmentEIM"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".LanguageActivityEIM"
+            android:name=".view.EIM.LanguageActivityEIM"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".RssFeederActivityEIM"
+            android:name=".view.EIM.RssFeederActivityEIM"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".FilterResultsActivityEIM"
+            android:name=".view.EIM.FilterResultsActivityEIM"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".FoodItemDisplayActivityEIM"
+            android:name=".view.EIM.FoodItemDisplayActivityEIM"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -123,7 +123,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".ExerciseActivity"
+            android:name=".AddExerciseActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

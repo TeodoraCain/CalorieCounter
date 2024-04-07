@@ -40,7 +40,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileActivity extends AppCompatActivity implements ChangeProfileInfoDialog.DialogListener {
 
-    private TextView tvName, tvEmail, tvDOB, tvGender, tvCountry, tvPassword;
+    TextView tvName;
+    TextView tvEmail;
+    TextView tvDOB;
+    TextView tvGender;
+    TextView tvCountry;
+    private TextView tvPassword;
     private String gender;
     private CircleImageView ivProfilePicture;
     private boolean imagePickerOpen = false;
@@ -54,8 +59,8 @@ public class ProfileActivity extends AppCompatActivity implements ChangeProfileI
     private StorageReference storageReference;
     private FirebaseUser firebaseUser;
 
+    private Context mContext;
     private final String TAG = "EditProfileActivity";
-    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,15 +68,15 @@ public class ProfileActivity extends AppCompatActivity implements ChangeProfileI
         setContentView(R.layout.activity_profile);
 
         setToolbar();
-        init();
+        setUpViews();
+        setUpUserDetails();
+        setUpFirebase();
+        checkUserAndSetUserDataToUI();
+        setUpProfilePicture();
+        setListeners();
+    }
 
-        if (firebaseUser == null) {
-            Toast.makeText(ProfileActivity.this, "Something went wrong! User details not available.", Toast.LENGTH_SHORT).show();
-        } else {
-            showUserProfile(firebaseUser);
-        }
-
-//      change profile picture
+    private void setUpProfilePicture() {
         imagePickLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if (result.getResultCode() == Activity.RESULT_OK) {
                 Intent data = result.getData();
@@ -93,11 +98,31 @@ public class ProfileActivity extends AppCompatActivity implements ChangeProfileI
                 savedChanges = false;
             }
         });
+    }
 
+    private void setListeners() {
         tvName.setOnClickListener(v -> openDialog("Are you sure you want to change your name?", "Change Name Dialog", tvName));
         tvDOB.setOnClickListener(v -> openDialog("Are you sure you want to change your date of birth?", "Change DOB Dialog", tvDOB));
         tvGender.setOnClickListener(v -> openDialog("Are you sure you want to change your gender?\nThis will affect your BMI and calorie intake calculations.", "Change Gender Dialog", tvGender));
         tvCountry.setOnClickListener(v -> openDialog("Are you sure you want to change your country of residence?", "Change Country Dialog", tvCountry));
+    }
+
+    private void checkUserAndSetUserDataToUI() {
+        if (firebaseUser == null) {
+            Toast.makeText(ProfileActivity.this, "Something went wrong! User details not available.", Toast.LENGTH_SHORT).show();
+        } else {
+            showUserProfile(firebaseUser);
+        }
+    }
+
+    private void setUpUserDetails() {
+        userDAO = new UserDAOImpl();
+        userDetails = UserDetailsHolder.getInstance().getData();
+    }
+
+    private void setUpFirebase() {
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        storageReference = FirebaseStorage.getInstance().getReference();
     }
 
     private void setToolbar() {
@@ -109,26 +134,20 @@ public class ProfileActivity extends AppCompatActivity implements ChangeProfileI
         getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
-    private void init() {
-        context = this;
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        storageReference = FirebaseStorage.getInstance().getReference();
-        userDAO = new UserDAOImpl();
-
-        userDetails = UserDetailsHolder.getInstance().getData();
-
+    private void setUpViews() {
+        mContext = ProfileActivity.this;
+        //set up text views
         tvName = findViewById(R.id.tvName);
         tvEmail = findViewById(R.id.tvEmail);
         tvDOB = findViewById(R.id.tvDOB);
         tvGender = findViewById(R.id.tvGender);
         tvPassword = findViewById(R.id.tvPassword);
         tvCountry = findViewById(R.id.tvCountry);
-
+        //set up image view
         ivProfilePicture = findViewById(R.id.ivProfilePicture);
     }
 
     private void openDialog(String message, String tag, TextView textView) {
-
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         alertDialog.setMessage(message);
         alertDialog.setPositiveButton("ok", (dialog, which) -> {
@@ -143,7 +162,7 @@ public class ProfileActivity extends AppCompatActivity implements ChangeProfileI
         alertDialog.create().show();
     }
 
-    private void showUserProfile(FirebaseUser user) {
+    void showUserProfile(FirebaseUser user) {
         if (userDetails != null) {
             String name = user.getDisplayName();
             String email = user.getEmail();
@@ -192,10 +211,11 @@ public class ProfileActivity extends AppCompatActivity implements ChangeProfileI
 
             userDAO.update(writeUserDetails).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    SuccessDialog successDialog = new SuccessDialog(context);
+                    SuccessDialog successDialog = new SuccessDialog(mContext);
                     successDialog.show();
 
                     new Handler().postDelayed(successDialog::cancel, 2000);
+                    UserDetailsHolder.getInstance().setData(writeUserDetails);
                 }
             });
 

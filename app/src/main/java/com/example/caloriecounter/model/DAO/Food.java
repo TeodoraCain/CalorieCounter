@@ -31,6 +31,30 @@ public class Food implements Parcelable {
     public Food() {
     }
 
+    public Food(String name, double serving_size, double calories, double total_fat, double saturated_fat, double sodium, double vitamin_a, double vitamin_b12, double vitamin_b6, double vitamin_c, double vitamin_d, double vitamin_e, double vitamin_k, double calcium, double iron, double magnesium, double potassium, double protein, double carbohydrate, double fiber, double sugars) {
+        this.name = name;
+        this.serving_size = serving_size;
+        this.calories = calories;
+        this.total_fat = total_fat;
+        this.saturated_fat = saturated_fat;
+        this.sodium = sodium;
+        this.vitamin_a = vitamin_a;
+        this.vitamin_b12 = vitamin_b12;
+        this.vitamin_b6 = vitamin_b6;
+        this.vitamin_c = vitamin_c;
+        this.vitamin_d = vitamin_d;
+        this.vitamin_e = vitamin_e;
+        this.vitamin_k = vitamin_k;
+        this.calcium = calcium;
+        this.iron = iron;
+        this.magnesium = magnesium;
+        this.potassium = potassium;
+        this.protein = protein;
+        this.carbohydrate = carbohydrate;
+        this.fiber = fiber;
+        this.sugars = sugars;
+    }
+
     public String getName() {
         return name;
     }

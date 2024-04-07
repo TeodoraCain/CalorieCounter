@@ -1,6 +1,7 @@
 package com.example.caloriecounter;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -27,7 +28,11 @@ public class LoginActivity extends AppCompatActivity {
     private boolean passwordVisible;
     private EditText password;
     private EditText email;
+    private Button loginButton;
     private FirebaseAuth authProfile;
+
+    private Context mContext;
+    private final String TAG = "LoginActivity";
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -35,32 +40,39 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        setUpViews();
+        passwordVisibilityButtonSet();
+        setUpFirebase();
+        startLogin();
+    }
+
+    private void setUpFirebase() {
+        authProfile = FirebaseAuth.getInstance();
+    }
+
+    private void setUpViews() {
+        mContext = LoginActivity.this;
         email = findViewById(R.id.etEmailLogin);
         password = findViewById(R.id.etPasswordLogin);
-        passwordVisibilityButtonSet();
-
-        authProfile = FirebaseAuth.getInstance();
-        startLogin();
-
+        loginButton = findViewById(R.id.btnLogin);
     }
 
     private void startLogin() {
-        Button loginButton = findViewById(R.id.btnLogin);
         loginButton.setOnClickListener(v -> {
             String emailTxt = email.getText().toString();
             String passwordTxt = password.getText().toString();
 
             if (TextUtils.isEmpty(emailTxt)) {
-                Toast.makeText(LoginActivity.this, "Please enter email!", Toast.LENGTH_SHORT).show();
-                email.setError("Email is required");
+                //Toast.makeText(LoginActivity.this, "Please enter email!", Toast.LENGTH_SHORT).show();
+                email.setError("Please enter email!");
                 email.requestFocus();
             } else if (!Patterns.EMAIL_ADDRESS.matcher(emailTxt).matches()) {
-                Toast.makeText(LoginActivity.this, "Email is incorrect!", Toast.LENGTH_SHORT).show();
-                email.setError("Re-type your email");
+                //Toast.makeText(LoginActivity.this, "Email is incorrect!", Toast.LENGTH_SHORT).show();
+                email.setError("Email is incorrect!");
                 email.requestFocus();
             } else if (TextUtils.isEmpty(passwordTxt)) {
-                Toast.makeText(LoginActivity.this, "Please enter password!", Toast.LENGTH_SHORT).show();
-                password.setError("Password is required");
+                //Toast.makeText(LoginActivity.this, "Please enter password!", Toast.LENGTH_SHORT).show();
+                password.setError("Please enter password!");
                 password.requestFocus();
             } else {
                 loginWithEmailAndPassword(emailTxt, passwordTxt);
@@ -71,8 +83,9 @@ public class LoginActivity extends AppCompatActivity {
     private void loginWithEmailAndPassword(String emailTxt, String passwordTxt) {
         authProfile.signInWithEmailAndPassword(emailTxt, passwordTxt).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                Toast.makeText(LoginActivity.this, "Welcome", Toast.LENGTH_SHORT).show();
-                Intent login = new Intent(LoginActivity.this, SplashActivity.class);
+                Log.d(TAG, "Logging in user..");
+                Toast.makeText(mContext, "Welcome", Toast.LENGTH_SHORT).show();
+                Intent login = new Intent(mContext, SplashActivity.class);
                 startActivity(login);
             } else {
                 try {
@@ -85,7 +98,7 @@ public class LoginActivity extends AppCompatActivity {
                     email.requestFocus();
                 } catch (Exception e) {
                     Log.e("LoginActivity", e.getMessage());
-                    Toast.makeText(LoginActivity.this, "Something went wrong. Try again!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "Something went wrong. Try again!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -116,7 +129,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onStartDashboardPage(View view) {
-        Intent login = new Intent(this, DashboardActivity.class);
+        Intent login = new Intent(mContext, DashboardActivity.class);
         startActivity(login);
     }
 }

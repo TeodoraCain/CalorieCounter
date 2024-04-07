@@ -18,11 +18,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.example.caloriecounter.ExerciseActivity;
-import com.example.caloriecounter.FoodActivity;
+import com.example.caloriecounter.AddExerciseActivity;
+import com.example.caloriecounter.AddFoodActivity;
 import com.example.caloriecounter.R;
-import com.example.caloriecounter.controller.RecipeAdapter;
-import com.example.caloriecounter.controller.WorkoutAdapter;
+import com.example.caloriecounter.controllers.RecipeAdapter;
+import com.example.caloriecounter.controllers.WorkoutAdapter;
 import com.example.caloriecounter.model.DAO.DailyData;
 import com.example.caloriecounter.model.DAO.DailyDataDAO;
 import com.example.caloriecounter.model.DAO.DailyDataDAOImpl;
@@ -87,7 +87,6 @@ public class DiaryFragment extends Fragment {
 
     private float gramsOfFat, gramsOfProtein, gramsOfCarbs;
     private int totalCalories;
-    private int totalWorkoutCalories;
 
     private static final int DAYS_TO_MOVE = 1;
 
@@ -117,14 +116,14 @@ public class DiaryFragment extends Fragment {
     }
 
     private void addExercise() {
-        Intent intent = new Intent(mContext, ExerciseActivity.class);
+        Intent intent = new Intent(mContext, AddExerciseActivity.class);
         intent.putExtra("FROMDIARY", true);
         intent.putExtra("DATE", diaryDate);
         startActivity(intent);
     }
 
     private void addFood(String meal) {
-        Intent intent = new Intent(mContext, FoodActivity.class);
+        Intent intent = new Intent(mContext, AddFoodActivity.class);
         intent.putExtra("MEAL", meal);
         intent.putExtra("DATE", diaryDate);
         startActivity(intent);
@@ -208,7 +207,6 @@ public class DiaryFragment extends Fragment {
 
         setWorkouts();
 
-
         tvTotalCaloriesCount.setText(MessageFormat.format("{0} / {1} kcal", totalCalories, calorieGoal));
         tvTotalProteinCount.setText(MessageFormat.format("{0} / {1} g", gramsOfProtein, maxGramsOfProtein));
         tvTotalCarbsCount.setText(MessageFormat.format("{0} / {1} g", gramsOfCarbs, maxGramsOfCarbs));
@@ -234,13 +232,12 @@ public class DiaryFragment extends Fragment {
                 gramsOfFat += food.getTotal_fat();
             }
         }
-
         textView.setText(String.valueOf(totalCaloriesMeal));
         setListViewHeightBasedOnItems(listView);
     }
 
     private void setWorkouts() {
-        totalWorkoutCalories = 0;
+        int totalWorkoutCalories = 0;
         List<Workout> workoutList = dailyData.getWorkouts();
         if (workoutList == null || workoutList.isEmpty()) {
             workoutList = new ArrayList<>();
@@ -253,7 +250,6 @@ public class DiaryFragment extends Fragment {
         }
 
         tvTotalCaloriesExercise.setText(String.valueOf(totalWorkoutCalories));
-
         totalCalories = totalCalories- totalWorkoutCalories;
         setListViewHeightBasedOnItems(lvWorkoutHistory);
     }
@@ -328,15 +324,17 @@ public class DiaryFragment extends Fragment {
             return;
         }
 
-        int desiredHeight = 0;
+        int totalHeight = 0;
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.AT_MOST);
+
         for (int i = 0; i < listAdapter.getCount(); i++) {
             View listItem = listAdapter.getView(i, null, listView);
-            listItem.measure(0, 0);
-            desiredHeight += listItem.getMeasuredHeight();
+            listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            totalHeight += listItem.getMeasuredHeight();
         }
 
         ViewGroup.LayoutParams params = listView.getLayoutParams();
-        params.height = desiredHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
         listView.setLayoutParams(params);
         listView.requestLayout();
     }

@@ -3,6 +3,7 @@ package com.example.caloriecounter;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -27,29 +28,32 @@ import java.util.Objects;
 
 public class GoalsActivity extends AppCompatActivity implements ChangeGoalsDialog.GoalsDialogListener {
 
-    private Context context;
-    private TextView tvCalorieGoal, tvExerciseGoal,
-            tvWeightGoal, tvWaterGoal, tvStepGoal;
+    private TextView tvCalorieGoal, tvExerciseGoal, tvWeightGoal, tvWaterGoal, tvStepGoal;
 
     private GoalData goalData;
     private boolean savedChanges = true;
+
+    private Context mContext;
+    private final String TAG = "GoalsActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_goals);
 
+        setToolbar();
+        setUpViews();
+        setOnClickListeners();
+        setGoalDataToUI();
+    }
+
+    private void setToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-
-        init();
-        setOnClickListeners();
-        showGoalData();
-
     }
 
     private void setOnClickListeners() {
@@ -60,8 +64,8 @@ public class GoalsActivity extends AppCompatActivity implements ChangeGoalsDialo
         tvStepGoal.setOnClickListener(v -> openDialog("Are you sure you want to change your Step Goal?", "Change Step Goal Dialog", tvStepGoal));
     }
 
-    private void init() {
-        context = this;
+    private void setUpViews() {
+        mContext = GoalsActivity.this;
         tvCalorieGoal = findViewById(R.id.tvCalorieGoal);
         tvExerciseGoal = findViewById(R.id.tvExerciseGoal);
         tvWeightGoal = findViewById(R.id.tvWeightGoal);
@@ -70,7 +74,7 @@ public class GoalsActivity extends AppCompatActivity implements ChangeGoalsDialo
     }
 
     private void openDialog(String message, String tag, TextView textView) {
-
+        Log.d(TAG, "Opening dialog " + tag);
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         alertDialog.setMessage(message);
         alertDialog.setPositiveButton("ok", (dialog, which) -> {
@@ -85,7 +89,7 @@ public class GoalsActivity extends AppCompatActivity implements ChangeGoalsDialo
         alertDialog.create().show();
     }
 
-    private void showGoalData() {
+    private void setGoalDataToUI() {
         goalData = GoalDataHolder.getInstance().getData();
         UserDetails userDetails = UserDetailsHolder.getInstance().getData();
 
@@ -100,24 +104,25 @@ public class GoalsActivity extends AppCompatActivity implements ChangeGoalsDialo
     public void onSaveProfileData(View view) {
         GoalDataDAO goalDataDAO = new GoalDAOImpl();
         if (!savedChanges) {
+            Log.d(TAG, "Saving data to db..");
             getGoalDataFromView();
             goalDataDAO.update(goalData).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    SuccessDialog successDialog = new SuccessDialog(context);
+                    GoalDataHolder.getInstance().setData(goalData);
+                    SuccessDialog successDialog = new SuccessDialog(mContext);
                     successDialog.show();
 
                     new Handler().postDelayed(successDialog::cancel, 2000);
                 }
             });
-
             savedChanges = true;
         } else {
-            Toast.makeText(GoalsActivity.this, "Nothing to save. No changes made", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, "Nothing to save. No changes made", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void getGoalDataFromView() {
-        GoalData goalData = GoalDataHolder.getInstance().getData();
+       // GoalData goalData = GoalDataHolder.getInstance().getData();
 
         goalData.setCalorieGoal(tvCalorieGoal.getText().toString().replaceAll("[^0-9]", ""));
         goalData.setExerciseTimeGoal(tvExerciseGoal.getText().toString().replaceAll("[^0-9]", ""));
@@ -125,7 +130,7 @@ public class GoalsActivity extends AppCompatActivity implements ChangeGoalsDialo
         goalData.setWaterIntakeGoal(tvWaterGoal.getText().toString().replaceAll("[^0-9]", ""));
         goalData.setStepGoal(tvStepGoal.getText().toString().replaceAll("[^0-9]", ""));
 
-        GoalDataHolder.getInstance().setData(goalData);
+        //GoalDataHolder.getInstance().setData(goalData);
     }
 
 
@@ -150,7 +155,6 @@ public class GoalsActivity extends AppCompatActivity implements ChangeGoalsDialo
         } else {
             return false;
         }
-        //return super.onOptionsItemSelected(item);
     }
 
     @Override

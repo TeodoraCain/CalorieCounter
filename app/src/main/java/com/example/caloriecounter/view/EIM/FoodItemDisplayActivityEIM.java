@@ -1,12 +1,13 @@
-package com.example.caloriecounter;
+package com.example.caloriecounter.view.EIM;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.caloriecounter.R;
 
 //Clasă obiecte cu 5 date membre de tipuri diferite:
 // inițializare cel putin 5 obiecte,
@@ -31,24 +32,21 @@ public class FoodItemDisplayActivityEIM extends AppCompatActivity {
 
         Button btnFilter = findViewById(R.id.btnFilter);
         btnFilter.setOnClickListener(v -> {
-            Intent intent = new Intent(FoodItemDisplayActivityEIM.this, FilterResultsActivityEIM.class);
+            Intent intent = new Intent(context, FilterResultsActivityEIM.class);
             startActivity(intent);
         });
 
         Button btnAdd = findViewById(R.id.btnAdd);
         btnAdd.setOnClickListener(v -> {
-            Intent intent = new Intent(FoodItemDisplayActivityEIM.this, WriteFoodToFileActivityEIM.class);
+            Intent intent = new Intent(context, WriteFoodToFileActivityEIM.class);
             startActivity(intent);
         });
 
         Button tvShowAll = findViewById(R.id.btnShowAll);
-        tvShowAll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(FoodItemDisplayActivityEIM.this, ShowFoodsActivityEIM.class);
-                intent.putExtra("SHOW", "ALL");
-                startActivity(intent);
-            }
+        tvShowAll.setOnClickListener(v -> {
+            Intent intent = new Intent(context, ShowFoodsActivityEIM.class);
+            intent.putExtra("SHOW", "ALL");
+            startActivity(intent);
         });
 
     }

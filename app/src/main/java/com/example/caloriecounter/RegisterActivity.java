@@ -1,5 +1,6 @@
 package com.example.caloriecounter;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -25,7 +26,7 @@ import com.example.caloriecounter.model.DAO.GoalDataDAO;
 import com.example.caloriecounter.model.DAO.UserDAO;
 import com.example.caloriecounter.model.DAO.UserDAOImpl;
 import com.example.caloriecounter.model.DAO.UserDetails;
-import com.example.caloriecounter.controller.ViewPagerAdapter;
+import com.example.caloriecounter.controllers.ViewPagerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
@@ -44,24 +45,42 @@ public class RegisterActivity extends AppCompatActivity implements ViewPager.OnP
     private ViewPager viewPager;
     private ProgressBar progressBar;
 
+    private TextView tvNext;
+    private ViewPagerAdapter adapter;
+
+    private Context mContext;
+    private final String TAG = "RegisterActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        userInputs = new HashMap<>();
-        progressBar = findViewById(R.id.pbRegisterProgress);
-
         setContentView(R.layout.activity_register);
 
+        setUpViews();
+        initializeUserInputs();
+        setUpViewPager();
+        setUpDotsIndicator();
+        setUpViewpagerNavigation(adapter);
+    }
+
+    private void initializeUserInputs() {
+        userInputs = new HashMap<>();
+    }
+
+    private void setUpViewPager() {
         viewPager = findViewById(R.id.viewPager);
-        ViewPagerAdapter adapter = new ViewPagerAdapter(viewPager, layouts);
+        adapter = new ViewPagerAdapter(viewPager, layouts);
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(this);
+    }
 
+    private void setUpDotsIndicator() {
         DotsIndicator dotsIndicator = findViewById(R.id.dots_indicator);
+        //noinspection deprecation
         dotsIndicator.setViewPager(viewPager);
+    }
 
-        TextView tvNext = findViewById(R.id.tvNext);
-
+    private void setUpViewpagerNavigation(ViewPagerAdapter adapter) {
         tvNext.setOnClickListener(v -> {
             int nextItem = viewPager.getCurrentItem() + 1;
             if (nextItem < adapter.getCount()) {
@@ -75,15 +94,19 @@ public class RegisterActivity extends AppCompatActivity implements ViewPager.OnP
                 }
             }
         });
+    }
 
+    private void setUpViews() {
+        mContext = RegisterActivity.this;
+        tvNext = findViewById(R.id.tvNext);
+        progressBar = findViewById(R.id.pbRegisterProgress);
     }
 
     private void registerUser() {
         FirebaseAuth auth = FirebaseAuth.getInstance();
-
         auth.createUserWithEmailAndPassword(Objects.requireNonNull(userInputs.get(getString(R.string.email))), Objects.requireNonNull(userInputs.get(getString(R.string.password)))).addOnCompleteListener(RegisterActivity.this, task -> {
             if (task.isSuccessful()) {
-                Toast.makeText(RegisterActivity.this, "Registration successful!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "Registration successful!", Toast.LENGTH_SHORT).show();
                 FirebaseUser firebaseUser = auth.getCurrentUser();
 
                 //set the name of the user
@@ -96,6 +119,7 @@ public class RegisterActivity extends AppCompatActivity implements ViewPager.OnP
 
                 UserDetails writeUserDetails = new UserDetails(userInputs, String.valueOf(calculateBMI()));
                 UserDAO userDao = new UserDAOImpl();
+                Log.d(TAG, "Attempting to register..");
                 userDao.add(writeUserDetails).addOnCompleteListener(task1 -> {
                     if (task1.isSuccessful()) {
                         //Send verification email
@@ -106,14 +130,15 @@ public class RegisterActivity extends AppCompatActivity implements ViewPager.OnP
                         goalData.setWeightGoal(writeUserDetails.getWeight());
 
                         goalDataDAO.add(goalData);
-                        Toast.makeText(RegisterActivity.this, "User registered successfully. Please verify your email", Toast.LENGTH_SHORT).show();
-
-                        Intent intent = new Intent(RegisterActivity.this, SplashActivity.class);
+                        Toast.makeText(mContext, "User registered successfully. Please verify your email", Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, "Registration successful..");
+                        Intent intent = new Intent(mContext, SplashActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
                         //finish();
                     } else {
-                        Toast.makeText(RegisterActivity.this, "Registration failed! Please try again", Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, "Registration was unsuccessful..");
+                        Toast.makeText(mContext, "Registration failed! Please try again", Toast.LENGTH_SHORT).show();
                     }
 
                 });
@@ -127,7 +152,7 @@ public class RegisterActivity extends AppCompatActivity implements ViewPager.OnP
                     alertIncomplete("Your email is invalid", 4);
                 } catch (Exception e) {
                     Log.e("Registration", e.getMessage());
-                    Toast.makeText(RegisterActivity.this, "Registration incomplete!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "Registration incomplete!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -140,11 +165,11 @@ public class RegisterActivity extends AppCompatActivity implements ViewPager.OnP
         String heightUnit = userInputs.get(getString(R.string.heightUnit));
         String weightUnit = userInputs.get(getString(R.string.weightUnit));
 
-        if (heightUnit.equals("cm") && weightUnit.equals("kg")) {
+        if (Objects.equals(heightUnit, "cm") && Objects.equals(weightUnit, "kg")) {
             double heightMeters = height / 100.0;
             return weight / (heightMeters * heightMeters);
         }
-        if (heightUnit.equals("in") && weightUnit.equals("lbs")) {
+        if (Objects.equals(heightUnit, "in") && Objects.equals(weightUnit, "lbs")) {
             double heightMeters = height * 0.0254;
             return (weight / (heightMeters * heightMeters)) * 703;
         }
@@ -238,7 +263,7 @@ public class RegisterActivity extends AppCompatActivity implements ViewPager.OnP
     }
 
     private void alertIncomplete(String message, int viewPagerItem) {
-        AlertDialog alertDialog = new AlertDialog.Builder(RegisterActivity.this).create();
+        AlertDialog alertDialog = new AlertDialog.Builder(mContext).create();
         alertDialog.setTitle("Customization incomplete");
         alertDialog.setMessage(message);
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Ok", (dialog, which) -> {
@@ -259,7 +284,6 @@ public class RegisterActivity extends AppCompatActivity implements ViewPager.OnP
 
     @Override
     public void onPageSelected(int position) {
-
         TextView tvNext = findViewById(R.id.tvNext);
         if (position == layouts.length - 1) {
             tvNext.setText(R.string.finish_text);
@@ -281,7 +305,6 @@ public class RegisterActivity extends AppCompatActivity implements ViewPager.OnP
         saveInput(R.id.etEmail, getString(R.string.email));
         saveInput(R.id.etPassword, getString(R.string.password));
         saveInput(R.id.etName, getString(R.string.name));
-
     }
 
     private void saveInput(int id, String inputKey) {
@@ -318,7 +341,6 @@ public class RegisterActivity extends AppCompatActivity implements ViewPager.OnP
             });
 
             String savedValue = userInputs.get(inputKey);
-
             if (!currentValue.equals(savedValue)) {
                 editText.setText(savedValue);
             }

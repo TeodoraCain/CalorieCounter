@@ -1,4 +1,4 @@
-package com.example.caloriecounter;
+package com.example.caloriecounter.view.EIM;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -8,6 +8,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.caloriecounter.R;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;

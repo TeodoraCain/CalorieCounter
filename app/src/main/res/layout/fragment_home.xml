@@ -18,9 +18,10 @@
             android:padding="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.8">
+            app:layout_constraintVertical_bias="1.0">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -38,9 +39,9 @@
                     android:textAlignment="center"
                     android:textColor="@color/gray"
                     android:textSize="24sp"
+                    app:drawableStartCompat="@drawable/calories_icon"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:drawableStartCompat="@drawable/calories_icon" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
@@ -145,9 +146,9 @@
                     android:text="@string/food_cat"
                     android:textColor="@color/gray"
                     android:textSize="26sp"
+                    app:drawableStartCompat="@drawable/healthy_food_icon"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:drawableStartCompat="@drawable/healthy_food_icon" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
@@ -166,10 +167,10 @@
                             android:layout_width="35dp"
                             android:layout_height="35dp"
                             android:layout_margin="20dp"
+                            android:contentDescription="@string/add"
                             android:src="@drawable/ic_add"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            android:contentDescription="@string/add" />
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
                             android:id="@+id/tvBreakfastCalories"
@@ -279,10 +280,10 @@
                             android:layout_width="35dp"
                             android:layout_height="35dp"
                             android:layout_margin="20dp"
+                            android:contentDescription="@string/add"
                             android:src="@drawable/ic_add"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            android:contentDescription="@string/add" />
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
                             android:id="@+id/tvCaloriesConsumedExercise"
@@ -336,9 +337,9 @@
                     android:text="@string/steps_cat"
                     android:textColor="@color/gray"
                     android:textSize="24sp"
+                    app:drawableStartCompat="@drawable/steps_icon_simple"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:drawableStartCompat="@drawable/steps_icon_simple" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
@@ -438,10 +439,10 @@
                             android:layout_width="35dp"
                             android:layout_height="35dp"
                             android:layout_margin="20dp"
+                            android:contentDescription="@string/add"
                             android:src="@drawable/ic_add"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            android:contentDescription="@string/add" />
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <LinearLayout
                             android:id="@+id/waterIntakeGroup"
@@ -495,6 +496,7 @@
                                 android:padding="4dp"
                                 android:src="@drawable/water_glass_icon_gray" />
                         </LinearLayout>
+
                         <TextView
                             android:id="@+id/tvWaterIntakeGoal"
                             android:layout_width="wrap_content"
@@ -546,20 +548,23 @@
 
                         <ImageView
                             android:id="@+id/ivAddWeight"
-                            android:layout_width="35dp"
-                            android:layout_height="35dp"
-                            android:layout_margin="20dp"
+                            android:layout_width="51dp"
+                            android:layout_height="51dp"
+                            android:layout_margin="8dp"
                             android:contentDescription="@string/add"
+                            android:padding="8dp"
                             android:src="@drawable/ic_add"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <RelativeLayout
                             android:id="@+id/relativeLayout2"
-                            android:layout_width="match_parent"
+                            android:layout_width="250dp"
                             android:layout_height="150dp"
+                            android:gravity="center"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent">
 
                             <com.github.mikephil.charting.charts.PieChart
@@ -578,10 +583,10 @@
                             android:id="@+id/tvWeightCategory"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:padding="8dp"
                             android:layout_margin="8dp"
-                            android:textColor="@color/gray"
+                            android:padding="8dp"
                             android:textAlignment="center"
+                            android:textColor="@color/gray"
                             android:textSize="@dimen/text_size"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"

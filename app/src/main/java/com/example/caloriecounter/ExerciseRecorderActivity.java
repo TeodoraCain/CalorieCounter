@@ -1,5 +1,6 @@
 package com.example.caloriecounter;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -46,19 +47,34 @@ public class ExerciseRecorderActivity extends AppCompatActivity {
     private boolean fromDiary;
     private String date;
 
+    private Context mContext;
+    private final String TAG = "ExerciseRecorderActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercise_recorder);
-        setToolbar();
 
-        exerciseTabs = findViewById(R.id.tabExercise);
+        setUpViews();
+        setUpTabsAndViewPager();
+    }
+
+    private void setUpTabsAndViewPager() {
+        Log.d(TAG, "Setting up the View Pager and Tabs..");
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this, fromDiary);
+        viewPager.setAdapter(viewPagerAdapter);
+
         if (fromDiary) {
             exerciseTabs.removeTabAt(0);
         }
-        viewPager = findViewById(R.id.viewPager);
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this, fromDiary);
-        viewPager.setAdapter(viewPagerAdapter);
+
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                Objects.requireNonNull(exerciseTabs.getTabAt(position)).select();
+            }
+        });
 
         exerciseTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -76,15 +92,13 @@ public class ExerciseRecorderActivity extends AppCompatActivity {
 
             }
         });
+    }
 
-        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override
-            public void onPageSelected(int position) {
-                super.onPageSelected(position);
-                Objects.requireNonNull(exerciseTabs.getTabAt(position)).select();
-            }
-        });
-
+    private void setUpViews() {
+        setToolbar();
+        mContext = ExerciseRecorderActivity.this;
+        exerciseTabs = findViewById(R.id.tabExercise);
+        viewPager = findViewById(R.id.viewPager);
     }
 
     private void setToolbar() {
@@ -93,9 +107,10 @@ public class ExerciseRecorderActivity extends AppCompatActivity {
         final String FROMDIARY = "FROMDIARY";
         final String DATE = "DATE";
 
-        fromDiary = this.getIntent().getBooleanExtra(FROMDIARY, false);
-        exercise = this.getIntent().getStringExtra(EXERCISE);
-        date = this.getIntent().getStringExtra(DATE);
+        Intent intent = this.getIntent();
+        fromDiary = intent.getBooleanExtra(FROMDIARY, false);
+        exercise = intent.getStringExtra(EXERCISE);
+        date = intent.getStringExtra(DATE);
         toolbar.setTitle(exercise);
         setSupportActionBar(toolbar);
 
@@ -103,8 +118,11 @@ public class ExerciseRecorderActivity extends AppCompatActivity {
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        ImageView saveImageView = findViewById(R.id.ivSave);
+        setUpSaveToolbarButton();
+    }
 
+    private void setUpSaveToolbarButton() {
+        ImageView saveImageView = findViewById(R.id.ivSave);
         saveImageView.setOnClickListener(v -> save());
     }
 
@@ -113,6 +131,7 @@ public class ExerciseRecorderActivity extends AppCompatActivity {
         Workout workout = null;
         if (!fromDiary) {
             if (currentItem == 0) {
+                Log.d(TAG, "Saving chronometer data..");
                 Chronometer timer = findViewById(R.id.timer);
                 TextView tvCalories = findViewById(R.id.tvCalories);
 
@@ -123,6 +142,7 @@ public class ExerciseRecorderActivity extends AppCompatActivity {
                 workout = new Workout(exercise, (int) minutes, Integer.parseInt(tvCalories.getText().toString().replaceAll("[^0-9]", "")));
 
             } else if (currentItem == 1) {
+                Log.d(TAG, "Saving record data..");
                 EditText etMinutes = findViewById(R.id.etMinutes);
                 TextView tvCalories = findViewById(R.id.tvCaloriesBurned);
                 if (etMinutes.getText() != null || etMinutes.getText().toString().isEmpty()) {
@@ -134,6 +154,7 @@ public class ExerciseRecorderActivity extends AppCompatActivity {
             }
 
         } else {
+            Log.d(TAG, "Saving data from diary..");
             EditText etMinutes = findViewById(R.id.etMinutes);
             TextView tvCalories = findViewById(R.id.tvCaloriesBurned);
             if (etMinutes.getText() != null || etMinutes.getText().toString().isEmpty()) {
@@ -145,7 +166,7 @@ public class ExerciseRecorderActivity extends AppCompatActivity {
         }
 
         this.finish();
-        Intent intent = new Intent(ExerciseRecorderActivity.this, DashboardActivity.class);
+        Intent intent = new Intent(mContext, DashboardActivity.class);
         startActivity(intent);
     }
 
@@ -172,7 +193,6 @@ public class ExerciseRecorderActivity extends AppCompatActivity {
                     DailyDataDAO dailyDataDAO = new DailyDataDAOImpl();
                     dailyDataDAO.update(dailyData);
                 }
-
                 saveDailyDataToDatabase(dailyData, date);
             }
 
@@ -199,19 +219,33 @@ public class ExerciseRecorderActivity extends AppCompatActivity {
         dailyDataDAO.update(dailyData);
     }
 
-
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             this.finish();
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
+    private void saveDailyDataToDatabase(DailyData dailyData, String date) {
+        DailyDataDAO dailyDataDAO = new DailyDataDAOImpl();
+        dailyDataDAO.update(dailyData, date).addOnCompleteListener(task -> {
+
+            if (task.isSuccessful()) {
+                Log.d("SaveData", "Data updated successfully");
+                Intent intent = new Intent(mContext, DashboardActivity.class);
+                intent.putExtra("NAVIGATE_TO_DIARY_FRAGMENT", true);
+                startActivity(intent);
+                //finish();
+            } else {
+                Log.e("SaveData", "Failed to update data", task.getException());
+            }
+        });
+    }
+
     public static class ViewPagerAdapter extends FragmentStateAdapter {
-        private boolean fromDiary;
+        private final boolean fromDiary;
 
         public ViewPagerAdapter(@NonNull FragmentActivity fragmentActivity, boolean fromDiary) {
             super(fragmentActivity);
@@ -231,26 +265,7 @@ public class ExerciseRecorderActivity extends AppCompatActivity {
 
         @Override
         public int getItemCount() {
-            if (fromDiary)
-                return 1;
-            return 2;
+            return fromDiary ? 1 : 2;
         }
-
-    }
-
-    private void saveDailyDataToDatabase(DailyData dailyData, String date) {
-        DailyDataDAO dailyDataDAO = new DailyDataDAOImpl();
-        dailyDataDAO.update(dailyData, date).addOnCompleteListener(task -> {
-
-            if (task.isSuccessful()) {
-                Log.d("SaveData", "Data updated successfully");
-                Intent intent = new Intent(ExerciseRecorderActivity.this, DashboardActivity.class);
-                intent.putExtra("NAVIGATE_TO_DIARY_FRAGMENT", true);
-                startActivity(intent);
-                //finish();
-            } else {
-                Log.e("SaveData", "Failed to update data", task.getException());
-            }
-        });
     }
 }

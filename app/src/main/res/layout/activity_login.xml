@@ -30,7 +30,7 @@
             android:text="@string/account_login"
             android:textAlignment="center"
             android:textColor="@color/gray"
-            android:textSize="@dimen/big_text_size"></TextView>
+            android:textSize="@dimen/big_text_size" />
 
         <!--    username    -->
         <EditText
@@ -75,6 +75,7 @@
             android:textSize="@dimen/text_size" />
     </LinearLayout>
 
+    <!--    login button    -->
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnLogin"
         android:layout_width="match_parent"

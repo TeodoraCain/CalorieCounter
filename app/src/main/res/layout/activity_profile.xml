@@ -21,7 +21,6 @@
         app:titleMarginStart="100dp"
         app:titleTextAppearance="@style/Theme.CalorieCounter"
         app:titleTextColor="@color/white" />
-    <!--        app:navigationIcon="@drawable/ic_back"-->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -46,8 +45,6 @@
             android:layout_marginTop="30dp"
             android:contentDescription="@string/loading"
            />
-<!--            app:civ_border_color="@color/eatwellgreenlight"-->
-<!--            app:civ_border_width="1dp" />-->
 
         <!--   name   -->
         <TextView
@@ -180,7 +177,7 @@
             android:maxWidth="78dip"
             android:minWidth="48dip"
             android:onClick="onSaveProfileData"
-            android:text="Save"
+            android:text="@string/save"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="@dimen/text_size" />

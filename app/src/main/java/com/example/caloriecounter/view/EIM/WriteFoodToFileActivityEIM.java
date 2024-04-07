@@ -1,4 +1,4 @@
-package com.example.caloriecounter;
+package com.example.caloriecounter.view.EIM;
 
 import android.os.Bundle;
 import android.view.View;
@@ -8,6 +8,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.caloriecounter.R;
 
 import java.io.File;
 import java.io.FileOutputStream;

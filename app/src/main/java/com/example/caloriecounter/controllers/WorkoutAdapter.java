@@ -1,4 +1,4 @@
-package com.example.caloriecounter.controller;
+package com.example.caloriecounter.controllers;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -15,8 +15,8 @@ import java.util.List;
 
 public class WorkoutAdapter extends ArrayAdapter<Workout> {
 
-    private Context mContext;
-    private List<Workout> mWorkoutList;
+    private final Context mContext;
+    private final List<Workout> mWorkoutList;
 
     public WorkoutAdapter(Context context, List<Workout> workoutList) {
         super(context, 0, workoutList);

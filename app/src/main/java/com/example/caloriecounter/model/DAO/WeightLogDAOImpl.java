@@ -8,33 +8,33 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Objects;
 
-public class UserDAOImpl implements UserDAO{
-    private final DatabaseReference userDatabaseReference;
+public class WeightLogDAOImpl implements WeightLogDAO {
+    private final DatabaseReference weightLogDatabaseReference;
 
-    public UserDAOImpl(){
+    public WeightLogDAOImpl() {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
         String userID = Objects.requireNonNull(firebaseUser).getUid();
-        userDatabaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(userID).child("user_details");
+        weightLogDatabaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(userID).child("weight_log");
     }
 
     @Override
     public DatabaseReference get() {
-        return userDatabaseReference;
+        return weightLogDatabaseReference;
     }
 
     @Override
-    public Task<Void> add(UserDetails userDetails) {
-       return userDatabaseReference.setValue(userDetails);
+    public Task<Void> add(WeightLog weight) {
+        return weightLogDatabaseReference.child(weight.getDate()).setValue(weight);
     }
 
     @Override
-    public Task<Void> update(UserDetails userDetails) {
-        return userDatabaseReference.setValue(userDetails);
+    public Task<Void> update(WeightLog weight) {
+        return weightLogDatabaseReference.child(weight.getDate()).setValue(weight);
     }
 
     @Override
     public Task<Void> delete() {
-        return userDatabaseReference.removeValue();
+        return null;
     }
 }

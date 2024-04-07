@@ -103,8 +103,8 @@
 
     <string-array name="weight_categories_array">
         <item>>18.5</item>
-        <item>18.5-24.9</item>
-        <item>25-29.9</item>
+        <item>18.5–24.9</item>
+        <item>25–29.9</item>
         <item>>30</item>
     </string-array>
 
@@ -429,4 +429,16 @@
     <string name="add_food">ADD FOOD</string>
     <string name="snacks">Snacks</string>
     <string name="add_exercise">ADD EXERCISE</string>
+    <string name="add_weight">Add Weight</string>
+    <string name="log_weight">Log weight</string>
+    <string name="register_views">Register Views</string>
+    <string name="add_photos">Add photos</string>
+    <string name="front">Front</string>
+    <string name="front_picture">Front picture</string>
+    <string name="side">Side</string>
+    <string name="side_picture">Side picture</string>
+    <string name="back">Back</string>
+    <string name="back_picture">Back picture</string>
+    <string name="weighing_date">Weighing date</string>
+    <string name="your_weight_here">Your weight here</string>
 </resources>

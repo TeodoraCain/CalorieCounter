@@ -1,9 +1,11 @@
 package com.example.caloriecounter;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.EditText;
 
@@ -13,8 +15,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.caloriecounter.controller.FirebaseExerciseRecyclerViewerAdapter;
-import com.example.caloriecounter.controller.RecyclerViewInterface;
+import com.example.caloriecounter.controllers.FirebaseExerciseRecyclerViewerAdapter;
+import com.example.caloriecounter.controllers.RecyclerViewInterface;
 import com.example.caloriecounter.model.DAO.Exercise;
 import com.example.caloriecounter.model.DAO.ExerciseDAO;
 import com.example.caloriecounter.model.DAO.ExerciseDAOImpl;
@@ -22,19 +24,28 @@ import com.firebase.ui.database.FirebaseRecyclerOptions;
 
 import java.util.Objects;
 
-public class ExerciseActivity extends AppCompatActivity implements RecyclerViewInterface {
+public class AddExerciseActivity extends AppCompatActivity implements RecyclerViewInterface {
     private RecyclerView rvExercises;
     private ExerciseDAO exerciseDAO;
     private FirebaseExerciseRecyclerViewerAdapter rvAdapter;
     private EditText etSearchExercise;
 
+    private Context mContext;
+    private final String TAG = "AddExerciseActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_exercise);
+        setContentView(R.layout.activity_add_exercise);
 
-        init();
+        setToolbar();
+        setUpViews();
+        setUpTextWatcherForSearch();
+        setUpRecyclerView();
+    }
 
+    private void setUpTextWatcherForSearch() {
+        Log.d(TAG, "Setting up the text watcher for search..");
         etSearchExercise.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -52,16 +63,18 @@ public class ExerciseActivity extends AppCompatActivity implements RecyclerViewI
 
             }
         });
-
-        rvExercises.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    private void init() {
-        setToolbar();
-
+    private void setUpViews() {
+        mContext = this;
         etSearchExercise = findViewById(R.id.etSearchExercise);
-        rvExercises = (RecyclerView) findViewById(R.id.rvExercises);
+        rvExercises = findViewById(R.id.rvExercises);
         exerciseDAO = new ExerciseDAOImpl();
+    }
+
+    private void setUpRecyclerView() {
+        rvExercises.setLayoutManager(new LinearLayoutManager(this));
+        searchByQuery(""); // Initial search
     }
 
     private void setToolbar() {
@@ -73,13 +86,12 @@ public class ExerciseActivity extends AppCompatActivity implements RecyclerViewI
         getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
-    private void searchByQuery(String str) {
-        if (str.length() > 0) {
-            str = Character.toUpperCase(str.charAt(0)) + str.substring(1);
+    private void searchByQuery(String query) {
+        if (query.length() > 0) {
+            query = Character.toUpperCase(query.charAt(0)) + query.substring(1);
         }
         FirebaseRecyclerOptions<Exercise> options = new FirebaseRecyclerOptions.Builder<Exercise>()
-                .setQuery(exerciseDAO.get().orderByChild("name").startAt(str).endAt(str + "~"), Exercise.class)
-                .build();
+                .setQuery(exerciseDAO.get().orderByChild("name").startAt(query).endAt(query + "~"), Exercise.class).build();
 
         rvAdapter = new FirebaseExerciseRecyclerViewerAdapter(options, this);
         rvAdapter.startListening();
@@ -93,7 +105,6 @@ public class ExerciseActivity extends AppCompatActivity implements RecyclerViewI
             rvAdapter.stopListening();
         }
     }
-
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -112,7 +123,9 @@ public class ExerciseActivity extends AppCompatActivity implements RecyclerViewI
         final String FROMDIARY = "FROMDIARY";
         final String DATE = "DATE";
 
-        Intent intent = new Intent(ExerciseActivity.this, ExerciseRecorderActivity.class);
+        Log.d(TAG, "ItemClick: Clicked on " + rvAdapter.getItem(position).getName());
+
+        Intent intent = new Intent(mContext, ExerciseRecorderActivity.class);
         intent.putExtra(FROMDIARY, this.getIntent().getBooleanExtra(FROMDIARY, false));
         intent.putExtra("DATE", this.getIntent().getStringExtra(DATE));
         intent.putExtra(EXERCISE, rvAdapter.getItem(position).getName());
