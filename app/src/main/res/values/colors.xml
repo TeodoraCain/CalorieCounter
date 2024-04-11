@@ -25,6 +25,7 @@
     <color name="eatwellgreenlight">#CB547664</color>
     <color name="eatwellgreenwhite">#ECF8F1</color>
     <color name="darkgray">#333333</color>
+    <color name="lightGreen">#9F9EAFA6</color>
     //indicator colors
     <color name="inactive">#C4C4C4</color>
     <color name="active">#50C2C9</color>

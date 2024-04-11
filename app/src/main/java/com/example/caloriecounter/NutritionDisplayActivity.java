@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -279,7 +280,7 @@ public class NutritionDisplayActivity extends AppCompatActivity {
         }
     }
 
-    private Food createFoodItemFromUI() {
+    Food createFoodItemFromUI() {
         Food food = new Food();
         food.setName(currentFood.getName());
         food.setServing_size(Double.parseDouble(etServingSize.getText().toString()));
@@ -301,7 +302,7 @@ public class NutritionDisplayActivity extends AppCompatActivity {
         return food;
     }
 
-    private Recipe createRecipeFromFood(Food food, List<Food> foods) {
+    Recipe createRecipeFromFood(Food food, List<Food> foods) {
         return new Recipe(food.getName(), foods, food.getServing_size(), food.getCalories());
     }
 
@@ -341,4 +342,13 @@ public class NutritionDisplayActivity extends AppCompatActivity {
             }
         });
     }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            this.finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 }

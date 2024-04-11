@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -15,10 +15,285 @@
         android:foregroundTint="@color/white"
         android:popupTheme="@style/Theme.CalorieCounter"
         android:theme="@style/Theme.AppCompat.Light"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:subtitleTextColor="@color/white"
         app:title="Weight Log"
         app:titleMarginStart="100dp"
         app:titleTextAppearance="@style/Theme.CalorieCounter"
         app:titleTextColor="@color/white" />
 
-</LinearLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/unit_kg"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/weightCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="10dp"
+                app:cardUseCompatPadding="true"
+                app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="8dp">
+
+                    <TextView
+                        android:id="@+id/tvWeightDifference"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="24dp"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@font/lora_font"
+                        android:gravity="start"
+                        android:text="@string/loading"
+                        android:textColor="@color/gray"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
+
+                    <TextView
+                        android:id="@+id/tvCurrentWeight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/now_loading"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="@id/pbWeight"
+                        app:layout_constraintStart_toStartOf="@+id/pbWeight"
+                        app:layout_constraintBottom_toTopOf="@+id/pbWeight"
+                        app:layout_constraintTop_toBottomOf="@+id/tvWeightDifference" />
+
+                    <ProgressBar
+                        android:id="@+id/pbWeight"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_marginHorizontal="24dp"
+                        android:layout_marginTop="16dp"
+                        android:indeterminate="false"
+                        android:indeterminateOnly="false"
+                        android:padding="8dp"
+                        android:progress="20"
+                        android:progressDrawable="@drawable/progress_bar"
+                        android:progressTint="@color/eatwellgreenlight"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tvWeightDifference" />
+
+                    <TextView
+                        android:id="@+id/tvStartWeight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="24dp"
+                        android:fontFamily="@font/lora_font"
+                        android:gravity="start"
+                        android:padding="8dp"
+                        android:text="@string/start_loading"
+                        android:textColor="@color/gray"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/pbWeight"
+                        app:layout_constraintTop_toBottomOf="@+id/pbWeight" />
+
+                    <TextView
+                        android:id="@+id/tvGoalWeight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="24dp"
+                        android:fontFamily="@font/lora_font"
+                        android:gravity="start"
+                        android:padding="8dp"
+                        android:text="@string/goal_loading"
+                        android:textColor="@color/gray"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/pbWeight"
+                        app:layout_constraintTop_toBottomOf="@+id/pbWeight" />
+
+                    <TextView
+                        android:id="@+id/tvTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginVertical="16dp"
+                        android:fontFamily="@font/lora_font"
+                        android:gravity="center"
+                        android:text="@string/weight_progress"
+                        android:textAlignment="center"
+                        android:textColor="@color/gray"
+                        android:textSize="18sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/historyCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="10dp"
+                app:cardUseCompatPadding="true">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="8dp">
+
+                    <TextView
+                        android:id="@+id/tvHistoryTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginVertical="16dp"
+                        android:fontFamily="@font/lora_font"
+                        android:gravity="center"
+                        android:text="@string/weight_history"
+                        android:textAlignment="center"
+                        android:textColor="@color/gray"
+                        android:textSize="18sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.jjoe64.graphview.GraphView
+                        android:id="@+id/weightChart"
+                        android:layout_width="match_parent"
+                        android:layout_height="250dp"
+                        android:layout_marginBottom="8dp"
+                        android:backgroundTint="@color/eatwellgreen"
+                        android:foregroundTint="@color/eatwellgreen"
+                        android:outlineAmbientShadowColor="@color/eatwellgreen"
+                        android:outlineSpotShadowColor="@color/eatwellgreen"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tvHistoryTitle"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/BMICard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="10dp"
+                app:cardUseCompatPadding="true"
+                app:layout_constraintTop_toBottomOf="@+id/weightCard">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="8dp">
+
+                    <TextView
+                        android:id="@+id/tvCurrentBMI"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/now_loading"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toTopOf="@+id/pbBMI"
+                        app:layout_constraintEnd_toEndOf="@id/pbBMI"
+                        app:layout_constraintStart_toStartOf="@+id/pbBMI"
+                        app:layout_constraintTop_toBottomOf="@+id/tvBMITitle" />
+
+                    <ProgressBar
+                        android:id="@+id/pbBMI"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_marginHorizontal="24dp"
+                        android:layout_marginTop="16dp"
+                        android:indeterminate="false"
+                        android:indeterminateOnly="false"
+                        android:padding="8dp"
+                        android:progress="20"
+                        android:progressDrawable="@drawable/bmi_progress_bar"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tvBMITitle" />
+
+                    <TextView
+                        android:id="@+id/tvBMIStart"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="24dp"
+                        android:fontFamily="@font/lora_font"
+                        android:gravity="start"
+                        android:padding="8dp"
+                        android:text="@string/underweight"
+                        android:textColor="@color/gray"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/pbBMI"
+                        app:layout_constraintTop_toBottomOf="@+id/pbBMI" />
+
+                    <TextView
+                        android:id="@+id/tvBMIGoal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="24dp"
+                        android:fontFamily="@font/lora_font"
+                        android:gravity="start"
+                        android:padding="8dp"
+                        android:text="@string/normal"
+                        android:textColor="@color/gray"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/pbBMI"
+                        app:layout_constraintStart_toStartOf="@id/pbBMI"
+                        app:layout_constraintTop_toBottomOf="@+id/pbBMI" />
+
+                    <TextView
+                        android:id="@+id/tvBMIOverweight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="24dp"
+                        android:fontFamily="@font/lora_font"
+                        android:gravity="start"
+                        android:padding="8dp"
+                        android:text="@string/overweight"
+                        android:textColor="@color/gray"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/pbBMI"
+                        app:layout_constraintTop_toBottomOf="@+id/pbBMI" />
+
+                    <TextView
+                        android:id="@+id/tvBMITitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginVertical="16dp"
+                        android:fontFamily="@font/lora_font"
+                        android:gravity="center"
+                        android:text="@string/body_mass_index"
+                        android:textAlignment="center"
+                        android:textColor="@color/gray"
+                        android:textSize="18sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

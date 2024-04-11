@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
@@ -26,9 +25,9 @@ import java.util.Objects;
 public class LoginActivity extends AppCompatActivity {
 
     private boolean passwordVisible;
-    private EditText password;
-    private EditText email;
-    private Button loginButton;
+    EditText password;
+    EditText email;
+    Button loginButton;
     private FirebaseAuth authProfile;
 
     private Context mContext;
@@ -57,30 +56,40 @@ public class LoginActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.btnLogin);
     }
 
-    private void startLogin() {
-        loginButton.setOnClickListener(v -> {
-            String emailTxt = email.getText().toString();
-            String passwordTxt = password.getText().toString();
+    void startLogin() {
+        loginButton.setOnClickListener(v ->{
+                    if(loginCheck())
+                        loginWithEmailAndPassword(email.getText().toString(), password.getText().toString());
+                }
 
-            if (TextUtils.isEmpty(emailTxt)) {
-                //Toast.makeText(LoginActivity.this, "Please enter email!", Toast.LENGTH_SHORT).show();
-                email.setError("Please enter email!");
-                email.requestFocus();
-            } else if (!Patterns.EMAIL_ADDRESS.matcher(emailTxt).matches()) {
-                //Toast.makeText(LoginActivity.this, "Email is incorrect!", Toast.LENGTH_SHORT).show();
-                email.setError("Email is incorrect!");
-                email.requestFocus();
-            } else if (TextUtils.isEmpty(passwordTxt)) {
-                //Toast.makeText(LoginActivity.this, "Please enter password!", Toast.LENGTH_SHORT).show();
-                password.setError("Please enter password!");
-                password.requestFocus();
-            } else {
-                loginWithEmailAndPassword(emailTxt, passwordTxt);
-            }
-        });
+        );
     }
 
-    private void loginWithEmailAndPassword(String emailTxt, String passwordTxt) {
+    boolean loginCheck() {
+        String emailTxt = email.getText().toString();
+        String passwordTxt = password.getText().toString();
+
+        if (emailTxt.isEmpty() ||emailTxt == null) {
+            //Toast.makeText(LoginActivity.this, "Please enter email!", Toast.LENGTH_SHORT).show();
+            email.setError("Please enter email!");
+            email.requestFocus();
+            return false;
+        } else if (!Patterns.EMAIL_ADDRESS.matcher(emailTxt).matches()) {
+            //Toast.makeText(LoginActivity.this, "Email is incorrect!", Toast.LENGTH_SHORT).show();
+            email.setError("Email is incorrect!");
+            email.requestFocus();
+            return false;
+        } else if (passwordTxt.isEmpty() ||passwordTxt == null) {
+            //Toast.makeText(LoginActivity.this, "Please enter password!", Toast.LENGTH_SHORT).show();
+            password.setError("Please enter password!");
+            password.requestFocus();
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    void loginWithEmailAndPassword(String emailTxt, String passwordTxt) {
         authProfile.signInWithEmailAndPassword(emailTxt, passwordTxt).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 Log.d(TAG, "Logging in user..");

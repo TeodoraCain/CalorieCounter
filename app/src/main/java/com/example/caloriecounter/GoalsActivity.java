@@ -28,13 +28,11 @@ import java.util.Objects;
 
 public class GoalsActivity extends AppCompatActivity implements ChangeGoalsDialog.GoalsDialogListener {
 
-    private TextView tvCalorieGoal, tvExerciseGoal, tvWeightGoal, tvWaterGoal, tvStepGoal;
-
-    private GoalData goalData;
-    private boolean savedChanges = true;
-
-    private Context mContext;
     private final String TAG = "GoalsActivity";
+    TextView tvCalorieGoal, tvExerciseGoal, tvWeightGoal, tvWaterGoal, tvStepGoal;
+    GoalData goalData;
+    private boolean savedChanges = true;
+    private Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +62,7 @@ public class GoalsActivity extends AppCompatActivity implements ChangeGoalsDialo
         tvStepGoal.setOnClickListener(v -> openDialog("Are you sure you want to change your Step Goal?", "Change Step Goal Dialog", tvStepGoal));
     }
 
-    private void setUpViews() {
+    void setUpViews() {
         mContext = GoalsActivity.this;
         tvCalorieGoal = findViewById(R.id.tvCalorieGoal);
         tvExerciseGoal = findViewById(R.id.tvExerciseGoal);
@@ -89,16 +87,25 @@ public class GoalsActivity extends AppCompatActivity implements ChangeGoalsDialo
         alertDialog.create().show();
     }
 
-    private void setGoalDataToUI() {
+    void setGoalDataToUI() {
         goalData = GoalDataHolder.getInstance().getData();
         UserDetails userDetails = UserDetailsHolder.getInstance().getData();
 
-        tvCalorieGoal.setText(MessageFormat.format("{0} kcal", goalData.getCalorieGoal()));
-        tvExerciseGoal.setText(MessageFormat.format("{0} min", goalData.getExerciseTimeGoal()));
-        tvWeightGoal.setText(MessageFormat.format("{0} {1}", goalData.getWeightGoal(), userDetails.getWeightUnit()));
-        tvWaterGoal.setText(MessageFormat.format("{0} ml", goalData.getWaterIntakeGoal()));
-        tvStepGoal.setText(MessageFormat.format("{0} steps", goalData.getStepGoal()));
-
+        if (tvCalorieGoal != null && goalData != null) {
+            tvCalorieGoal.setText(MessageFormat.format("{0} kcal", goalData.getCalorieGoal()));
+        }
+        if (tvExerciseGoal != null && goalData != null) {
+            tvExerciseGoal.setText(MessageFormat.format("{0} min", goalData.getExerciseTimeGoal()));
+        }
+        if (tvWeightGoal != null && goalData != null && userDetails != null) {
+            tvWeightGoal.setText(MessageFormat.format("{0} {1}", goalData.getWeightGoal(), userDetails.getWeightUnit()));
+        }
+        if (tvWaterGoal != null && goalData != null) {
+            tvWaterGoal.setText(MessageFormat.format("{0} ml", goalData.getWaterIntakeGoal()));
+        }
+        if (tvStepGoal != null && goalData != null) {
+            tvStepGoal.setText(MessageFormat.format("{0} steps", goalData.getStepGoal()));
+        }
     }
 
     public void onSaveProfileData(View view) {
@@ -121,8 +128,8 @@ public class GoalsActivity extends AppCompatActivity implements ChangeGoalsDialo
         }
     }
 
-    private void getGoalDataFromView() {
-       // GoalData goalData = GoalDataHolder.getInstance().getData();
+    void getGoalDataFromView() {
+        // GoalData goalData = GoalDataHolder.getInstance().getData();
 
         goalData.setCalorieGoal(tvCalorieGoal.getText().toString().replaceAll("[^0-9]", ""));
         goalData.setExerciseTimeGoal(tvExerciseGoal.getText().toString().replaceAll("[^0-9]", ""));

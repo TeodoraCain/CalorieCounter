@@ -150,7 +150,9 @@ public class ExerciseRecorderActivity extends AppCompatActivity {
                 }
             }
             if (workout != null) {
-                saveToDailyData(workout);
+                DailyData dailyData = saveToDailyData(workout);
+                DailyDataDAO dailyDataDAO = new DailyDataDAOImpl();
+                dailyDataDAO.update(dailyData);
             }
 
         } else {
@@ -204,7 +206,7 @@ public class ExerciseRecorderActivity extends AppCompatActivity {
 
     }
 
-    private void saveToDailyData(Workout workout) {
+    DailyData saveToDailyData(Workout workout) {
         List<Workout> workouts = new ArrayList<>();
         DailyData dailyData = DailyDataHolder.getInstance().getData();
         if (dailyData != null) {
@@ -215,8 +217,7 @@ public class ExerciseRecorderActivity extends AppCompatActivity {
         workouts.add(workout);
         dailyData.setWorkouts(workouts);
         DailyDataHolder.getInstance().setData(dailyData);
-        DailyDataDAO dailyDataDAO = new DailyDataDAOImpl();
-        dailyDataDAO.update(dailyData);
+        return dailyData;
     }
 
     @Override
@@ -231,7 +232,6 @@ public class ExerciseRecorderActivity extends AppCompatActivity {
     private void saveDailyDataToDatabase(DailyData dailyData, String date) {
         DailyDataDAO dailyDataDAO = new DailyDataDAOImpl();
         dailyDataDAO.update(dailyData, date).addOnCompleteListener(task -> {
-
             if (task.isSuccessful()) {
                 Log.d("SaveData", "Data updated successfully");
                 Intent intent = new Intent(mContext, DashboardActivity.class);

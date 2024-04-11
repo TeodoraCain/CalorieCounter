@@ -20,13 +20,16 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.caloriecounter.controllers.ViewPagerAdapter;
 import com.example.caloriecounter.model.DAO.GoalDAOImpl;
 import com.example.caloriecounter.model.DAO.GoalData;
 import com.example.caloriecounter.model.DAO.GoalDataDAO;
 import com.example.caloriecounter.model.DAO.UserDAO;
 import com.example.caloriecounter.model.DAO.UserDAOImpl;
 import com.example.caloriecounter.model.DAO.UserDetails;
-import com.example.caloriecounter.controllers.ViewPagerAdapter;
+import com.example.caloriecounter.model.DAO.WeightLog;
+import com.example.caloriecounter.model.DAO.WeightLogDAO;
+import com.example.caloriecounter.model.DAO.WeightLogDAOImpl;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
@@ -41,15 +44,13 @@ import java.util.Objects;
 public class RegisterActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
 
     private final int[] layouts = {R.layout.view_pager_1, R.layout.view_pager_2, R.layout.view_pager_3, R.layout.view_pager_4, R.layout.view_pager_5};
+    private final String TAG = "RegisterActivity";
     private HashMap<String, String> userInputs;
     private ViewPager viewPager;
     private ProgressBar progressBar;
-
     private TextView tvNext;
     private ViewPagerAdapter adapter;
-
     private Context mContext;
-    private final String TAG = "RegisterActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,12 +125,9 @@ public class RegisterActivity extends AppCompatActivity implements ViewPager.OnP
                     if (task1.isSuccessful()) {
                         //Send verification email
                         Objects.requireNonNull(firebaseUser).sendEmailVerification();
-                        GoalDataDAO goalDataDAO = new GoalDAOImpl();
-                        GoalData goalData = new GoalData();
-                        calculateGoals(goalData);
-                        goalData.setWeightGoal(writeUserDetails.getWeight());
+                        createGoalData(writeUserDetails);
+                        createFirstWeightLog(writeUserDetails);
 
-                        goalDataDAO.add(goalData);
                         Toast.makeText(mContext, "User registered successfully. Please verify your email", Toast.LENGTH_SHORT).show();
                         Log.d(TAG, "Registration successful..");
                         Intent intent = new Intent(mContext, SplashActivity.class);
@@ -159,8 +157,22 @@ public class RegisterActivity extends AppCompatActivity implements ViewPager.OnP
 
     }
 
+    private void createFirstWeightLog(UserDetails writeUserDetails) {
+        WeightLogDAO weightLogDAO = new WeightLogDAOImpl();
+        WeightLog weightLog = new WeightLog(Double.parseDouble(writeUserDetails.getWeight()));
+        weightLogDAO.add(weightLog);
+    }
+
+    private void createGoalData(UserDetails writeUserDetails) {
+        GoalDataDAO goalDataDAO = new GoalDAOImpl();
+        GoalData goalData = new GoalData();
+        calculateGoals(goalData);
+        goalData.setWeightGoal(writeUserDetails.getWeight());
+        goalDataDAO.add(goalData);
+    }
+
     private double calculateBMI() {
-        int height =  Integer.parseInt(Objects.requireNonNull(userInputs.get(getString(R.string.height))));
+        int height = Integer.parseInt(Objects.requireNonNull(userInputs.get(getString(R.string.height))));
         double weight = Double.parseDouble(Objects.requireNonNull(userInputs.get(getString(R.string.weight))));
         String heightUnit = userInputs.get(getString(R.string.heightUnit));
         String weightUnit = userInputs.get(getString(R.string.weightUnit));

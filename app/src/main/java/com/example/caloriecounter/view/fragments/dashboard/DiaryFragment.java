@@ -139,7 +139,6 @@ public class DiaryFragment extends Fragment {
 
     private void moveBackward() {
         playPageTransitionAnimation(AnimationUtils.loadAnimation(DiaryFragment.this.getContext(), R.anim.slide_left));
-
         calendar.add(Calendar.DAY_OF_YEAR, -DAYS_TO_MOVE);
         Date newDate = calendar.getTime();
         updateFoodDiary(newDate);

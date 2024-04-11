@@ -1,5 +1,10 @@
 package com.example.caloriecounter.model.DAO;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
 public class WeightLog {
     private String date;
     private double weight;
@@ -9,6 +14,15 @@ public class WeightLog {
             backPictureUri;
 
     public WeightLog() {
+    }
+
+    public WeightLog(double weight) {
+        Date date = Calendar.getInstance().getTime();
+        this.date = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH).format(date);
+        this.weight = weight;
+        this.frontPictureUri = "";
+        this.backPictureUri = "";
+        this.sidePictureUri = "";
     }
 
     public String getFrontPictureUri() {

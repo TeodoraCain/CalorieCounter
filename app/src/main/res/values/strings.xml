@@ -108,6 +108,8 @@
         <item>>30</item>
     </string-array>
 
+    <integer name="google_play_services_version">12451000</integer>
+
     <string-array name="goals_array">
         <item>Losing Weight</item>
         <item>Gaining Weight</item>
@@ -441,4 +443,13 @@
     <string name="back_picture">Back picture</string>
     <string name="weighing_date">Weighing date</string>
     <string name="your_weight_here">Your weight here</string>
+    <string name="start_loading">Start: loading..</string>
+    <string name="now_loading">Now loading</string>
+    <string name="goal_loading">Goal: loading..</string>
+    <string name="weight_progress">Weight Progress</string>
+    <string name="weight_history">Weight History</string>
+    <string name="underweight">Underweight</string>
+    <string name="normal">Normal</string>
+    <string name="overweight">Overweight</string>
+    <string name="body_mass_index">Body mass index</string>
 </resources>
