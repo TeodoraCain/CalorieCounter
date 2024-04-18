@@ -53,10 +53,10 @@
     <string name="unit_in">lbs</string>
 
     // Weight Categories
-    <string name="underweight_categ_message"><![CDATA[Underweight Category BMI <18.5]]></string>
-    <string name="healthy_categ_message">Healty Weight Category BMI between 18.5 and 24.9</string>
-    <string name="obese_categ_message"><![CDATA[Obese Category BMI >30]]></string>
-    <string name="overweight_categ_message">Overweight Category between 25 and 29.9</string>
+    <string name="underweight_category_message"><![CDATA[Underweight Category BMI <18.5]]></string>
+    <string name="healthy_category_message">Healthy Weight Category BMI between 18.5 and 24.9</string>
+    <string name="obese_category_message"><![CDATA[Obese Category BMI >30]]></string>
+    <string name="overweight_category_message">Overweight Category between 25 and 29.9</string>
 
     // Warnings
     <string name="please_enter_name">Please enter name</string>
@@ -79,7 +79,7 @@
     <string name="today_s_calories">Today\'s calories</string>
     <string name="food_cat">Food</string>
     <string name="steps_cat">Steps</string>
-    <string name="fitnesss">Fitness Goal</string>
+    <string name="fitness">Fitness Goal</string>
     <string name="daily_Activity">Daily activity</string>
     <string name="notifications">Notifications</string>
     <string name="profile_picture">Profile Picture</string>
@@ -381,7 +381,7 @@
         <item>Zambia</item>
         <item>Zimbabwe</item>
     </string-array>
-    <string name="encountry">Uk</string>
+    <string name="country_name">Uk</string>
     <string name="choose_your_gender">Choose your gender</string>
     <string name="choose_your_language">Choose your language</string>
     <string name="fr">FR</string>
@@ -452,4 +452,34 @@
     <string name="normal">Normal</string>
     <string name="overweight">Overweight</string>
     <string name="body_mass_index">Body mass index</string>
+    <string name="step_progress">Step Progress</string>
+    <string name="step_history">Step History</string>
+    <string name="summary">Summary</string>
+    <string name="water_progress">Water Progress</string>
+    <string name="water_history">Water History</string>
+    <string name="weight_goal">Weight Goal</string>
+    <string name="step_goal">Step Goal</string>
+    <string name="resume_workout">Resume workout</string>
+    <string name="pause">Pause workout</string>
+    <string name="time_yourself">Time Yourself</string>
+    <string name="add_record">Add Record</string>
+    <string name="home">Home</string>
+    <string name="new_value">New value</string>
+    <string name="calories_per_serving">Calories per serving:</string>
+    <string name="vegetarian">Vegetarian</string>
+    <string name="select">select</string>
+    <string name="eat_well">Eat Well</string>
+    <string name="carbs">Carbs</string>
+    <string name="fat">Fat</string>
+    <string name="_0kcal">0kcal</string>
+    <string name="food_0_kcal">Food: 0 kcal</string>
+    <string name="exercise_0_kcal">Exercise: 0 kcal</string>
+    <string name="breakfast_0_kcal">Breakfast: 0 kcal</string>
+    <string name="lunch_0_kcal">Lunch: 0 kcal</string>
+    <string name="snacks_0_kcal">Snacks: 0 kcal</string>
+    <string name="dinner_0_kcal">Dinner: 0 kcal</string>
+    <string name="_0_kcal">0 kcal</string>
+    <string name="_0_min">0 min</string>
+    <string name="_0_steps">0 steps</string>
+    <string name="goal_6000">Goal: 6000</string>
 </resources>

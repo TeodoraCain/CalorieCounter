@@ -5,17 +5,17 @@ import static com.example.caloriecounter.R.id;
 import static com.example.caloriecounter.R.layout;
 import static com.example.caloriecounter.R.string;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -29,129 +29,89 @@ import java.util.Calendar;
 import java.util.Objects;
 
 public class ChangeProfileInfoDialog extends AppCompatDialogFragment {
+
+    private final TextView TEXT_VIEW;
+    DialogListener listener;
     private EditText etName;
     private EditText etDOB;
-    private final TextView textView;
-    private RadioGroup rgGender;
     private String newGender;
     private Spinner spCountry;
     private String newCountry;
-    DialogListener listener;
 
-    public ChangeProfileInfoDialog(TextView textView) {
-        this.textView = textView;
+    public ChangeProfileInfoDialog(TextView TEXT_VIEW) {
+        this.TEXT_VIEW = TEXT_VIEW;
     }
 
+    @SuppressLint("NonConstantResourceId")
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
+        Context context = getContext();
         View view;
-        switch (textView.getId()) {
+        switch (TEXT_VIEW.getId()) {
             case id.tvName:
-                view = inflater.inflate(layout.change_name_dialog, null);
+                view = inflater.inflate(layout.cutom_dialog_change_name, new FrameLayout(context), false);
 
-                builder.setView(view)
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        })
-                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                String name = String.valueOf(etName.getText());
-                                listener.applyText(name, textView);
-                            }
-                        });
+                builder.setView(view).setNegativeButton("Cancel", (dialog, which) -> {
+                }).setPositiveButton("Ok", (dialog, which) -> {
+                    String name = String.valueOf(etName.getText());
+                    listener.applyText(name, TEXT_VIEW);
+                });
 
                 etName = view.findViewById(id.etChangeName);
                 break;
             case id.tvDOB:
-                view = inflater.inflate(layout.change_dob_dialog, null);
+                view = inflater.inflate(layout.cutom_dialog_change_dob, new FrameLayout(context), false);
 
-                builder.setView(view)
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
+                builder.setView(view).setNegativeButton("Cancel", (dialog, which) -> {
 
-                            }
-                        })
-                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                String dob = String.valueOf(etDOB.getText());
-                                listener.applyText(dob, textView);
-                            }
-                        });
+                }).setPositiveButton("Ok", (dialog, which) -> {
+                    String dob = String.valueOf(etDOB.getText());
+                    listener.applyText(dob, TEXT_VIEW);
+                });
 
                 etDOB = view.findViewById(id.etChangeDOB);
-                etDOB.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        showDatePicker();
-                    }
-                });
+                etDOB.setOnClickListener(v -> showDatePicker());
                 break;
             case id.tvGender:
-                view = inflater.inflate(layout.change_gender_dialog, null);
+                view = inflater.inflate(layout.cutom_dialog_change_gender, new FrameLayout(context), false);
 
-                builder.setView(view)
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
+                builder.setView(view).setNegativeButton("Cancel", (dialog, which) -> {
 
-                            }
-                        })
-                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                if (!Objects.equals(newGender, null)) {
-                                    listener.applyText(newGender, textView);
-                                }
-                            }
-                        });
+                }).setPositiveButton("Ok", (dialog, which) -> {
+                    if (!Objects.equals(newGender, null)) {
+                        listener.applyText(newGender, TEXT_VIEW);
+                    }
+                });
 
+                RadioGroup rgGender = view.findViewById(id.rgChangeGender);
+                rgGender.setOnCheckedChangeListener((group, checkedId) -> {
+                    // Check which radio button is selected
+                    if (checkedId == id.rbChangeFemale) {
+                        // Female radio button is selected
+                        newGender = getResources().getString(string.female_text);
 
-                rgGender = view.findViewById(id.rgChangeGender);
-                rgGender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(RadioGroup group, int checkedId) {
-                        // Check which radio button is selected
-                        if (checkedId == id.rbChangeFemale) {
-                            // Female radio button is selected
-                            newGender = getResources().getString(string.female_text);
-
-                        } else if (checkedId == id.rbChangeMale) {
-                            // Male radio button is selected
-                            newGender = getResources().getString(string.male_text);
-                        }
+                    } else if (checkedId == id.rbChangeMale) {
+                        // Male radio button is selected
+                        newGender = getResources().getString(string.male_text);
                     }
                 });
                 break;
             case id.tvCountry:
-                view = inflater.inflate(layout.change_country_dialog, null);
+                view = inflater.inflate(layout.cutom_dialog_change_country, new FrameLayout(context), false);
 
-                builder.setView(view)
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
+                builder.setView(view).setNegativeButton("Cancel", (dialog, which) -> {
 
-                            }
-                        })
-                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                if(!Objects.equals(newCountry, null)) {
-                                    listener.applyText(newCountry, textView);
-                                }else {
-                                    listener.applyText(spCountry.getItemAtPosition(227).toString(), textView);
-                                }
-                            }
-                        });
+                }).setPositiveButton("Ok", (dialog, which) -> {
+                    if (!Objects.equals(newCountry, null)) {
+                        listener.applyText(newCountry, TEXT_VIEW);
+                    } else {
+                        listener.applyText(spCountry.getItemAtPosition(227).toString(), TEXT_VIEW);
+                    }
+                });
 
 
                 spCountry = view.findViewById(id.spChangeCountry);
@@ -185,16 +145,10 @@ public class ChangeProfileInfoDialog extends AppCompatDialogFragment {
         int month = calendar.get(Calendar.MONTH);
         int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
 
-        DatePickerDialog datePickerDialog = new DatePickerDialog(
-                this.getContext(),
-                new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        String selectedDate = dayOfMonth + "/" + (month + 1) + "/" + year;
-                        etDOB.setText(selectedDate);
-                    }
-                },
-                year, month, dayOfMonth);
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this.getContext(), (view, year1, month1, dayOfMonth1) -> {
+            String selectedDate = dayOfMonth1 + "/" + (month1 + 1) + "/" + year1;
+            etDOB.setText(selectedDate);
+        }, year, month, dayOfMonth);
 
         datePickerDialog.show();
     }

@@ -174,7 +174,7 @@
                         android:id="@+id/weightChart"
                         android:layout_width="match_parent"
                         android:layout_height="250dp"
-                        android:layout_marginBottom="8dp"
+                        android:layout_margin="8dp"
                         android:backgroundTint="@color/eatwellgreen"
                         android:foregroundTint="@color/eatwellgreen"
                         android:outlineAmbientShadowColor="@color/eatwellgreen"
@@ -292,8 +292,6 @@
                         app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
-
-
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -69,8 +69,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginVertical="8dp">
+            android:layout_marginVertical="8dp"
+            android:orientation="vertical">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -80,7 +80,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
-                    android:text="Calories"
+                    android:text="@string/calories"
                     android:textColor="@color/gray"
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -92,7 +92,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="24dp"
-                    android:text="1000/2000 kcal"
                     android:textColor="@color/gray"
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -106,8 +105,8 @@
                 android:layout_height="16dp"
                 android:layout_marginHorizontal="16dp"
                 android:indeterminate="false"
-                android:padding="4dp"
                 android:indeterminateOnly="false"
+                android:padding="4dp"
                 android:progressBackgroundTint="@color/eatwellgreenlight"
                 android:progressDrawable="@drawable/progress_bar" />
 
@@ -119,7 +118,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
-                    android:text="Protein"
+                    android:text="@string/protein"
                     android:textColor="@color/gray"
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -131,7 +130,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="24dp"
-                    android:text="85.7/135.0 g"
                     android:textColor="@color/gray"
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -145,11 +143,12 @@
                 android:layout_height="16dp"
                 android:layout_marginHorizontal="16dp"
                 android:indeterminate="false"
-                android:padding="4dp"
                 android:indeterminateOnly="false"
+                android:padding="4dp"
                 android:progress="20"
                 android:progressBackgroundTint="@color/eatwellgreenlight"
                 android:progressDrawable="@drawable/progress_bar" />
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -158,7 +157,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
-                    android:text="Carbs"
+                    android:text="@string/carbs"
                     android:textColor="@color/gray"
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -170,7 +169,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="24dp"
-                    android:text="107.4 / 235.0 g"
                     android:textColor="@color/gray"
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -184,10 +182,11 @@
                 android:layout_height="16dp"
                 android:layout_marginHorizontal="16dp"
                 android:indeterminate="false"
-                android:padding="4dp"
                 android:indeterminateOnly="false"
+                android:padding="4dp"
                 android:progressBackgroundTint="@color/eatwellgreenlight"
                 android:progressDrawable="@drawable/progress_bar" />
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -196,7 +195,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
-                    android:text="Fat"
+                    android:text="@string/fat"
                     android:textColor="@color/gray"
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -208,7 +207,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="24dp"
-                    android:text="50.9 / 80.0 g"
                     android:textColor="@color/gray"
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -222,57 +220,12 @@
                 android:layout_height="16dp"
                 android:layout_marginHorizontal="16dp"
                 android:indeterminate="false"
-                android:padding="4dp"
                 android:indeterminateOnly="false"
+                android:padding="4dp"
                 android:progressBackgroundTint="@color/eatwellgreenlight"
                 android:progressDrawable="@drawable/progress_bar" />
 
         </LinearLayout>
-
-        <!--        <androidx.constraintlayout.widget.ConstraintLayout-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="match_parent">-->
-
-        <!--            <TextView-->
-        <!--                android:layout_width="wrap_content"-->
-        <!--                android:layout_height="wrap_content"-->
-        <!--                android:layout_marginStart="10dp"-->
-        <!--                android:layout_marginBottom="8dp"-->
-        <!--                android:text="Fat"-->
-        <!--                android:textColor="@color/gray"-->
-        <!--                android:textSize="14sp"-->
-        <!--                app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--                app:layout_constraintEnd_toEndOf="parent"-->
-        <!--                app:layout_constraintHorizontal_bias=".2"-->
-        <!--                app:layout_constraintStart_toStartOf="parent" />-->
-
-        <!--            <TextView-->
-        <!--                android:layout_width="wrap_content"-->
-        <!--                android:layout_height="wrap_content"-->
-        <!--                android:layout_marginStart="5dp"-->
-        <!--                android:layout_marginBottom="8dp"-->
-        <!--                android:text="Protein"-->
-        <!--                android:textColor="@color/gray"-->
-        <!--                android:textSize="14sp"-->
-        <!--                app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--                app:layout_constraintEnd_toEndOf="parent"-->
-        <!--                app:layout_constraintHorizontal_bias=".5"-->
-        <!--                app:layout_constraintStart_toStartOf="parent" />-->
-        <!--           -->
-
-        <!--            <TextView-->
-        <!--                android:layout_width="wrap_content"-->
-        <!--                android:layout_height="wrap_content"-->
-        <!--                android:layout_marginStart="5dp"-->
-        <!--                android:layout_marginBottom="8dp"-->
-        <!--                android:text="Sugars"-->
-        <!--                android:textColor="@color/gray"-->
-        <!--                android:textSize="14sp"-->
-        <!--                app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--                app:layout_constraintEnd_toEndOf="parent"-->
-        <!--                app:layout_constraintHorizontal_bias=".8"-->
-        <!--                app:layout_constraintStart_toStartOf="parent" />-->
-        <!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
 
     </androidx.cardview.widget.CardView>
 

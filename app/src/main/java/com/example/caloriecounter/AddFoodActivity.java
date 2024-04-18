@@ -15,9 +15,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.caloriecounter.controllers.FoodRecyclerViewAdapter;
-import com.example.caloriecounter.model.DAO.Food;
-import com.example.caloriecounter.model.dataHolder.FoodListHolder;
+import com.example.caloriecounter.adapters.FoodRecyclerViewAdapter;
+import com.example.caloriecounter.models.dao.Food;
+import com.example.caloriecounter.models.dataHolders.FoodListHolder;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -26,13 +26,15 @@ import java.util.Objects;
 
 public class AddFoodActivity extends AppCompatActivity {
 
+    private final String TAG = "AddFoodActivity";
+    private Context context;
+    
     private String meal;
+    private List<Food> foods;
+    
     private RecyclerView rvFoods;
     private EditText etSearchFoods;
-    private List<Food> foods;
-
-    private Context mContext;
-    private final String TAG = "AddFoodActivity";
+ 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,15 @@ public class AddFoodActivity extends AppCompatActivity {
         setUpViews();
         setUpTextWatcherForSearch();
         setUpRecyclerView();
+    }
+
+    /********************************* SET UP VIEWS ***********************************************/
+    private void setUpViews() {
+        setToolbar();
+        context = AddFoodActivity.this;
+        etSearchFoods = findViewById(R.id.etSearchFoods);
+        rvFoods = findViewById(R.id.rvFoods);
+        foods = FoodListHolder.getInstance().getData();
     }
 
     private void setUpRecyclerView() {
@@ -70,15 +81,13 @@ public class AddFoodActivity extends AppCompatActivity {
         });
     }
 
+    /********************************* ACTIONS ****************************************************/
     private void searchByQuery(String query) {
         List<Food> queryResult = new ArrayList<>();
         String[] queryWords = query.toLowerCase().split("\\s+");
 
         for (Food food : foods) {
-            boolean matched = false;
-            if (food.getName().toLowerCase().contains(query.toLowerCase())) {
-                matched = true;
-            }
+            boolean matched = food.getName().toLowerCase().contains(query.toLowerCase());
             for (String word : queryWords) {
                 if (food.getName().toLowerCase().contains(word)) {
                     matched = true;
@@ -96,14 +105,20 @@ public class AddFoodActivity extends AppCompatActivity {
         rvFoods.setAdapter(rvAdapter);
     }
 
-    private void setUpViews() {
-        setToolbar();
-        mContext = this;
-        etSearchFoods = findViewById(R.id.etSearchFoods);
-        rvFoods = findViewById(R.id.rvFoods);
-        foods = FoodListHolder.getInstance().getData();
+    public void onItemClick(Food food) {
+        String date = this.getIntent().getStringExtra("DATE");
+
+        Log.d(TAG, "ItemClick: Clicked on " + food.getName());
+
+        Intent intent = new Intent(context, NutritionDisplayActivity.class);
+        intent.putExtra("MEAL", meal);
+        intent.putExtra("FOOD", food);
+        intent.putExtra("DATE", date);
+
+        startActivity(intent);
     }
 
+    /********************************* SET UP TOOLBAR *********************************************/
     private void setToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         final String MEAL = "MEAL";
@@ -118,11 +133,6 @@ public class AddFoodActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPostResume() {
-        super.onPostResume();
-    }
-
-    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             this.finish();
@@ -132,16 +142,5 @@ public class AddFoodActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void onItemClick(Food food) {
-        String date = this.getIntent().getStringExtra("DATE");
 
-        Log.d(TAG, "ItemClick: Clicked on " + food.getName());
-
-        Intent intent = new Intent(mContext, NutritionDisplayActivity.class);
-        intent.putExtra("MEAL", meal);
-        intent.putExtra("FOOD", food);
-        intent.putExtra("DATE", date);
-
-        startActivity(intent);
-    }
 }

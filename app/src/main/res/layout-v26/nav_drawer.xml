@@ -9,7 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="140dp"
-        android:background="@drawable/headerbackground"
+        android:background="@drawable/ic_header_background"
         android:paddingVertical="14dp">
 
         <ImageView
@@ -19,7 +19,7 @@
             android:layout_gravity="bottom"
             android:background="@drawable/logo_background"
             android:contentDescription="@string/profile_picture"
-            android:src="@drawable/eatwelllogo"
+            android:src="@drawable/eat_well_logo"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.08"
@@ -94,12 +94,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
-            android:drawableStart="@drawable/ic_user"
             android:drawablePadding="8dp"
             android:fontFamily="@font/lora_font"
-            android:text="Profile"
+            android:text="@string/profile"
             android:textColor="@color/gray"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            app:drawableStartCompat="@drawable/ic_user" />
     </LinearLayout>
 
     <LinearLayout
@@ -114,12 +114,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
-            android:drawableStart="@drawable/ic_target"
             android:drawablePadding="8dp"
             android:fontFamily="@font/lora_font"
             android:text="@string/goals"
             android:textColor="@color/gray"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            app:drawableStartCompat="@drawable/ic_target" />
     </LinearLayout>
 
     <LinearLayout
@@ -134,77 +134,77 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
-            android:drawableStart="@drawable/ic_share"
             android:drawablePadding="8dp"
             android:fontFamily="@font/lora_font"
-            android:text="EIM 1+2"
+            android:text="@string/share"
             android:textColor="@color/gray"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            app:drawableStartCompat="@drawable/ic_share" />
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/nav_eimRss"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="18dp"
-        android:layout_marginTop="28dp"
-        android:orientation="horizontal">
+<!--    <LinearLayout-->
+<!--        android:id="@+id/nav_eimRss"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginHorizontal="18dp"-->
+<!--        android:layout_marginTop="28dp"-->
+<!--        android:orientation="horizontal">-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:drawableStart="@drawable/ic_share"
-            android:drawablePadding="8dp"
-            android:fontFamily="@font/lora_font"
-            android:text="EIM Rss"
-            android:textColor="@color/gray"
-            android:textSize="18sp" />
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="start"-->
+<!--            android:drawableStart="@drawable/ic_share"-->
+<!--            android:drawablePadding="8dp"-->
+<!--            android:fontFamily="@font/lora_font"-->
+<!--            android:text="EIM Rss"-->
+<!--            android:textColor="@color/gray"-->
+<!--            android:textSize="18sp" />-->
 
-    </LinearLayout>
+<!--    </LinearLayout>-->
 
-    <LinearLayout
-        android:id="@+id/nav_eimLanguage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="18dp"
-        android:layout_marginTop="28dp"
-        android:orientation="horizontal">
+<!--    <LinearLayout-->
+<!--        android:id="@+id/nav_eimLanguage"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginHorizontal="18dp"-->
+<!--        android:layout_marginTop="28dp"-->
+<!--        android:orientation="horizontal">-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:drawableStart="@drawable/ic_share"
-            android:drawablePadding="8dp"
-            android:fontFamily="@font/lora_font"
-            android:text="EIM Language"
-            android:textColor="@color/gray"
-            android:textSize="18sp" />
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="start"-->
+<!--            android:drawableStart="@drawable/ic_share"-->
+<!--            android:drawablePadding="8dp"-->
+<!--            android:fontFamily="@font/lora_font"-->
+<!--            android:text="EIM Language"-->
+<!--            android:textColor="@color/gray"-->
+<!--            android:textSize="18sp" />-->
 
-    </LinearLayout>
+<!--    </LinearLayout>-->
 
-    <LinearLayout
-        android:id="@+id/nav_eimFragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="18dp"
-        android:layout_marginTop="28dp"
-        android:orientation="horizontal">
+<!--    <LinearLayout-->
+<!--        android:id="@+id/nav_eimFragment"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginHorizontal="18dp"-->
+<!--        android:layout_marginTop="28dp"-->
+<!--        android:orientation="horizontal">-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:drawableStart="@drawable/ic_share"
-            android:drawablePadding="8dp"
-            android:fontFamily="@font/lora_font"
-            android:text="EIM Fragment"
-            android:textColor="@color/gray"
-            android:textSize="18sp" />
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="start"-->
+<!--            android:drawableStart="@drawable/ic_share"-->
+<!--            android:drawablePadding="8dp"-->
+<!--            android:fontFamily="@font/lora_font"-->
+<!--            android:text="EIM Fragment"-->
+<!--            android:textColor="@color/gray"-->
+<!--            android:textSize="18sp" />-->
 
-    </LinearLayout>
+<!--    </LinearLayout>-->
 
     <LinearLayout
         android:id="@+id/nav_about"
@@ -218,12 +218,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
-            android:drawableStart="@drawable/ic_about"
             android:drawablePadding="8dp"
             android:fontFamily="@font/lora_font"
-            android:text="About Us"
+            android:text="@string/about_us"
             android:textColor="@color/gray"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            app:drawableStartCompat="@drawable/ic_about" />
     </LinearLayout>
 
     <View
@@ -244,12 +244,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
-            android:drawableStart="@drawable/ic_logout"
             android:drawablePadding="8dp"
             android:fontFamily="@font/lora_font"
-            android:text="Logout"
+            android:text="@string/logout"
             android:textColor="@color/gray"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            app:drawableStartCompat="@drawable/ic_logout" />
     </LinearLayout>
 
 </LinearLayout>

@@ -24,97 +24,54 @@ import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private boolean passwordVisible;
+    private final String TAG = "LoginActivity";
     EditText password;
     EditText email;
     Button loginButton;
+    private Context context;
     private FirebaseAuth authProfile;
+    private boolean passwordVisible;
 
-    private Context mContext;
-    private final String TAG = "LoginActivity";
-
-    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        setUpViews();
-        passwordVisibilityButtonSet();
+        initContext();
         setUpFirebase();
-        startLogin();
+        setUpViews();
+        setUpListeners();
     }
 
+    @SuppressWarnings("unused")
+    public void onStartDashboardPage(View view) {
+        Intent login = new Intent(context, DashboardActivity.class);
+        startActivity(login);
+    }
+
+    /********************************* INIT ACTIVITY **********************************************/
     private void setUpFirebase() {
         authProfile = FirebaseAuth.getInstance();
     }
 
+    private void initContext() {
+        context = LoginActivity.this;
+    }
+
     private void setUpViews() {
-        mContext = LoginActivity.this;
         email = findViewById(R.id.etEmailLogin);
         password = findViewById(R.id.etPasswordLogin);
         loginButton = findViewById(R.id.btnLogin);
     }
 
-    void startLogin() {
-        loginButton.setOnClickListener(v ->{
-                    if(loginCheck())
-                        loginWithEmailAndPassword(email.getText().toString(), password.getText().toString());
-                }
+    /********************************* SET UP LISTENERS *******************************************/
 
-        );
-    }
-
-    boolean loginCheck() {
-        String emailTxt = email.getText().toString();
-        String passwordTxt = password.getText().toString();
-
-        if (emailTxt.isEmpty() ||emailTxt == null) {
-            //Toast.makeText(LoginActivity.this, "Please enter email!", Toast.LENGTH_SHORT).show();
-            email.setError("Please enter email!");
-            email.requestFocus();
-            return false;
-        } else if (!Patterns.EMAIL_ADDRESS.matcher(emailTxt).matches()) {
-            //Toast.makeText(LoginActivity.this, "Email is incorrect!", Toast.LENGTH_SHORT).show();
-            email.setError("Email is incorrect!");
-            email.requestFocus();
-            return false;
-        } else if (passwordTxt.isEmpty() ||passwordTxt == null) {
-            //Toast.makeText(LoginActivity.this, "Please enter password!", Toast.LENGTH_SHORT).show();
-            password.setError("Please enter password!");
-            password.requestFocus();
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    void loginWithEmailAndPassword(String emailTxt, String passwordTxt) {
-        authProfile.signInWithEmailAndPassword(emailTxt, passwordTxt).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                Log.d(TAG, "Logging in user..");
-                Toast.makeText(mContext, "Welcome", Toast.LENGTH_SHORT).show();
-                Intent login = new Intent(mContext, SplashActivity.class);
-                startActivity(login);
-            } else {
-                try {
-                    throw Objects.requireNonNull(task.getException());
-                } catch (FirebaseAuthInvalidUserException e) {
-                    email.setError("Invalid user. Please try again.");
-                    email.requestFocus();
-                } catch (FirebaseAuthInvalidCredentialsException e) {
-                    email.setError("Invalid credentials. Please try again.");
-                    email.requestFocus();
-                } catch (Exception e) {
-                    Log.e("LoginActivity", e.getMessage());
-                    Toast.makeText(mContext, "Something went wrong. Try again!", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+    private void setUpListeners() {
+        setUpPassVisibilityListener();
+        setUpLoginListener();
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private void passwordVisibilityButtonSet() {
+    private void setUpPassVisibilityListener() {
         password.setOnTouchListener((v, event) -> {
             final int right = 2;
             if (event.getAction() == MotionEvent.ACTION_UP) {
@@ -137,8 +94,61 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    public void onStartDashboardPage(View view) {
-        Intent login = new Intent(mContext, DashboardActivity.class);
-        startActivity(login);
+    void setUpLoginListener() {
+        loginButton.setOnClickListener(v -> {
+                    if (isLoginInputCorrect())
+                        loginWithEmailAndPassword(email.getText().toString(), password.getText().toString());
+                }
+        );
     }
+
+    boolean isLoginInputCorrect() {
+        String emailTxt = email.getText().toString();
+        String passwordTxt = password.getText().toString();
+
+        if (emailTxt.isEmpty()) {
+            //Toast.makeText(LoginActivity.this, "Please enter email!", Toast.LENGTH_SHORT).show();
+            email.setError("Please enter email!");
+            email.requestFocus();
+            return false;
+        } else if (!Patterns.EMAIL_ADDRESS.matcher(emailTxt).matches()) {
+            //Toast.makeText(LoginActivity.this, "Email is incorrect!", Toast.LENGTH_SHORT).show();
+            email.setError("Email is incorrect!");
+            email.requestFocus();
+            return false;
+        } else if (passwordTxt.isEmpty()) {
+            //Toast.makeText(LoginActivity.this, "Please enter password!", Toast.LENGTH_SHORT).show();
+            password.setError("Please enter password!");
+            password.requestFocus();
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    void loginWithEmailAndPassword(String emailTxt, String passwordTxt) {
+        authProfile.signInWithEmailAndPassword(emailTxt, passwordTxt).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Log.d(TAG, "Logging in user..");
+                Toast.makeText(context, "Welcome", Toast.LENGTH_SHORT).show();
+                Intent login = new Intent(context, SplashActivity.class);
+                startActivity(login);
+            } else {
+                try {
+                    throw Objects.requireNonNull(task.getException());
+                } catch (FirebaseAuthInvalidUserException e) {
+                    email.setError("Invalid user. Please try again.");
+                    email.requestFocus();
+                } catch (FirebaseAuthInvalidCredentialsException e) {
+                    email.setError("Invalid credentials. Please try again.");
+                    email.requestFocus();
+                } catch (Exception e) {
+                    Log.e("LoginActivity", e.getMessage());
+                    Toast.makeText(context, "Something went wrong. Try again!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+
 }

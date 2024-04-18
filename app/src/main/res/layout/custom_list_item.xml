@@ -11,7 +11,7 @@
     android:padding="8dp"
     android:textColor="@color/gray"
     android:textSize="@dimen/text_size"
-    android:hint="select"
+    android:hint="@string/select"
     android:textColorHint="@color/gray"
     app:cardElevation="8dp" />
     

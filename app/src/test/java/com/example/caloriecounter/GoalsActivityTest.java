@@ -5,7 +5,7 @@ import static org.mockito.Mockito.when;
 
 import android.widget.TextView;
 
-import com.example.caloriecounter.model.DAO.GoalData;
+import com.example.caloriecounter.models.dao.GoalData;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -33,7 +33,7 @@ public class GoalsActivityTest {
 
     @Before
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
         goalsActivity = new GoalsActivity();
 
         goalsActivity.tvCalorieGoal = mockedCalorieGoal;

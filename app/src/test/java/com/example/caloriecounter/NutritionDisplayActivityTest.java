@@ -8,8 +8,8 @@ import android.text.Editable;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.caloriecounter.model.DAO.Food;
-import com.example.caloriecounter.model.DAO.Recipe;
+import com.example.caloriecounter.models.dao.Food;
+import com.example.caloriecounter.models.dao.Recipe;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -42,7 +42,7 @@ public class NutritionDisplayActivityTest {
 
     @Before
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
         activity = new NutritionDisplayActivity();
 
         activity.etServingSize = etServingSize;

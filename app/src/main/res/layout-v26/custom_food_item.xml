@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:elevation="12dp"
+    app:cardCornerRadius="6dp"
+    app:cardUseCompatPadding="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tvFoodItemName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:background="@drawable/custom_input_text"
+            android:fontFamily="@font/lora_font"
+            android:gravity="center"
+            android:minHeight="48dp"
+            android:padding="8dp"
+            android:textColor="@color/gray"
+            android:textColorHint="@color/gray"
+            android:textSize="@dimen/text_size"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvServingSize"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:background="@drawable/custom_input_text"
+            android:fontFamily="@font/lora_font"
+            android:minHeight="48dp"
+            android:padding="8dp"
+            android:text="@string/serving_size"
+            android:textColor="@color/gray"
+            android:textColorHint="@color/gray"
+            android:textSize="@dimen/text_size"
+            app:layout_constraintTop_toBottomOf="@+id/tvFoodItemName" />
+
+        <TextView
+            android:id="@+id/tvCaloriesPerServing"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:background="@drawable/custom_input_text"
+            android:fontFamily="@font/lora_font"
+            android:minHeight="48dp"
+            android:padding="8dp"
+            android:text="@string/calories_per_serving"
+            android:textColor="@color/gray"
+            android:textColorHint="@color/gray"
+            android:textSize="@dimen/text_size"
+            app:layout_constraintTop_toBottomOf="@+id/tvServingSize" />
+
+        <TextView
+            android:id="@+id/tvProtein"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:background="@drawable/custom_input_text"
+            android:fontFamily="@font/lora_font"
+            android:minHeight="48dp"
+            android:padding="8dp"
+            android:text="@string/protein"
+            android:textColor="@color/gray"
+            android:textColorHint="@color/gray"
+            android:textSize="@dimen/text_size"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvCaloriesPerServing" />
+
+        <CheckBox
+            android:id="@+id/cbVegetarian"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:text="@string/vegetarian"
+            android:textColor="@color/gray"
+            android:textColorHint="@color/gray"
+            android:textSize="@dimen/text_size"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvProtein" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

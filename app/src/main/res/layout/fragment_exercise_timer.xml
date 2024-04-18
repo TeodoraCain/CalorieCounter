@@ -19,7 +19,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="50dp"
             android:contentDescription="@string/clock"
-            android:src="@drawable/bgcircle"
+            android:src="@drawable/ic_timer_background"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -31,7 +31,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="50dp"
             android:contentDescription="@string/clock"
-            android:src="@drawable/icanchor"
+            android:src="@drawable/ic_timer_hand"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -67,7 +67,7 @@
             android:gravity="center_vertical"
             android:minHeight="48dp"
             android:padding="8dp"
-            android:text="0kcal"
+            android:text="@string/_0kcal"
             android:textColor="@color/gray"
             android:textSize="24sp"
             app:drawableStartCompat="@drawable/ic_calories"
@@ -76,29 +76,6 @@
             app:layout_constraintStart_toEndOf="@id/timer"
             app:layout_constraintTop_toBottomOf="@+id/ivAnchor"
             app:layout_constraintVertical_bias="0.047" />
-
-        <!--            <TextView-->
-        <!--                android:id="@+id/tvExercise"-->
-        <!--                android:layout_width="match_parent"-->
-        <!--                android:layout_height="wrap_content"-->
-        <!--                android:layout_gravity="center"-->
-        <!--                android:layout_marginHorizontal="16dp"-->
-        <!--                android:autofillHints=""-->
-        <!--                android:layout_marginTop="50dp"-->
-        <!--                android:drawablePadding="8dp"-->
-        <!--                android:fontFamily="@font/lora_font"-->
-        <!--                android:gravity="center"-->
-        <!--                android:minHeight="48dp"-->
-        <!--                android:padding="8dp"-->
-        <!--                android:text="Exercise name"-->
-        <!--                android:textColor="@color/gray"-->
-        <!--                android:textColorHint="@color/gray"-->
-        <!--                android:textSize="18sp"-->
-        <!--                app:layout_constraintBottom_toTopOf="@+id/ivAnchor"-->
-        <!--                app:layout_constraintEnd_toEndOf="parent"-->
-        <!--                app:layout_constraintStart_toStartOf="parent"-->
-        <!--                app:layout_constraintTop_toTopOf="parent"-->
-        <!--                app:layout_constraintVertical_bias="0.5" />-->
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnStartRecord"
@@ -118,7 +95,28 @@
             app:layout_constraintHorizontal_bias="0.614"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView"
-            app:layout_constraintVertical_bias="0.8" />
+            app:layout_constraintVertical_bias="0.7" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnPauseRecord"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="48dp"
+            android:background="@drawable/button_animation"
+            android:fontFamily="@font/lora_font"
+            android:maxWidth="78dip"
+            android:minWidth="48dip"
+            android:text="@string/pause"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="@dimen/big_text_size"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.614"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView"
+            app:layout_constraintVertical_bias="0.9" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

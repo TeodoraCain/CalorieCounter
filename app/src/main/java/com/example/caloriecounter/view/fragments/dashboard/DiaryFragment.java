@@ -21,17 +21,17 @@ import androidx.fragment.app.Fragment;
 import com.example.caloriecounter.AddExerciseActivity;
 import com.example.caloriecounter.AddFoodActivity;
 import com.example.caloriecounter.R;
-import com.example.caloriecounter.controllers.RecipeAdapter;
-import com.example.caloriecounter.controllers.WorkoutAdapter;
-import com.example.caloriecounter.model.DAO.DailyData;
-import com.example.caloriecounter.model.DAO.DailyDataDAO;
-import com.example.caloriecounter.model.DAO.DailyDataDAOImpl;
-import com.example.caloriecounter.model.DAO.Food;
-import com.example.caloriecounter.model.DAO.GoalData;
-import com.example.caloriecounter.model.DAO.Recipe;
-import com.example.caloriecounter.model.DAO.Workout;
-import com.example.caloriecounter.model.dataHolder.DailyDataHolder;
-import com.example.caloriecounter.model.dataHolder.GoalDataHolder;
+import com.example.caloriecounter.adapters.RecipeAdapter;
+import com.example.caloriecounter.adapters.WorkoutAdapter;
+import com.example.caloriecounter.models.dao.DailyData;
+import com.example.caloriecounter.models.dao.DailyDataDAO;
+import com.example.caloriecounter.models.dao.DailyDataDAOImpl;
+import com.example.caloriecounter.models.dao.Food;
+import com.example.caloriecounter.models.dao.GoalData;
+import com.example.caloriecounter.models.dao.Recipe;
+import com.example.caloriecounter.models.dao.Workout;
+import com.example.caloriecounter.models.dataHolders.DailyDataHolder;
+import com.example.caloriecounter.models.dataHolders.GoalDataHolder;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -47,61 +47,119 @@ import java.util.Locale;
 
 public class DiaryFragment extends Fragment {
 
+    private static final int DAYS_TO_MOVE = 1;
+    private Context context;
+    //views
+    private View view;
     private TextView tvTotalCaloriesExercise;
     private TextView tvTotalBreakfastCalories;
     private TextView tvTotalLunchCalories;
     private TextView tvTotalDinnerCalories;
     private TextView tvTotalSnackCalories;
-
     private TextView tvTotalCaloriesCount;
     private TextView tvTotalProteinCount;
     private TextView tvTotalCarbsCount;
     private TextView tvTotalFatCount;
-
     private TextView tvDiaryDate;
     private Calendar calendar;
-
     private ImageView ivPrevious, ivNext;
-
     private ListView lvWorkoutHistory;
     private ListView lvBreakfast;
     private ListView lvLunch;
     private ListView lvDinner;
     private ListView lvSnacks;
-
     private TextView tvAddBreakfast, tvAddLunch,
             tvAddDinner, tvAddSnacks, tvAddExercise;
-
-    private DailyData dailyData;
-    private View view;
-
-    private Context mContext;
-    private String diaryDate;
-
+    private ProgressBar pbProtein, pbFat, pbCarbs, pbCalories;
+    // attributes
     private int maxGramsOfProtein;
     private int maxGramsOfFat;
     private int maxGramsOfCarbs;
     private int calorieGoal;
-
-    private ProgressBar pbProtein, pbFat, pbCarbs, pbCalories;
-
-    private float gramsOfFat, gramsOfProtein, gramsOfCarbs;
     private int totalCalories;
-
-    private static final int DAYS_TO_MOVE = 1;
+    private float gramsOfFat, gramsOfProtein, gramsOfCarbs;
+    private String diaryDate;
+    private DailyData dailyData;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_diary, container, false);
-        init();
-
-        calendar = Calendar.getInstance();
-        Date currentDate = calendar.getTime();
-        updateFoodDiary(currentDate);
-
+        setUpViews();
+        getCalorieGoal();
+        initMacroValues();
+        setMaxMacrosToUI();
         addListeners();
+        updateFoodDiary(getCurrentDate());
+
         return view;
+    }
+
+    @NonNull
+    private Date getCurrentDate() {
+        calendar = Calendar.getInstance();
+        return calendar.getTime();
+    }
+
+    /********************************* INIT VIEW ***************************************************/
+    private void setUpViews() {
+        tvTotalCaloriesExercise = view.findViewById(R.id.tvTotalExerciseCalories);
+        tvTotalBreakfastCalories = view.findViewById(R.id.tvTotalBreakfastCalories);
+        tvTotalLunchCalories = view.findViewById(R.id.tvTotalLunchCalories);
+        tvTotalDinnerCalories = view.findViewById(R.id.tvTotalDinnerCalories);
+        tvTotalSnackCalories = view.findViewById(R.id.tvTotalSnacksCalories);
+
+        tvTotalCaloriesCount = view.findViewById(R.id.tvTotalCalorieCount);
+        tvTotalProteinCount = view.findViewById(R.id.tvTotalProteinCount);
+        tvTotalCarbsCount = view.findViewById(R.id.tvTotalCarbsCount);
+        tvTotalFatCount = view.findViewById(R.id.tvTotalFatCount);
+
+        lvBreakfast = view.findViewById(R.id.lvBreakfast);
+        lvLunch = view.findViewById(R.id.lvLunch);
+        lvDinner = view.findViewById(R.id.lvDinner);
+        lvSnacks = view.findViewById(R.id.lvSnacks);
+        lvWorkoutHistory = view.findViewById(R.id.lvWorkoutHistory);
+
+        dailyData = DailyDataHolder.getInstance().getData();
+
+        tvDiaryDate = view.findViewById(R.id.tvDiaryDate);
+        tvAddBreakfast = view.findViewById(R.id.addBreakfast);
+        tvAddLunch = view.findViewById(R.id.addLunch);
+        tvAddDinner = view.findViewById(R.id.addDinner);
+        tvAddSnacks = view.findViewById(R.id.addSnacks);
+        tvAddExercise = view.findViewById(R.id.addExercise);
+
+        ivNext = view.findViewById(R.id.ivNext);
+        ivPrevious = view.findViewById(R.id.ivPrevious);
+
+        pbCalories = view.findViewById(R.id.pbTotalCalories);
+        pbProtein = view.findViewById(R.id.pbTotalProtein);
+        pbCarbs = view.findViewById(R.id.pbTotalCarbs);
+        pbFat = view.findViewById(R.id.pbTotalFat);
+    }
+
+    // get calorie goal from goal data
+    private void getCalorieGoal() {
+        GoalData goalData = GoalDataHolder.getInstance().getData();
+        if (goalData != null) {
+            calorieGoal = Integer.parseInt(goalData.getCalorieGoal());
+        } else {
+            calorieGoal = 2000;
+        }
+    }
+
+    // init total grams of fat, carbs and protein
+    private void initMacroValues() {
+        maxGramsOfProtein = (int) (calorieGoal * 0.3) / 4;
+        maxGramsOfCarbs = (int) (0.4 * calorieGoal) / 4;
+        maxGramsOfFat = (int) (0.3 * calorieGoal) / 9;
+    }
+
+    private void setMaxMacrosToUI() {
+        pbCalories.setMax(calorieGoal);
+        pbProtein.setMax(maxGramsOfProtein);
+        pbCarbs.setMax(maxGramsOfCarbs);
+        pbFat.setMax(maxGramsOfFat);
     }
 
     private void addListeners() {
@@ -115,43 +173,12 @@ public class DiaryFragment extends Fragment {
         tvAddExercise.setOnClickListener(v -> addExercise());
     }
 
-    private void addExercise() {
-        Intent intent = new Intent(mContext, AddExerciseActivity.class);
-        intent.putExtra("FROMDIARY", true);
-        intent.putExtra("DATE", diaryDate);
-        startActivity(intent);
-    }
-
-    private void addFood(String meal) {
-        Intent intent = new Intent(mContext, AddFoodActivity.class);
-        intent.putExtra("MEAL", meal);
-        intent.putExtra("DATE", diaryDate);
-        startActivity(intent);
-    }
-
-    private void moveForward() {
-        playPageTransitionAnimation(AnimationUtils.loadAnimation(DiaryFragment.this.getContext(), R.anim.slide_right));
-
-        calendar.add(Calendar.DAY_OF_YEAR, DAYS_TO_MOVE);
-        Date newDate = calendar.getTime();
-        updateFoodDiary(newDate);
-    }
-
-    private void moveBackward() {
-        playPageTransitionAnimation(AnimationUtils.loadAnimation(DiaryFragment.this.getContext(), R.anim.slide_left));
-        calendar.add(Calendar.DAY_OF_YEAR, -DAYS_TO_MOVE);
-        Date newDate = calendar.getTime();
-        updateFoodDiary(newDate);
-    }
+    /********************************* INIT DATA ***************************************************/
 
     private void updateFoodDiary(Date date) {
         diaryDate = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH).format(date);
         tvDiaryDate.setText(diaryDate);
         getDailyData(diaryDate);
-    }
-
-    private void playPageTransitionAnimation(Animation animation) {
-        view.startAnimation(animation);
     }
 
     private void getDailyData(String date) {
@@ -163,7 +190,7 @@ public class DiaryFragment extends Fragment {
                 if (dailyData == null) {
                     dailyData = new DailyData();
                 }
-                loadData();
+                loadAndSetDataToUI();
             }
 
             @Override
@@ -173,7 +200,7 @@ public class DiaryFragment extends Fragment {
         });
     }
 
-    private void loadData() {
+    private void loadAndSetDataToUI() {
         List<Recipe> breakfastList = dailyData.getBreakfast();
         List<Recipe> lunchList = dailyData.getLunch();
         List<Recipe> dinnerList = dailyData.getDinner();
@@ -218,7 +245,7 @@ public class DiaryFragment extends Fragment {
     }
 
     private void setFoodList(List<Recipe> arrayList, TextView textView, ListView listView) {
-        ArrayAdapter<Recipe> adapter = new RecipeAdapter(mContext, arrayList);
+        ArrayAdapter<Recipe> adapter = new RecipeAdapter(context, arrayList);
         listView.setAdapter(adapter);
 
         int totalCaloriesMeal = 0;
@@ -241,7 +268,7 @@ public class DiaryFragment extends Fragment {
         if (workoutList == null || workoutList.isEmpty()) {
             workoutList = new ArrayList<>();
         }
-        ArrayAdapter<Workout> adapter = new WorkoutAdapter(mContext, workoutList);
+        ArrayAdapter<Workout> adapter = new WorkoutAdapter(context, workoutList);
         lvWorkoutHistory.setAdapter(adapter);
 
         for (Workout workout : workoutList) {
@@ -249,72 +276,8 @@ public class DiaryFragment extends Fragment {
         }
 
         tvTotalCaloriesExercise.setText(String.valueOf(totalWorkoutCalories));
-        totalCalories = totalCalories- totalWorkoutCalories;
+        totalCalories = totalCalories - totalWorkoutCalories;
         setListViewHeightBasedOnItems(lvWorkoutHistory);
-    }
-
-    private void init() {
-        tvTotalCaloriesExercise = view.findViewById(R.id.tvTotalExerciseCalories);
-        tvTotalBreakfastCalories = view.findViewById(R.id.tvTotalBreakfastCalories);
-        tvTotalLunchCalories = view.findViewById(R.id.tvTotalLunchCalories);
-        tvTotalDinnerCalories = view.findViewById(R.id.tvTotalDinnerCalories);
-        tvTotalSnackCalories = view.findViewById(R.id.tvTotalSnacksCalories);
-
-        tvTotalCaloriesCount = view.findViewById(R.id.tvTotalCalorieCount);
-        tvTotalProteinCount = view.findViewById(R.id.tvTotalProteinCount);
-        tvTotalCarbsCount = view.findViewById(R.id.tvTotalCarbsCount);
-        tvTotalFatCount = view.findViewById(R.id.tvTotalFatCount);
-
-        lvBreakfast = view.findViewById(R.id.lvBreakfast);
-        lvLunch = view.findViewById(R.id.lvLunch);
-        lvDinner = view.findViewById(R.id.lvDinner);
-        lvSnacks = view.findViewById(R.id.lvSnacks);
-        lvWorkoutHistory = view.findViewById(R.id.lvWorkoutHistory);
-
-        dailyData = DailyDataHolder.getInstance().getData();
-
-        tvDiaryDate = view.findViewById(R.id.tvDiaryDate);
-        tvAddBreakfast = view.findViewById(R.id.addBreakfast);
-        tvAddLunch = view.findViewById(R.id.addLunch);
-        tvAddDinner = view.findViewById(R.id.addDinner);
-        tvAddSnacks = view.findViewById(R.id.addSnacks);
-        tvAddExercise = view.findViewById(R.id.addExercise);
-
-        ivNext = view.findViewById(R.id.ivNext);
-        ivPrevious = view.findViewById(R.id.ivPrevious);
-
-        pbCalories = view.findViewById(R.id.pbTotalCalories);
-        pbProtein = view.findViewById(R.id.pbTotalProtein);
-        pbCarbs = view.findViewById(R.id.pbTotalCarbs);
-        pbFat = view.findViewById(R.id.pbTotalFat);
-
-        getCalorieGoal();
-        initMacroValues();
-        setMaxMacrosToUI();
-    }
-
-    private void setMaxMacrosToUI() {
-        pbCalories.setMax(calorieGoal);
-        pbProtein.setMax(maxGramsOfProtein);
-        pbCarbs.setMax(maxGramsOfCarbs);
-        pbFat.setMax(maxGramsOfFat);
-    }
-
-    // get calorie goal from goal data
-    private void getCalorieGoal() {
-        GoalData goalData = GoalDataHolder.getInstance().getData();
-        if (goalData != null) {
-            calorieGoal = Integer.parseInt(goalData.getCalorieGoal());
-        } else {
-            calorieGoal = 2000;
-        }
-    }
-
-    // init total grams of fat, carbs and protein
-    private void initMacroValues() {
-        maxGramsOfProtein = (int) (calorieGoal * 0.3) / 4;
-        maxGramsOfCarbs = (int) (0.4 * calorieGoal) / 4;
-        maxGramsOfFat = (int) (0.3 * calorieGoal) / 9;
     }
 
     private void setListViewHeightBasedOnItems(ListView listView) {
@@ -338,6 +301,42 @@ public class DiaryFragment extends Fragment {
         listView.requestLayout();
     }
 
+    /********************************* ONCLICK ACTIONS *********************************************/
+    private void addExercise() {
+        Intent intent = new Intent(context, AddExerciseActivity.class);
+        intent.putExtra("FROMDIARY", true);
+        intent.putExtra("DATE", diaryDate);
+        startActivity(intent);
+    }
+
+    private void addFood(String meal) {
+        Intent intent = new Intent(context, AddFoodActivity.class);
+        intent.putExtra("MEAL", meal);
+        intent.putExtra("DATE", diaryDate);
+        startActivity(intent);
+    }
+
+    /********************************* VIEW ACTIONS ************************************************/
+    private void moveForward() {
+        playPageTransitionAnimation(AnimationUtils.loadAnimation(DiaryFragment.this.getContext(), R.anim.slide_right));
+        calendar.add(Calendar.DAY_OF_YEAR, DAYS_TO_MOVE);
+        Date newDate = calendar.getTime();
+        updateFoodDiary(newDate);
+    }
+
+    private void moveBackward() {
+        playPageTransitionAnimation(AnimationUtils.loadAnimation(DiaryFragment.this.getContext(), R.anim.slide_left));
+        calendar.add(Calendar.DAY_OF_YEAR, -DAYS_TO_MOVE);
+        Date newDate = calendar.getTime();
+        updateFoodDiary(newDate);
+    }
+
+    private void playPageTransitionAnimation(Animation animation) {
+        view.startAnimation(animation);
+    }
+
+
+    /*********************************** LIFECYCLE OVERRIDES ***************************************/
     @Override
     public void onResume() {
         super.onResume();
@@ -349,6 +348,6 @@ public class DiaryFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        mContext = context;
+        this.context = context;
     }
 }

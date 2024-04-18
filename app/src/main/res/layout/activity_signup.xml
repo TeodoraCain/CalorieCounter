@@ -18,7 +18,6 @@
         android:maxWidth="78dip"
         android:minHeight="48dip"
         android:nestedScrollingEnabled="false"
-        android:onClick="onContinueToSignUp"
         android:text="@string/continue_text"
         android:textAllCaps="false"
         android:textColor="@color/white"

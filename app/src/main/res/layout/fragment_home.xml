@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".view.fragments.dashboard.HomeFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -107,7 +107,7 @@
                             android:fontFamily="@font/lora_font"
                             android:gravity="start"
                             android:padding="16dp"
-                            android:text="Food: 0 kcal"
+                            android:text="@string/food_0_kcal"
                             android:textColor="@color/gray"
                             android:textSize="@dimen/text_size"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -123,7 +123,7 @@
                             android:fontFamily="@font/lora_font"
                             android:gravity="start"
                             android:padding="16dp"
-                            android:text="Exercise: 0 kcal"
+                            android:text="@string/exercise_0_kcal"
                             android:textColor="@color/gray"
                             android:textSize="@dimen/text_size"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -180,7 +180,7 @@
                             android:fontFamily="@font/lora_font"
                             android:gravity="start"
                             android:padding="8dp"
-                            android:text="Breakfast: 0 kcal"
+                            android:text="@string/breakfast_0_kcal"
                             android:textColor="@color/gray"
                             android:textSize="@dimen/text_size"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -198,7 +198,7 @@
                             android:fontFamily="@font/lora_font"
                             android:gravity="start"
                             android:padding="8dp"
-                            android:text="Lunch: 0 kcal"
+                            android:text="@string/lunch_0_kcal"
                             android:textColor="@color/gray"
                             android:textSize="@dimen/text_size"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -216,7 +216,7 @@
                             android:fontFamily="@font/lora_font"
                             android:gravity="start"
                             android:padding="8dp"
-                            android:text="Snacks: 0 kcal"
+                            android:text="@string/snacks_0_kcal"
                             android:textColor="@color/gray"
                             android:textSize="@dimen/text_size"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -234,7 +234,7 @@
                             android:fontFamily="@font/lora_font"
                             android:gravity="start"
                             android:padding="8dp"
-                            android:text="Dinner: 0 kcal"
+                            android:text="@string/dinner_0_kcal"
                             android:textColor="@color/gray"
                             android:textSize="@dimen/text_size"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -293,7 +293,7 @@
                             android:fontFamily="@font/lora_font"
                             android:gravity="start"
                             android:padding="8dp"
-                            android:text="0 kcal"
+                            android:text="@string/_0_kcal"
                             android:textColor="@color/gray"
                             android:textSize="@dimen/text_size"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -311,7 +311,7 @@
                             android:fontFamily="@font/lora_font"
                             android:gravity="start"
                             android:padding="8dp"
-                            android:text="0 min"
+                            android:text="@string/_0_min"
                             android:textColor="@color/gray"
                             android:textSize="@dimen/text_size"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -322,7 +322,6 @@
                             app:layout_constraintVertical_bias="0.9" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
-
                 </androidx.cardview.widget.CardView>
 
                 <TextView
@@ -350,6 +349,7 @@
                     app:cardUseCompatPadding="true">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/stepHistory"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
@@ -359,7 +359,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/lora_font"
                             android:gravity="center"
-                            android:text="0 steps"
+                            android:text="@string/_0_steps"
                             android:textColor="@color/gray"
                             android:textSize="23sp"
                             app:layout_constraintBottom_toTopOf="@+id/pbSteps"
@@ -393,7 +393,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/lora_font"
                             android:gravity="start"
-                            android:text="Goal: 6000"
+                            android:text="@string/goal_6000"
                             android:textColor="@color/gray"
                             android:textSize="16sp"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -431,6 +431,7 @@
                     app:cardUseCompatPadding="true">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/waterHistory"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 

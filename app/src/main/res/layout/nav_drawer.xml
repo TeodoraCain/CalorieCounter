@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-    <!--    android:paddingTop="32dp">-->
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="110dp"
-        android:background="@drawable/headerbackground">
+        android:background="@drawable/ic_header_background">
 
         <ImageView
             android:id="@+id/ivProfileImage"
@@ -18,14 +16,14 @@
             android:layout_height="60dp"
             android:layout_gravity="bottom"
             android:background="@drawable/logo_background"
-            android:src="@drawable/eatwelllogo"
+            android:contentDescription="@string/profile_picture"
+            android:src="@drawable/eat_well_logo"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.08"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.275"
-            android:contentDescription="@string/profile_picture" />
+            app:layout_constraintVertical_bias="0.275" />
 
         <TextView
             android:id="@+id/tvUserName"
@@ -46,8 +44,7 @@
             app:layout_constraintStart_toEndOf="@+id/ivProfileImage"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.23"
-            app:layout_constraintWidth="wrap_content"
-            tools:targetApi="o" />
+            app:layout_constraintWidth="wrap_content" />
 
         <TextView
             android:id="@+id/tvUserEmail"
@@ -68,20 +65,7 @@
             app:layout_constraintStart_toEndOf="@+id/ivProfileImage"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.47"
-            app:layout_constraintWidth="wrap_content"
-            tools:targetApi="o" />
-
-        <!--        <ImageView-->
-        <!--            android:id="@+id/imageView2"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_marginEnd="8dp"-->
-        <!--            android:src="@drawable/ic_close"-->
-        <!--            android:tint="@color/white"-->
-        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--            app:layout_constraintEnd_toEndOf="parent"-->
-        <!--            app:layout_constraintTop_toTopOf="parent"-->
-        <!--            app:layout_constraintVertical_bias="0.5" />-->
+            app:layout_constraintWidth="wrap_content" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -165,7 +149,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="14dp"
-        android:background="@color/gray"/>
+        android:background="@color/gray" />
 
     <LinearLayout
         android:id="@+id/nav_logout"

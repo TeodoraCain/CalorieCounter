@@ -5,9 +5,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.when;
 
-import com.example.caloriecounter.model.DAO.DailyData;
-import com.example.caloriecounter.model.DAO.Workout;
-import com.example.caloriecounter.model.dataHolder.DailyDataHolder;
+import com.example.caloriecounter.models.dao.DailyData;
+import com.example.caloriecounter.models.dao.Workout;
+import com.example.caloriecounter.models.dataHolders.DailyDataHolder;
 
 import org.junit.Before;
 import org.junit.Test;

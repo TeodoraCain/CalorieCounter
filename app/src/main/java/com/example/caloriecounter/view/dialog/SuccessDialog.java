@@ -4,11 +4,11 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Handler;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 
@@ -28,13 +28,12 @@ public class SuccessDialog extends Dialog {
         setCancelable(false);
         setOnCancelListener(null);
 
-        View view = LayoutInflater.from(context).inflate(R.layout.activity_success, null);
+        View view = LayoutInflater.from(context).inflate(R.layout.activity_success, new FrameLayout(context), false);
         setContentView(view);
 
         LottieAnimationView animSuccess = view.findViewById(R.id.animSuccess);
         animSuccess.setVisibility(View.VISIBLE);
         animSuccess.playAnimation();
-
 
     }
 

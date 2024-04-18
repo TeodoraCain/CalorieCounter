@@ -153,8 +153,8 @@
             android:id="@+id/ivDeleteFrontPic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="4dp"
             android:contentDescription="@string/close"
+            android:padding="4dp"
             android:src="@drawable/ic_camera"
             app:layout_constraintEnd_toEndOf="@+id/ivPhotoFront"
             app:layout_constraintTop_toTopOf="@+id/ivPhotoFront" />
@@ -190,11 +190,12 @@
             android:id="@+id/ivDeleteSidePic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="4dp"
             android:contentDescription="@string/close"
+            android:padding="4dp"
             android:src="@drawable/ic_camera"
             app:layout_constraintEnd_toEndOf="@+id/ivPhotoSide"
             app:layout_constraintTop_toTopOf="@+id/ivPhotoSide" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -227,8 +228,8 @@
             android:id="@+id/ivDeleteBackPic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="4dp"
             android:contentDescription="@string/close"
+            android:padding="4dp"
             android:src="@drawable/ic_camera"
             app:layout_constraintEnd_toEndOf="@+id/ivPhotoBack"
             app:layout_constraintTop_toTopOf="@+id/ivPhotoBack" />
@@ -254,5 +255,20 @@
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
         app:layout_constraintVertical_bias="0.8" />
 
-
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginHorizontal="56dp"
+        android:indeterminateTint="@color/eatwellgreen"
+        android:padding="8dp"
+        android:progressBackgroundTint="@color/eatwellgreen"
+        android:progressDrawable="@drawable/progress_bar"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.8"
+        tools:layout_editor_absoluteX="56dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

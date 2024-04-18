@@ -11,7 +11,7 @@
         android:id="@+id/relativeLayout3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/eatwelllogo"
+        android:background="@drawable/eat_well_logo"
         android:padding="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -27,10 +27,10 @@
         android:padding="8dp"
         android:progressBackgroundTint="@color/eatwellgreen"
         android:progressDrawable="@drawable/progress_bar"
-        android:progressTint="@color/eatwellgreen"
+        android:indeterminateTint="@color/eatwellgreen"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/relativeLayout3"
-        app:layout_constraintVertical_bias="0.771"
+        app:layout_constraintVertical_bias="0.77"
         tools:layout_editor_absoluteX="56dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

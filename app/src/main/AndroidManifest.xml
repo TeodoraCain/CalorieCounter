@@ -6,13 +6,16 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.SENSOR_ACCELEROMETER" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
-    <attribution android:tag="calorieCounter"
-        android:label="@string/app_name" />
 
-    <uses-feature android:name="android.hardware.sensor.accelerometer" android:required="true" />
+    <attribution
+        android:label="@string/app_name"
+        android:tag="calorieCounter" />
+
+    <uses-feature
+        android:name="android.hardware.sensor.accelerometer"
+        android:required="true" />
+
     <application
         android:name=".setup.FirebaseHandler"
         android:allowBackup="true"
@@ -25,6 +28,20 @@
         android:theme="@style/Theme.CalorieCounter"
         tools:targetApi="31">
         <activity
+            android:name=".WaterLogActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".StepLogActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".WeightLogActivity"
             android:exported="false">
             <meta-data
@@ -33,20 +50,6 @@
         </activity>
         <activity
             android:name=".AddWeightActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".view.EIM.ShowFoodsActivityEIM"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".view.EIM.WriteFoodToFileActivityEIM"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -67,49 +70,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".SuccessActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
             android:name=".AddFoodActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".view.EIM.SecondFragmentEIM"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".view.EIM.LanguageActivityEIM"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".view.EIM.RssFeederActivityEIM"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".view.EIM.FilterResultsActivityEIM"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".view.EIM.FoodItemDisplayActivityEIM"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -194,8 +155,6 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-<!--        <service android:name=".services.DatabaseUpdateWorker"-->
-<!--            android:exported="false" />-->
     </application>
 
 </manifest>

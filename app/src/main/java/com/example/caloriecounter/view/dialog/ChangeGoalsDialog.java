@@ -16,8 +16,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.example.caloriecounter.R;
-import com.example.caloriecounter.model.DAO.UserDetails;
-import com.example.caloriecounter.model.dataHolder.UserDetailsHolder;
+import com.example.caloriecounter.models.dao.UserDetails;
+import com.example.caloriecounter.models.dataHolders.UserDetailsHolder;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -25,8 +25,8 @@ import java.util.Objects;
 public class ChangeGoalsDialog extends AppCompatDialogFragment {
 
     private final TextView textView;
-    private Spinner spinner;
     GoalsDialogListener listener;
+    private Spinner spinner;
 
 
     public ChangeGoalsDialog(TextView textView) {
@@ -42,19 +42,17 @@ public class ChangeGoalsDialog extends AppCompatDialogFragment {
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view;
-        view = inflater.inflate(R.layout.change_goals_dialog, null);
+        view = inflater.inflate(R.layout.cutom_dialog_change_goals, null);
         spinner = view.findViewById(R.id.spGoal);
 
         switch (textView.getId()) {
             case R.id.tvCalorieGoal:
-                builder.setView(view)
-                        .setNegativeButton("Cancel", (dialog, which) -> {
+                builder.setView(view).setNegativeButton("Cancel", (dialog, which) -> {
 
-                        })
-                        .setPositiveButton("Ok", (dialog, which) -> {
-                            String text = spinner.getSelectedItem().toString() + " kcal";
-                            listener.applyText(text, textView);
-                        });
+                }).setPositiveButton("Ok", (dialog, which) -> {
+                    String text = spinner.getSelectedItem().toString() + " kcal";
+                    listener.applyText(text, textView);
+                });
 
                 ArrayList<Integer> calorieList = new ArrayList<>();
                 for (int i = 1000; i <= 6000; i += 100) {
@@ -68,14 +66,12 @@ public class ChangeGoalsDialog extends AppCompatDialogFragment {
 
             case R.id.tvWeightGoal:
                 UserDetails userDetails = UserDetailsHolder.getInstance().getData();
-                builder.setView(view)
-                        .setNegativeButton("Cancel", (dialog, which) -> {
+                builder.setView(view).setNegativeButton("Cancel", (dialog, which) -> {
 
-                        })
-                        .setPositiveButton("Ok", (dialog, which) -> {
-                            String text = spinner.getSelectedItem().toString() + " " + userDetails.getWeightUnit();
-                            listener.applyText(text, textView);
-                        });
+                }).setPositiveButton("Ok", (dialog, which) -> {
+                    String text = spinner.getSelectedItem().toString() + " " + userDetails.getWeightUnit();
+                    listener.applyText(text, textView);
+                });
 
                 ArrayList<Integer> weightList = new ArrayList<>();
                 for (int i = 40; i <= 200; i++) {
@@ -88,14 +84,12 @@ public class ChangeGoalsDialog extends AppCompatDialogFragment {
                 break;
 
             case R.id.tvExerciseGoal:
-                builder.setView(view)
-                        .setNegativeButton("Cancel", (dialog, which) -> {
+                builder.setView(view).setNegativeButton("Cancel", (dialog, which) -> {
 
-                        })
-                        .setPositiveButton("Ok", (dialog, which) -> {
-                            String text = spinner.getSelectedItem().toString() + " min";
-                            listener.applyText(text, textView);
-                        });
+                }).setPositiveButton("Ok", (dialog, which) -> {
+                    String text = spinner.getSelectedItem().toString() + " min";
+                    listener.applyText(text, textView);
+                });
 
                 ArrayList<Integer> exerciseList = new ArrayList<>();
                 for (int i = 30; i <= 480; i += 15) {
@@ -108,14 +102,12 @@ public class ChangeGoalsDialog extends AppCompatDialogFragment {
                 break;
 
             case R.id.tvWaterGoal:
-                builder.setView(view)
-                        .setNegativeButton("Cancel", (dialog, which) -> {
+                builder.setView(view).setNegativeButton("Cancel", (dialog, which) -> {
 
-                        })
-                        .setPositiveButton("Ok", (dialog, which) -> {
-                            String text = spinner.getSelectedItem().toString() + " ml";
-                            listener.applyText(text, textView);
-                        });
+                }).setPositiveButton("Ok", (dialog, which) -> {
+                    String text = spinner.getSelectedItem().toString() + " ml";
+                    listener.applyText(text, textView);
+                });
 
                 ArrayList<Integer> waterList = new ArrayList<>();
                 for (int i = 1000; i <= 3500; i += 500) {
@@ -128,14 +120,12 @@ public class ChangeGoalsDialog extends AppCompatDialogFragment {
                 break;
 
             case R.id.tvStepGoal:
-                builder.setView(view)
-                        .setNegativeButton("Cancel", (dialog, which) -> {
+                builder.setView(view).setNegativeButton("Cancel", (dialog, which) -> {
 
-                        })
-                        .setPositiveButton("Ok", (dialog, which) -> {
-                            String text = spinner.getSelectedItem().toString() + " steps";
-                            listener.applyText(text, textView);
-                        });
+                }).setPositiveButton("Ok", (dialog, which) -> {
+                    String text = spinner.getSelectedItem().toString() + " steps";
+                    listener.applyText(text, textView);
+                });
 
                 ArrayList<Integer> stepList = new ArrayList<>();
                 for (int i = 1000; i <= 10000; i += 500) {

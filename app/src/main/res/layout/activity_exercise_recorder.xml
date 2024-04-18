@@ -30,7 +30,8 @@
             android:layout_gravity="end"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_check" />
+            android:src="@drawable/ic_check"
+            android:contentDescription="@string/save" />
 
     </androidx.appcompat.widget.Toolbar>
 
@@ -50,13 +51,13 @@
             android:id="@+id/tabTimeYourself"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Time Yourself" />
+            android:text="@string/time_yourself" />
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/tabRecord"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Add Record" />
+            android:text="@string/add_record" />
     </com.google.android.material.tabs.TabLayout>
 
     <androidx.viewpager2.widget.ViewPager2

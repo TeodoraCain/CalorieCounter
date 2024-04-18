@@ -3,6 +3,7 @@ package com.example.caloriecounter;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -13,19 +14,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
-import com.example.caloriecounter.model.DAO.GoalData;
-import com.example.caloriecounter.model.DAO.UserDetails;
-import com.example.caloriecounter.model.DAO.WeightLog;
-import com.example.caloriecounter.model.DAO.WeightLogDAO;
-import com.example.caloriecounter.model.DAO.WeightLogDAOImpl;
-import com.example.caloriecounter.model.dataHolder.GoalDataHolder;
-import com.example.caloriecounter.model.dataHolder.UserDetailsHolder;
+import com.example.caloriecounter.models.dao.GoalData;
+import com.example.caloriecounter.models.dao.UserDetails;
+import com.example.caloriecounter.models.dao.WeightLog;
+import com.example.caloriecounter.models.dao.WeightLogDAO;
+import com.example.caloriecounter.models.dao.WeightLogDAOImpl;
+import com.example.caloriecounter.models.dataHolders.GoalDataHolder;
+import com.example.caloriecounter.models.dataHolders.UserDetailsHolder;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GridLabelRenderer;
+import com.jjoe64.graphview.Viewport;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 import com.jjoe64.graphview.series.PointsGraphSeries;
@@ -34,6 +36,7 @@ import java.text.MessageFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -43,17 +46,8 @@ public class WeightLogActivity extends AppCompatActivity {
 
 
     private final String TAG = "WeightLogActivity";
-    private Context mContext;
-
-    private PointsGraphSeries<DataPoint> series;
-    private LineGraphSeries<DataPoint> lineSeries;
-    private GraphView weightChart;
-    private GoalData goalData;
-    private WeightLog weightLog;
-    private UserDetails userDetails;
-    private List<String> dates;
-    private List<WeightLog> weightLogs;
-
+    private Context context;
+    // views
     private TextView tvWeightDifference,
             tvCurrentWeight,
             tvStartWeight,
@@ -61,15 +55,46 @@ public class WeightLogActivity extends AppCompatActivity {
             tvCurrentBMI;
     private ProgressBar pbWeight,
             pbBMI;
+    private GraphView weightChart;
+    // attributes
+    private GoalData goalData;
+    private UserDetails userDetails;
 
+    private DataPoint[] dataPoints;
+    private PointsGraphSeries<DataPoint> series;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weight_log);
+        initContext();
         setToolbar();
         setUpViews();
-        setUpUserData();
+        initUserData();
+    }
+
+    /********************************* INIT VIEWS **************************************************/
+    private void initContext() {
+        context = WeightLogActivity.this;
+    }
+
+    private void setUpViews() {
+        weightChart = findViewById(R.id.weightChart);
+        tvWeightDifference = findViewById(R.id.tvWeightDifference);
+        tvCurrentWeight = findViewById(R.id.tvCurrentWeight);
+
+        tvStartWeight = findViewById(R.id.tvStartWeight);
+        tvGoalWeight = findViewById(R.id.tvGoalWeight);
+        tvCurrentBMI = findViewById(R.id.tvCurrentBMI);
+        pbWeight = findViewById(R.id.pbWeight);
+        pbBMI = findViewById(R.id.pbBMI);
+    }
+
+    /********************************* INIT DATA ***************************************************/
+    private void initUserData() {
+        goalData = GoalDataHolder.getInstance().getData();
+        userDetails = UserDetailsHolder.getInstance().getData();
+        getWeightLogs();
     }
 
     private void setDataToUI() {
@@ -80,7 +105,6 @@ public class WeightLogActivity extends AppCompatActivity {
         final String heightUnit;
         int height;
         double bmi;
-        DataPoint[] dataPoints = getDataPoint();
         double startWeight, goalWeight, weight;
 
         weightUnit = userDetails.getWeightUnit();
@@ -104,7 +128,7 @@ public class WeightLogActivity extends AppCompatActivity {
             tvWeightDifference.setTextColor(Color.RED);
             pbWeight.setProgress(0);
         } else if (weight < startWeight) {
-            tvWeightDifference.setTextColor(ContextCompat.getColor(mContext, R.color.eatwellgreen));
+            tvWeightDifference.setTextColor(ContextCompat.getColor(context, R.color.eatwellgreen));
             tvWeightDifference.setText(MessageFormat.format("-{0} {1}", startWeight - weight, weightUnit));
         }
 
@@ -128,10 +152,60 @@ public class WeightLogActivity extends AppCompatActivity {
         return 0;
     }
 
+    /********************************* HISTORY CHART ***********************************************/
+    private void getWeightLogs() {
+        Log.d(TAG, "Retrieving graph data");
+        WeightLogDAO weightLogDAO = new WeightLogDAOImpl();
+        weightLogDAO.get().addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<DataPoint> dpList = new ArrayList<>();
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    WeightLog weightLog = dataSnapshot.getValue(WeightLog.class);
+                    try {
+                        Date date = dateFormat.parse(Objects.requireNonNull(dataSnapshot.getKey()));
+                        if (date != null) {
+                            dpList.add(new DataPoint(date, Objects.requireNonNull(weightLog).getWeight()));
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                dpList.sort(Comparator.comparingDouble(DataPoint::getX));
+                dataPoints = dpList.toArray(new DataPoint[0]);
+
+                setUpWeightHistoryChart();
+                setDataToUI();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.d(TAG, error.toString());
+            }
+        });
+    }
+
     private void setUpWeightHistoryChart() {
         setUpPointsGraph();
         setUpLineSeries();
         formatGraphDate();
+        setScrollableAndScalable();
+    }
+
+    private void setUpPointsGraph() {
+        series = new PointsGraphSeries<>(dataPoints);
+        series.setOnDataPointTapListener((series, dataPoint) -> Toast.makeText(WeightLogActivity.this.getApplicationContext(), "Series1: On Data Point clicked: " + dataPoint, Toast.LENGTH_SHORT).show());
+        series.setSize(9);
+        series.setColor(ContextCompat.getColor(context, R.color.pistachio));
+    }
+
+    private void setUpLineSeries() {
+        LineGraphSeries<DataPoint> lineSeries = new LineGraphSeries<>(dataPoints);
+        lineSeries.setColor(ContextCompat.getColor(context, R.color.eatwellgreenmediumlight));
+        weightChart.addSeries(lineSeries);
+        weightChart.addSeries(series);
     }
 
     private void formatGraphDate() {
@@ -150,93 +224,28 @@ public class WeightLogActivity extends AppCompatActivity {
         });
     }
 
-    private void setUpPointsGraph() {
-        series = new PointsGraphSeries<>(getDataPoint());
-        series.setOnDataPointTapListener((series, dataPoint) -> Toast.makeText(WeightLogActivity.this.getApplicationContext(), "Series1: On Data Point clicked: " + dataPoint, Toast.LENGTH_SHORT).show());
-        series.setSize(9);
-        series.setColor(ContextCompat.getColor(mContext, R.color.pistachio));
+    private void setScrollableAndScalable() {
+        Viewport viewport = weightChart.getViewport();
+        viewport.setScrollable(true);
+        viewport.scrollToEnd();
+
+        int lastIndex = dataPoints.length - 1;
+        int firstIndex = Math.max(0, lastIndex - 6);
+
+        // Set the visible range
+        viewport.setXAxisBoundsManual(true);
+        viewport.setMinX(dataPoints[firstIndex].getX());
+        viewport.setMaxX(dataPoints[lastIndex].getX());
     }
 
-    private void setUpLineSeries() {
-        lineSeries = new LineGraphSeries<>(getDataPoint());
-        lineSeries.setColor(ContextCompat.getColor(mContext, R.color.eatwellgreenmediumlight));
-        weightChart.addSeries(lineSeries);
-        weightChart.addSeries(series);
-    }
-
-    private DataPoint[] getDataPoint() {
-        DataPoint[] dp = new DataPoint[weightLogs.size()];
-        int i = 0;
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
-        for (WeightLog weightLog : weightLogs) {
-            try {
-                Date date = dateFormat.parse(weightLog.getDate());
-                dp[i++] = new DataPoint(date, weightLog.getWeight());
-            } catch (ParseException e) {
-                // Handle parsing errors
-                e.printStackTrace();
-            }
-        }
-        return dp;
-    }
-
-    private void setUpUserData() {
-        goalData = GoalDataHolder.getInstance().getData();
-        userDetails = UserDetailsHolder.getInstance().getData();
-        getWeightLogs();
-    }
-
-    private void getWeightLogs() {
-        WeightLogDAO weightLogDAO = new WeightLogDAOImpl();
-        weightLogDAO.get().addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                List<String> keys = new ArrayList<>();
-                weightLogs = new ArrayList<>();
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-
-                    WeightLog weightLog = dataSnapshot.getValue(WeightLog.class);
-                    weightLogs.add(weightLog);
-                    keys.add(dataSnapshot.getKey());
-                }
-                dates = keys;
-                setUpWeightHistoryChart();
-                setDataToUI();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
-
-    private void setUpViews() {
-        mContext = WeightLogActivity.this;
-        weightChart = findViewById(R.id.weightChart);
-        tvWeightDifference = findViewById(R.id.tvWeightDifference);
-        tvCurrentWeight = findViewById(R.id.tvCurrentWeight);
-
-        tvStartWeight = findViewById(R.id.tvStartWeight);
-        tvGoalWeight = findViewById(R.id.tvGoalWeight);
-        tvCurrentBMI = findViewById(R.id.tvCurrentBMI);
-        pbWeight = findViewById(R.id.pbWeight);
-        pbBMI = findViewById(R.id.pbBMI);
-    }
-
+    /********************************* TOOLBAR *****************************************************/
     private void setToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
-
-        toolbar.setTitle("Weight Log");
         setSupportActionBar(toolbar);
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-//
-//        ImageView saveImageView = findViewById(R.id.ivSave);
-//
-//        saveImageView.setOnClickListener(v -> save());
     }
 
     @Override

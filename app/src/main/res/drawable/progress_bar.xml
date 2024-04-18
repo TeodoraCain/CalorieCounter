@@ -8,7 +8,7 @@
             <size
                 android:width="15dp"
                 android:height="15dp" />
-            <corners android:radius="20dp"></corners>
+            <corners android:radius="20dp" />
         </shape>
     </item>
     <item android:id="@+id/progress">

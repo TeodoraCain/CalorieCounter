@@ -19,11 +19,11 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.example.caloriecounter.model.DAO.DailyData;
-import com.example.caloriecounter.model.DAO.DailyDataDAO;
-import com.example.caloriecounter.model.DAO.DailyDataDAOImpl;
-import com.example.caloriecounter.model.DAO.Workout;
-import com.example.caloriecounter.model.dataHolder.DailyDataHolder;
+import com.example.caloriecounter.models.dao.DailyData;
+import com.example.caloriecounter.models.dao.DailyDataDAO;
+import com.example.caloriecounter.models.dao.DailyDataDAOImpl;
+import com.example.caloriecounter.models.dao.Workout;
+import com.example.caloriecounter.models.dataHolders.DailyDataHolder;
 import com.example.caloriecounter.view.fragments.exercise.ExerciseRecordFragment;
 import com.example.caloriecounter.view.fragments.exercise.ExerciseTimerFragment;
 import com.google.android.material.tabs.TabLayout;
@@ -41,30 +41,50 @@ import java.util.Objects;
 
 public class ExerciseRecorderActivity extends AppCompatActivity {
 
-    private TabLayout exerciseTabs;
-    private ViewPager2 viewPager;
-    private String exercise;
+    private final String TAG = "ExerciseRecorderActivity";
+    private Context context;
+
     private boolean fromDiary;
+    private String exercise;
     private String date;
 
-    private Context mContext;
-    private final String TAG = "ExerciseRecorderActivity";
+    private TabLayout exerciseTabs;
+    private ViewPager2 viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercise_recorder);
-
-        setUpViews();
+        initActivity();
+        setUpSaveButtonListener();
         setUpTabsAndViewPager();
+
+    }
+
+    /********************************* SET UP VIEWS ***********************************************/
+    private void initActivity() {
+        setToolbar();
+        initContext();
+        setUpViews();
+    }
+    private void setUpViews() {
+        exerciseTabs = findViewById(R.id.tabExercise);
+        viewPager = findViewById(R.id.viewPager);
+    }
+
+    private void initContext() {
+        context = ExerciseRecorderActivity.this;
     }
 
     private void setUpTabsAndViewPager() {
         Log.d(TAG, "Setting up the View Pager and Tabs..");
+        String currentDate = getCurrentDate();
+        fromDiary = fromDiary && !date.equals(currentDate);
+
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this, fromDiary);
         viewPager.setAdapter(viewPagerAdapter);
 
-        if (fromDiary) {
+        if (fromDiary && !date.equals(currentDate)) {
             exerciseTabs.removeTabAt(0);
         }
 
@@ -94,38 +114,19 @@ public class ExerciseRecorderActivity extends AppCompatActivity {
         });
     }
 
-    private void setUpViews() {
-        setToolbar();
-        mContext = ExerciseRecorderActivity.this;
-        exerciseTabs = findViewById(R.id.tabExercise);
-        viewPager = findViewById(R.id.viewPager);
+    @NonNull
+    private String getCurrentDate() {
+        Calendar calendar = Calendar.getInstance();
+        Date date = calendar.getTime();
+        return new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH).format(date);
     }
 
-    private void setToolbar() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        final String EXERCISE = "EXERCISE";
-        final String FROMDIARY = "FROMDIARY";
-        final String DATE = "DATE";
-
-        Intent intent = this.getIntent();
-        fromDiary = intent.getBooleanExtra(FROMDIARY, false);
-        exercise = intent.getStringExtra(EXERCISE);
-        date = intent.getStringExtra(DATE);
-        toolbar.setTitle(exercise);
-        setSupportActionBar(toolbar);
-
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-
-        setUpSaveToolbarButton();
-    }
-
-    private void setUpSaveToolbarButton() {
+    /********************************* SET UP ONCLICK LISTENER ************************************/
+    private void setUpSaveButtonListener() {
         ImageView saveImageView = findViewById(R.id.ivSave);
         saveImageView.setOnClickListener(v -> save());
     }
-
+    /********************************* SAVE EXERCISE **********************************************/
     private void save() {
         int currentItem = viewPager.getCurrentItem();
         Workout workout = null;
@@ -168,8 +169,23 @@ public class ExerciseRecorderActivity extends AppCompatActivity {
         }
 
         this.finish();
-        Intent intent = new Intent(mContext, DashboardActivity.class);
+        Intent intent = new Intent(context, DashboardActivity.class);
         startActivity(intent);
+    }
+
+    private void saveDailyDataToDatabase(DailyData dailyData, String date) {
+        DailyDataDAO dailyDataDAO = new DailyDataDAOImpl();
+        dailyDataDAO.update(dailyData, date).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Log.d("SaveData", "Data updated successfully");
+                Intent intent = new Intent(context, DashboardActivity.class);
+                intent.putExtra("NAVIGATE_TO_DIARY_FRAGMENT", true);
+                startActivity(intent);
+                //finish();
+            } else {
+                Log.e("SaveData", "Failed to update data", task.getException());
+            }
+        });
     }
 
     private void saveToDailyData(Workout newWorkout, String date) {
@@ -187,8 +203,8 @@ public class ExerciseRecorderActivity extends AppCompatActivity {
                 dailyData.setWorkouts(workouts);
 
                 Calendar calendar = Calendar.getInstance();
-                Date todaysDate = calendar.getTime();
-                String currentDate = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH).format(todaysDate);
+                Date today = calendar.getTime();
+                String currentDate = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH).format(today);
 
                 if (date.equals(currentDate)) {
                     DailyDataHolder.getInstance().setData(dailyData);
@@ -219,6 +235,24 @@ public class ExerciseRecorderActivity extends AppCompatActivity {
         DailyDataHolder.getInstance().setData(dailyData);
         return dailyData;
     }
+    /********************************* TOOLBAR ****************************************************/
+    private void setToolbar() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        final String EXERCISE = "EXERCISE";
+        final String FROMDIARY = "FROMDIARY";
+        final String DATE = "DATE";
+
+        Intent intent = this.getIntent();
+        fromDiary = intent.getBooleanExtra(FROMDIARY, false);
+        exercise = intent.getStringExtra(EXERCISE);
+        date = intent.getStringExtra(DATE);
+        toolbar.setTitle(exercise);
+        setSupportActionBar(toolbar);
+
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+    }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -229,21 +263,7 @@ public class ExerciseRecorderActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void saveDailyDataToDatabase(DailyData dailyData, String date) {
-        DailyDataDAO dailyDataDAO = new DailyDataDAOImpl();
-        dailyDataDAO.update(dailyData, date).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                Log.d("SaveData", "Data updated successfully");
-                Intent intent = new Intent(mContext, DashboardActivity.class);
-                intent.putExtra("NAVIGATE_TO_DIARY_FRAGMENT", true);
-                startActivity(intent);
-                //finish();
-            } else {
-                Log.e("SaveData", "Failed to update data", task.getException());
-            }
-        });
-    }
-
+    /********************************* TAB VIEW PAGER ADAPTER *************************************/
     public static class ViewPagerAdapter extends FragmentStateAdapter {
         private final boolean fromDiary;
 

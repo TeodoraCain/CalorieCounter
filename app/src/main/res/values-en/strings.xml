@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
-    <string name="encountry">United States</string>
+    <string name="country_name">United States</string>
     <string name="choose_your_gender">Choose your gender</string>
     <string name="choose_your_language">Choose your language</string>
     <string name="fr">FR</string>

@@ -1,6 +1,20 @@
 package com.example.caloriecounter;
 
-import static com.example.caloriecounter.R.id.*;
+import static com.example.caloriecounter.R.id.diary;
+import static com.example.caloriecounter.R.id.fab;
+import static com.example.caloriecounter.R.id.frameLayout;
+import static com.example.caloriecounter.R.id.home;
+import static com.example.caloriecounter.R.id.layoutBreakfast;
+import static com.example.caloriecounter.R.id.layoutDinner;
+import static com.example.caloriecounter.R.id.layoutLunch;
+import static com.example.caloriecounter.R.id.layoutSnack;
+import static com.example.caloriecounter.R.id.nav_logout;
+import static com.example.caloriecounter.R.id.nav_profile;
+import static com.example.caloriecounter.R.id.nav_settings;
+import static com.example.caloriecounter.R.id.nav_share;
+import static com.example.caloriecounter.R.id.toolbar;
+import static com.example.caloriecounter.R.id.tvUserEmail;
+import static com.example.caloriecounter.R.id.tvUserName;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -28,10 +42,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.caloriecounter.R.id;
-import com.example.caloriecounter.view.EIM.FoodItemDisplayActivityEIM;
-import com.example.caloriecounter.view.EIM.LanguageActivityEIM;
-import com.example.caloriecounter.view.EIM.RssFeederActivityEIM;
-import com.example.caloriecounter.view.EIM.SecondFragmentEIM;
 import com.example.caloriecounter.view.fragments.dashboard.DiaryFragment;
 import com.example.caloriecounter.view.fragments.dashboard.HomeFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -42,55 +52,19 @@ import java.util.Objects;
 
 public class DashboardActivity extends AppCompatActivity {
 
-    private LinearLayout menu, profile, settings, share, about_us, logout;
+    private final String TAG = "DashboardActivity";
+    private Context mContext;
     private FirebaseAuth mAuth;
 
-    // Drawer activity
-    private FloatingActionButton floatingActionButton;
+    private LinearLayout llMenu, llProfile, llSettings, llShare, llAboutUs, llLogout;
+    // drawer
     private DrawerLayout drawerLayout;
+    // bottom navigation
+    private FloatingActionButton floatingActionButton;
     private BottomNavigationView bottomNavigationView;
-
-    private Context mContext;
-    private final String TAG = "DashboardActivity";
 
     public DashboardActivity() {
     }
-
-    @SuppressLint("NonConstantResourceId")
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dashboard);
-
-        setUpFirebase();
-        setUpViews();
-
-        setOnClickListeners();
-        changeDrawerHeader();
-        setUpBottomNavigation();
-
-        setUpViewFragment();
-    }
-
-
-//        Toolbar toolbar = findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-
-//        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-//        navigationView.setNavigationItemSelectedListener(this);
-    // Initialize Firebase Auth
-
-
-//        toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_nav, R.string.close_nav);
-//        toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.white));
-//        drawerLayout.addDrawerListener(toggle);
-//        toggle.syncState();
-//
-//        if (savedInstanceState == null) {
-//            getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new HomeFragment()).commit();
-//            navigationView.setCheckedItem(R.id.nav_home);
-//        }
-
 
 //        mAuth.signInWithCustomToken(mCustomToken)
 //                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -113,6 +87,37 @@ public class DashboardActivity extends AppCompatActivity {
     //
 //    }
 
+    @SuppressLint("NonConstantResourceId")
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_dashboard);
+
+        setUpFirebase();
+        setUpViews();
+        setOnClickListeners();
+        changeDrawerHeader();
+        setUpBottomNavigation();
+        setUpViewFragment();
+    }
+
+    /********************************* SET UP ACTIVITY *********************************************/
+    private void setUpViews() {
+        mContext = DashboardActivity.this;
+        bottomNavigationView = findViewById(id.bottomNavigationView);
+        floatingActionButton = findViewById(fab);
+        drawerLayout = findViewById(id.drawerLayout);
+        llMenu = findViewById(toolbar);
+        llProfile = findViewById(nav_profile);
+        llSettings = findViewById(nav_settings);
+        llLogout = findViewById(nav_logout);
+        llShare = findViewById(nav_share);
+    }
+
+    private void setUpFirebase() {
+        mAuth = FirebaseAuth.getInstance();
+    }
+
     private void setUpViewFragment() {
         boolean fragment_flag = getIntent().getBooleanExtra("NAVIGATE_TO_DIARY_FRAGMENT", false);
 
@@ -123,10 +128,119 @@ public class DashboardActivity extends AppCompatActivity {
         }
     }
 
-    private void setUpFirebase() {
-        mAuth = FirebaseAuth.getInstance();
+    private void replaceFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(frameLayout, fragment);
+        fragmentTransaction.commit();
     }
 
+    /********************************* SET UP DRAWER ***********************************************/
+    public void changeDrawerHeader() {
+        //set user name in drawer header
+        TextView userName = findViewById(tvUserName);
+        userName.setText(Objects.requireNonNull(mAuth.getCurrentUser()).getDisplayName());
+
+        //set user e-mail in drawer header
+        TextView email = findViewById(tvUserEmail);
+        email.setText(mAuth.getCurrentUser().getEmail());
+    }
+
+    private void setOnClickListeners() {
+        llMenu.setOnClickListener(v -> openDrawer(drawerLayout));
+        llProfile.setOnClickListener(this::goToUserProfile);
+        llSettings.setOnClickListener(this::goToGoalSettings);
+        llLogout.setOnClickListener(this::showLogoutConfirmation);
+
+        // ***************** EIM ************************
+
+//        share.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(mContext, EIMMenu.class);
+//                startActivity(intent);
+//            }
+//        });
+//
+//        LinearLayout eim2 = findViewById(nav_eimRss);
+//        eim2.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(mContext, RssFeederActivityEIM.class);
+//                startActivity(intent);
+//            }
+//        });
+//        LinearLayout eim3 = findViewById(nav_eimLanguage);
+//        eim3.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(mContext, LanguageActivityEIM.class);
+//                startActivity(intent);
+//            }
+//        });
+//
+//        LinearLayout eim4 = findViewById(nav_eimFragment);
+//        eim4.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(mContext, SecondFragmentEIM.class);
+//                startActivity(intent);
+//            }
+//        });
+
+    }
+
+    @SuppressWarnings("unused")
+    private void goToGoalSettings(View v) {
+        Log.d(TAG, "Staring GoalsActivity..");
+        redirectActivity(this, GoalsActivity.class);
+        closeDrawer(drawerLayout);
+    }
+
+    @SuppressWarnings("unused")
+    private void goToUserProfile(View v) {
+        Log.d(TAG, "Staring ProfileActivity..");
+        redirectActivity(this, ProfileActivity.class);
+        closeDrawer(drawerLayout);
+    }
+
+    public static void redirectActivity(Activity activity, Class<?> destinationActivity) {
+        Intent intent = new Intent(activity, destinationActivity);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        activity.startActivity(intent);
+    }
+
+    @SuppressWarnings("unused")
+    private void showLogoutConfirmation(View v) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setMessage("Are you sure you want to logout?");
+        builder.setPositiveButton("yes", (dialog, which) -> signOutUser());
+        builder.setNegativeButton("cancel", (dialog, which) -> {
+        });
+        builder.show();
+    }
+
+    private void signOutUser() {
+        Log.d(TAG, "Signing out..");
+        mAuth.signOut();
+
+        Intent mainActivity = new Intent(mContext, MainActivity.class);
+        mainActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(mainActivity);
+        finish();
+    }
+
+    public static void openDrawer(DrawerLayout drawerLayout) {
+        drawerLayout.openDrawer(GravityCompat.START);
+    }
+
+    public static void closeDrawer(DrawerLayout drawerLayout) {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        }
+    }
+
+    /********************************* SET UP BOTTOM NAVIGATION ***********************************/
     @SuppressLint("NonConstantResourceId")
     private void setUpBottomNavigation() {
         bottomNavigationView.setBackground(null);
@@ -155,128 +269,10 @@ public class DashboardActivity extends AppCompatActivity {
         floatingActionButton.setOnClickListener(view -> showBottomDialog());
     }
 
-    private void setOnClickListeners() {
-        menu.setOnClickListener(v -> openDrawer(drawerLayout));
-        profile.setOnClickListener(this::goToUserProfile);
-        settings.setOnClickListener(this::goToGoalSettings);
-        logout.setOnClickListener(this::showLogoutConfirmation);
-
-        // ***************** EIM ************************
-
-        share.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mContext, FoodItemDisplayActivityEIM.class);
-                startActivity(intent);
-            }
-        });
-
-        LinearLayout eim2 = findViewById(nav_eimRss);
-        eim2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mContext, RssFeederActivityEIM.class);
-                startActivity(intent);
-            }
-        });
-        LinearLayout eim3 = findViewById(nav_eimLanguage);
-        eim3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mContext, LanguageActivityEIM.class);
-                startActivity(intent);
-            }
-        });
-
-        LinearLayout eim4 = findViewById(nav_eimFragment);
-        eim4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mContext, SecondFragmentEIM.class);
-                startActivity(intent);
-            }
-        });
-
-    }
-
-    private void goToGoalSettings(View v) {
-        Log.d(TAG, "Staring GoalsActivity..");
-        redirectActivity(this, GoalsActivity.class);
-        closeDrawer(drawerLayout);
-    }
-
-    private void goToUserProfile(View v) {
-        Log.d(TAG, "Staring ProfileActivity..");
-        redirectActivity(this, ProfileActivity.class);
-        closeDrawer(drawerLayout);
-    }
-
-    private void showLogoutConfirmation(View v) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-        builder.setMessage("Are you sure you want to logout?");
-        builder.setPositiveButton("yes", (dialog, which) -> signOutUser());
-        builder.setNegativeButton("cancel", (dialog, which) -> {
-            //return
-        });
-
-        builder.show();
-    }
-
-    private void setUpViews() {
-        mContext = DashboardActivity.this;
-        bottomNavigationView = findViewById(id.bottomNavigationView);
-        floatingActionButton = findViewById(fab);
-        drawerLayout = findViewById(id.drawerLayout);
-        menu = findViewById(toolbar);
-        profile = findViewById(nav_profile);
-        settings = findViewById(nav_settings);
-        logout = findViewById(nav_logout);
-        share = findViewById(nav_share);
-    }
-
-    public static void redirectActivity(Activity activity, Class destinationActivity) {
-        Intent intent = new Intent(activity, destinationActivity);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        activity.startActivity(intent);
-    }
-
-    private void signOutUser() {
-        Log.d(TAG, "Signing out..");
-        mAuth.signOut();
-
-        Intent mainActivity = new Intent(mContext, MainActivity.class);
-        mainActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(mainActivity);
-        finish();
-    }
-
-    public void changeDrawerHeader() {
-        //set user name in drawer header
-        TextView userName = findViewById(tvUserName);
-        userName.setText(Objects.requireNonNull(mAuth.getCurrentUser()).getDisplayName());
-
-        //set user e-mail in drawer header
-        TextView email = findViewById(tvUserEmail);
-        email.setText(mAuth.getCurrentUser().getEmail());
-    }
-
-    @Override
-    protected void onPostResume() {
-        super.onPostResume();
-        changeDrawerHeader();
-    }
-
-    private void replaceFragment(Fragment fragment) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(frameLayout, fragment);
-        fragmentTransaction.commit();
-    }
-
     private void showBottomDialog() {
         final Dialog dialog = new Dialog(mContext);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.bottom_sheet_layout);
+        dialog.setContentView(R.layout.cutom_layout_bottom_sheet);
 
         LinearLayout breakfastLayout = dialog.findViewById(layoutBreakfast);
         LinearLayout lunchLayout = dialog.findViewById(layoutLunch);
@@ -321,22 +317,19 @@ public class DashboardActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public static void openDrawer(DrawerLayout drawerLayout) {
-        drawerLayout.openDrawer(GravityCompat.START);
-    }
-
-    public static void closeDrawer(DrawerLayout drawerLayout) {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
-        }
-    }
-
+    /********************************* LIFECYCLE OVERRIDES *****************************************/
     @Override
     protected void onPause() {
         super.onPause();
         closeDrawer(drawerLayout);
     }
 
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        changeDrawerHeader();
+    }
+}
 //    @Override
 //    public void onStart() {
 //        super.onStart();
@@ -428,4 +421,3 @@ public class DashboardActivity extends AppCompatActivity {
 //            toggle.syncState();
 //        }
 //    }
-}

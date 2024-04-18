@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".StepLogActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/eatwellgreen"
+        android:elevation="4dp"
+        android:foregroundTint="@color/white"
+        android:popupTheme="@style/Theme.CalorieCounter"
+        android:theme="@style/Theme.AppCompat.Light"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:subtitleTextColor="@color/white"
+        app:title="Step Log"
+        app:titleMarginStart="100dp"
+        app:titleTextAppearance="@style/Theme.CalorieCounter"
+        app:titleTextColor="@color/white" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/unit_kg"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@+id/historyCard"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/weightCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="10dp"
+                app:cardUseCompatPadding="true">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="8dp">
+
+                    <TextView
+                        android:id="@+id/tvCurrentSteps"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/now_loading"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="@id/pbSteps"
+                        app:layout_constraintStart_toStartOf="@+id/tvTitle"
+                        app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
+
+                    <ProgressBar
+                        android:id="@+id/pbSteps"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_marginHorizontal="24dp"
+                        android:layout_marginTop="16dp"
+                        android:indeterminate="false"
+                        android:indeterminateOnly="false"
+                        android:padding="8dp"
+                        android:progress="20"
+                        android:progressDrawable="@drawable/progress_bar"
+                        android:progressTint="@color/eatwellgreenlight"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
+
+                    <TextView
+                        android:id="@+id/tvStartWeight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="24dp"
+                        android:fontFamily="@font/lora_font"
+                        android:gravity="start"
+                        android:padding="8dp"
+                        android:text="@string/_0"
+                        android:textColor="@color/gray"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/pbSteps"
+                        app:layout_constraintTop_toBottomOf="@+id/pbSteps" />
+
+                    <TextView
+                        android:id="@+id/tvGoalSteps"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="24dp"
+                        android:fontFamily="@font/lora_font"
+                        android:gravity="start"
+                        android:padding="8dp"
+                        android:text="@string/goal_loading"
+                        android:textColor="@color/gray"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/pbSteps"
+                        app:layout_constraintTop_toBottomOf="@+id/pbSteps" />
+
+                    <TextView
+                        android:id="@+id/tvTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginVertical="16dp"
+                        android:fontFamily="@font/lora_font"
+                        android:gravity="center"
+                        android:text="@string/step_progress"
+                        android:textAlignment="center"
+                        android:textColor="@color/gray"
+                        android:textSize="18sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/historyCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="10dp"
+                app:cardUseCompatPadding="true">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="8dp">
+
+                    <TextView
+                        android:id="@+id/tvHistoryTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginVertical="16dp"
+                        android:fontFamily="@font/lora_font"
+                        android:gravity="center"
+                        android:text="@string/step_history"
+                        android:textAlignment="center"
+                        android:textColor="@color/gray"
+                        android:textSize="18sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.jjoe64.graphview.GraphView
+                        android:id="@+id/stepChart"
+                        android:layout_width="match_parent"
+                        android:layout_height="250dp"
+                        android:layout_margin="8dp"
+                        android:backgroundTint="@color/eatwellgreen"
+                        android:foregroundTint="@color/eatwellgreen"
+                        android:outlineAmbientShadowColor="@color/eatwellgreen"
+                        android:outlineSpotShadowColor="@color/eatwellgreen"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tvHistoryTitle"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/BMICard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="10dp"
+                app:cardUseCompatPadding="true">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="8dp">
+
+                    <TextView
+                        android:id="@+id/tvSummaryTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginVertical="16dp"
+                        android:fontFamily="@font/lora_font"
+                        android:gravity="center"
+                        android:text="@string/summary"
+                        android:textAlignment="center"
+                        android:textColor="@color/gray"
+                        android:textSize="18sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvSummarySteps"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="24dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="16dp"
+                        android:drawablePadding="8dp"
+                        android:fontFamily="@font/lora_font"
+                        android:gravity="start"
+                        android:text="@string/loading"
+                        android:textColor="@color/gray"
+                        android:textSize="@dimen/big_text_size"
+                        app:drawableStartCompat="@drawable/ic_footsteps"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tvSummaryTitle" />
+
+                    <TextView
+                        android:id="@+id/tvSummaryDistance"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="24dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="16dp"
+                        android:drawablePadding="8dp"
+                        android:fontFamily="@font/lora_font"
+                        android:gravity="start"
+                        android:text="@string/loading"
+                        android:textColor="@color/gray"
+                        android:textSize="@dimen/big_text_size"
+                        app:drawableStartCompat="@drawable/ic_distance"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tvSummarySteps" />
+
+                    <TextView
+                        android:id="@+id/tvSummaryCalories"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="24dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="16dp"
+                        android:drawablePadding="8dp"
+                        android:fontFamily="@font/lora_font"
+                        android:gravity="start"
+                        android:text="@string/loading"
+                        android:textColor="@color/gray"
+                        android:textSize="@dimen/big_text_size"
+                        app:drawableStartCompat="@drawable/ic_calories"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tvSummaryDistance" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

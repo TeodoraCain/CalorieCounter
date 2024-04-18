@@ -36,7 +36,7 @@ public class LoginActivityTest {
 
     @Before
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
         loginActivity = new LoginActivity();
         loginActivity.email = mockedEmailEditText;
         loginActivity.password = mockedPasswordEditText;
@@ -50,7 +50,7 @@ public class LoginActivityTest {
         when(mockedEmailEditText.getText()).thenReturn(Editable.Factory.getInstance().newEditable(newText));
         when(mockedPasswordEditText.getText()).thenReturn(Editable.Factory.getInstance().newEditable(newText));
 
-        boolean result = loginActivity.loginCheck();
+        boolean result = loginActivity.isLoginInputCorrect();
 
         verify(mockedEmailEditText).setError("Please enter email!");
         verify(mockedEmailEditText).requestFocus();
@@ -65,7 +65,7 @@ public class LoginActivityTest {
         when(mockedEmailEditText.getText()).thenReturn(Editable.Factory.getInstance().newEditable(emailText));
         when(mockedPasswordEditText.getText()).thenReturn(Editable.Factory.getInstance().newEditable(passwordText));
 
-        boolean result = loginActivity.loginCheck();
+        boolean result = loginActivity.isLoginInputCorrect();
 
         verify(mockedEmailEditText).setError("Email is incorrect!");
         verify(mockedEmailEditText).requestFocus();
@@ -80,7 +80,7 @@ public class LoginActivityTest {
         when(mockedEmailEditText.getText()).thenReturn(Editable.Factory.getInstance().newEditable(emailText));
         when(mockedPasswordEditText.getText()).thenReturn(Editable.Factory.getInstance().newEditable(passwordText));
 
-        boolean result = loginActivity.loginCheck();
+        boolean result = loginActivity.isLoginInputCorrect();
 
         verify(mockedPasswordEditText).setError("Please enter password!");
         verify(mockedPasswordEditText).requestFocus();
@@ -95,7 +95,7 @@ public class LoginActivityTest {
         when(mockedEmailEditText.getText()).thenReturn(Editable.Factory.getInstance().newEditable(emailText));
         when(mockedPasswordEditText.getText()).thenReturn(Editable.Factory.getInstance().newEditable(passwordText));
 
-        boolean result = loginActivity.loginCheck();
+        boolean result = loginActivity.isLoginInputCorrect();
 
         verify(mockedEmailEditText, never()).setError(anyString());
         verify(mockedPasswordEditText, never()).setError(anyString());

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="encountry">Romania</string>
+    <string name="country_name">Romania</string>
     <string name="choose_your_gender">Alege-ti genul</string>
     <string name="choose_your_language">Alege-ti limba</string>
     <string name="fr">FR</string>

@@ -20,16 +20,16 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.caloriecounter.controllers.ViewPagerAdapter;
-import com.example.caloriecounter.model.DAO.GoalDAOImpl;
-import com.example.caloriecounter.model.DAO.GoalData;
-import com.example.caloriecounter.model.DAO.GoalDataDAO;
-import com.example.caloriecounter.model.DAO.UserDAO;
-import com.example.caloriecounter.model.DAO.UserDAOImpl;
-import com.example.caloriecounter.model.DAO.UserDetails;
-import com.example.caloriecounter.model.DAO.WeightLog;
-import com.example.caloriecounter.model.DAO.WeightLogDAO;
-import com.example.caloriecounter.model.DAO.WeightLogDAOImpl;
+import com.example.caloriecounter.adapters.ViewPagerAdapter;
+import com.example.caloriecounter.models.dao.GoalDAOImpl;
+import com.example.caloriecounter.models.dao.GoalData;
+import com.example.caloriecounter.models.dao.GoalDataDAO;
+import com.example.caloriecounter.models.dao.UserDAO;
+import com.example.caloriecounter.models.dao.UserDAOImpl;
+import com.example.caloriecounter.models.dao.UserDetails;
+import com.example.caloriecounter.models.dao.WeightLog;
+import com.example.caloriecounter.models.dao.WeightLogDAO;
+import com.example.caloriecounter.models.dao.WeightLogDAOImpl;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
@@ -45,23 +45,34 @@ public class RegisterActivity extends AppCompatActivity implements ViewPager.OnP
 
     private final int[] layouts = {R.layout.view_pager_1, R.layout.view_pager_2, R.layout.view_pager_3, R.layout.view_pager_4, R.layout.view_pager_5};
     private final String TAG = "RegisterActivity";
-    private HashMap<String, String> userInputs;
-    private ViewPager viewPager;
+    private Context context;
     private ProgressBar progressBar;
+
+    private HashMap<String, String> userInputs;
+
     private TextView tvNext;
+    private ViewPager viewPager;
     private ViewPagerAdapter adapter;
-    private Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-
+        initContext();
         setUpViews();
         initializeUserInputs();
         setUpViewPager();
         setUpDotsIndicator();
         setUpViewpagerNavigation(adapter);
+    }
+    /********************************* INIT ACTIVITY **********************************************/
+    private void initContext() {
+        context = RegisterActivity.this;
+    }
+
+    private void setUpViews() {
+        tvNext = findViewById(R.id.tvNext);
+        progressBar = findViewById(R.id.pbRegisterProgress);
     }
 
     private void initializeUserInputs() {
@@ -97,23 +108,16 @@ public class RegisterActivity extends AppCompatActivity implements ViewPager.OnP
         });
     }
 
-    private void setUpViews() {
-        mContext = RegisterActivity.this;
-        tvNext = findViewById(R.id.tvNext);
-        progressBar = findViewById(R.id.pbRegisterProgress);
-    }
-
+    /********************************* SET UP LISTENERS *******************************************/
     private void registerUser() {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         auth.createUserWithEmailAndPassword(Objects.requireNonNull(userInputs.get(getString(R.string.email))), Objects.requireNonNull(userInputs.get(getString(R.string.password)))).addOnCompleteListener(RegisterActivity.this, task -> {
             if (task.isSuccessful()) {
-                Toast.makeText(mContext, "Registration successful!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Registration successful!", Toast.LENGTH_SHORT).show();
                 FirebaseUser firebaseUser = auth.getCurrentUser();
 
                 //set the name of the user
-                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                        .setDisplayName(userInputs.get(getString(R.string.name)))
-                        .build();
+                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setDisplayName(userInputs.get(getString(R.string.name))).build();
 
                 assert firebaseUser != null;
                 firebaseUser.updateProfile(profileUpdates);
@@ -128,15 +132,15 @@ public class RegisterActivity extends AppCompatActivity implements ViewPager.OnP
                         createGoalData(writeUserDetails);
                         createFirstWeightLog(writeUserDetails);
 
-                        Toast.makeText(mContext, "User registered successfully. Please verify your email", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "User registered successfully. Please verify your email", Toast.LENGTH_SHORT).show();
                         Log.d(TAG, "Registration successful..");
-                        Intent intent = new Intent(mContext, SplashActivity.class);
+                        Intent intent = new Intent(context, SplashActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
                         //finish();
                     } else {
                         Log.d(TAG, "Registration was unsuccessful..");
-                        Toast.makeText(mContext, "Registration failed! Please try again", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Registration failed! Please try again", Toast.LENGTH_SHORT).show();
                     }
 
                 });
@@ -150,7 +154,7 @@ public class RegisterActivity extends AppCompatActivity implements ViewPager.OnP
                     alertIncomplete("Your email is invalid", 4);
                 } catch (Exception e) {
                     Log.e("Registration", e.getMessage());
-                    Toast.makeText(mContext, "Registration incomplete!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Registration incomplete!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -161,14 +165,6 @@ public class RegisterActivity extends AppCompatActivity implements ViewPager.OnP
         WeightLogDAO weightLogDAO = new WeightLogDAOImpl();
         WeightLog weightLog = new WeightLog(Double.parseDouble(writeUserDetails.getWeight()));
         weightLogDAO.add(weightLog);
-    }
-
-    private void createGoalData(UserDetails writeUserDetails) {
-        GoalDataDAO goalDataDAO = new GoalDAOImpl();
-        GoalData goalData = new GoalData();
-        calculateGoals(goalData);
-        goalData.setWeightGoal(writeUserDetails.getWeight());
-        goalDataDAO.add(goalData);
     }
 
     private double calculateBMI() {
@@ -186,6 +182,13 @@ public class RegisterActivity extends AppCompatActivity implements ViewPager.OnP
             return (weight / (heightMeters * heightMeters)) * 703;
         }
         return 0;
+    }
+    private void createGoalData(UserDetails writeUserDetails) {
+        GoalDataDAO goalDataDAO = new GoalDAOImpl();
+        GoalData goalData = new GoalData();
+        calculateGoals(goalData);
+        goalData.setWeightGoal(writeUserDetails.getWeight());
+        goalDataDAO.add(goalData);
     }
 
     private void calculateGoals(GoalData goalData) {
@@ -275,7 +278,7 @@ public class RegisterActivity extends AppCompatActivity implements ViewPager.OnP
     }
 
     private void alertIncomplete(String message, int viewPagerItem) {
-        AlertDialog alertDialog = new AlertDialog.Builder(mContext).create();
+        AlertDialog alertDialog = new AlertDialog.Builder(context).create();
         alertDialog.setTitle("Customization incomplete");
         alertDialog.setMessage(message);
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Ok", (dialog, which) -> {
@@ -285,10 +288,7 @@ public class RegisterActivity extends AppCompatActivity implements ViewPager.OnP
         alertDialog.show();
     }
 
-//    private int[] getOnboardingLayouts() {
-//        return new int[]{R.layout.view_pager_1, R.layout.view_pager_2, R.layout.view_pager_3, R.layout.view_pager_4, R.layout.view_pager_5};
-//    }
-
+    /********************************* PAGE CHANGE LISTENER OVERRIDES *****************************/
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 

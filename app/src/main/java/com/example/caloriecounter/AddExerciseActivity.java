@@ -15,22 +15,21 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.caloriecounter.controllers.FirebaseExerciseRecyclerViewerAdapter;
-import com.example.caloriecounter.controllers.RecyclerViewInterface;
-import com.example.caloriecounter.model.DAO.Exercise;
-import com.example.caloriecounter.model.DAO.ExerciseDAO;
-import com.example.caloriecounter.model.DAO.ExerciseDAOImpl;
+import com.example.caloriecounter.adapters.FirebaseExerciseRecyclerViewerAdapter;
+import com.example.caloriecounter.models.dao.Exercise;
+import com.example.caloriecounter.models.dao.ExerciseDAO;
+import com.example.caloriecounter.models.dao.ExerciseDAOImpl;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 
 import java.util.Objects;
 
-public class AddExerciseActivity extends AppCompatActivity implements RecyclerViewInterface {
+public class AddExerciseActivity extends AppCompatActivity implements FirebaseExerciseRecyclerViewerAdapter.RecyclerViewInterface {
     private RecyclerView rvExercises;
     private ExerciseDAO exerciseDAO;
     private FirebaseExerciseRecyclerViewerAdapter rvAdapter;
     private EditText etSearchExercise;
 
-    private Context mContext;
+    private Context context;
     private final String TAG = "AddExerciseActivity";
 
     @Override
@@ -43,7 +42,13 @@ public class AddExerciseActivity extends AppCompatActivity implements RecyclerVi
         setUpTextWatcherForSearch();
         setUpRecyclerView();
     }
-
+    /********************************* SET UP VIEWS ***********************************************/
+    private void setUpViews() {
+        context = this;
+        etSearchExercise = findViewById(R.id.etSearchExercise);
+        rvExercises = findViewById(R.id.rvExercises);
+        exerciseDAO = new ExerciseDAOImpl();
+    }
     private void setUpTextWatcherForSearch() {
         Log.d(TAG, "Setting up the text watcher for search..");
         etSearchExercise.addTextChangedListener(new TextWatcher() {
@@ -64,26 +69,9 @@ public class AddExerciseActivity extends AppCompatActivity implements RecyclerVi
             }
         });
     }
-
-    private void setUpViews() {
-        mContext = this;
-        etSearchExercise = findViewById(R.id.etSearchExercise);
-        rvExercises = findViewById(R.id.rvExercises);
-        exerciseDAO = new ExerciseDAOImpl();
-    }
-
     private void setUpRecyclerView() {
         rvExercises.setLayoutManager(new LinearLayoutManager(this));
         searchByQuery(""); // Initial search
-    }
-
-    private void setToolbar() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
     private void searchByQuery(String query) {
@@ -98,14 +86,37 @@ public class AddExerciseActivity extends AppCompatActivity implements RecyclerVi
         rvExercises.setAdapter(rvAdapter);
     }
 
+    /********************************* RecyclerViewInterface OVERRIDE *****************************/
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (rvAdapter != null) {
-            rvAdapter.stopListening();
-        }
+    public void onItemClick(int position) {
+        final String EXERCISE = "EXERCISE";
+        final String CALORIES = "CALORIES";
+        final String FROMDIARY = "FROMDIARY";
+        final String DATE = "DATE";
+
+        Log.d(TAG, "ItemClick: Clicked on " + rvAdapter.getItem(position).getName());
+
+        Intent intent = new Intent(context, ExerciseRecorderActivity.class);
+        intent.putExtra(FROMDIARY, this.getIntent().getBooleanExtra(FROMDIARY, false));
+        intent.putExtra("DATE", this.getIntent().getStringExtra(DATE));
+        intent.putExtra(EXERCISE, rvAdapter.getItem(position).getName());
+        intent.putExtra(CALORIES, String.valueOf(rvAdapter.getItem(position).getCalories()));
+
+        startActivity(intent);
+        this.finish();
     }
 
+    /********************************* SET UP TOOLBAR *********************************************/
+    private void setToolbar() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+    }
+
+    /********************************* LIFECYCLE OVERRIDES ****************************************/
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
@@ -117,20 +128,14 @@ public class AddExerciseActivity extends AppCompatActivity implements RecyclerVi
     }
 
     @Override
-    public void onItemClick(int position) {
-        final String EXERCISE = "EXERCISE";
-        final String CALORIES = "CALORIES";
-        final String FROMDIARY = "FROMDIARY";
-        final String DATE = "DATE";
-
-        Log.d(TAG, "ItemClick: Clicked on " + rvAdapter.getItem(position).getName());
-
-        Intent intent = new Intent(mContext, ExerciseRecorderActivity.class);
-        intent.putExtra(FROMDIARY, this.getIntent().getBooleanExtra(FROMDIARY, false));
-        intent.putExtra("DATE", this.getIntent().getStringExtra(DATE));
-        intent.putExtra(EXERCISE, rvAdapter.getItem(position).getName());
-        intent.putExtra(CALORIES, String.valueOf(rvAdapter.getItem(position).getCalories()));
-
-        startActivity(intent);
+    protected void onDestroy() {
+        super.onDestroy();
+        if (rvAdapter != null) {
+            rvAdapter.stopListening();
+        }
     }
+
+
+
+
 }

@@ -15,12 +15,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.example.caloriecounter.model.DAO.DailyData;
-import com.example.caloriecounter.model.DAO.DailyDataDAO;
-import com.example.caloriecounter.model.DAO.DailyDataDAOImpl;
-import com.example.caloriecounter.model.DAO.Food;
-import com.example.caloriecounter.model.DAO.Recipe;
-import com.example.caloriecounter.model.dataHolder.DailyDataHolder;
+import com.example.caloriecounter.models.dao.DailyData;
+import com.example.caloriecounter.models.dao.DailyDataDAO;
+import com.example.caloriecounter.models.dao.DailyDataDAOImpl;
+import com.example.caloriecounter.models.dao.Food;
+import com.example.caloriecounter.models.dao.Recipe;
+import com.example.caloriecounter.models.dataHolders.DailyDataHolder;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -35,6 +35,8 @@ import java.util.Objects;
 
 public class NutritionDisplayActivity extends AppCompatActivity {
 
+    private final String TAG = "NutritionDisplayActivity";
+    // views
     EditText etServingSize;
     TextView tvCalories;
     TextView tvCarbohydrate;
@@ -51,16 +53,13 @@ public class NutritionDisplayActivity extends AppCompatActivity {
     TextView tvVitaminB6;
     TextView tvVitaminB12;
     TextView tvVitaminC;
-
+    // attributes
     Food currentFood;
+    DailyDataDAO dailyDataDAO;
     private String meal;
     private String date;
     private String currentDate;
-
-    DailyDataDAO dailyDataDAO;
-
-    private Context mContext;
-    private final String TAG = "NutritionDisplayActivity";
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,15 +69,13 @@ public class NutritionDisplayActivity extends AppCompatActivity {
         parseIntentExtras();
         setToolbar();
         setUpViews();
-        initDailyData();
-        setTextsToUI();
+        initDailyDataDAO();
+
+        setUpSaveBtnListener();
         setUpTextWatcherForServingSize();
     }
 
-    private void initDailyData() {
-        dailyDataDAO = new DailyDataDAOImpl();
-    }
-
+    /********************************* INIT ACTIVITY **********************************************/
     private void parseIntentExtras() {
         Intent intent = getIntent();
         currentFood = intent.getParcelableExtra("FOOD");
@@ -90,6 +87,31 @@ public class NutritionDisplayActivity extends AppCompatActivity {
         currentDate = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH).format(date);
     }
 
+    private void setUpViews() {
+        context = NutritionDisplayActivity.this;
+        etServingSize = findViewById(R.id.etServingSize);
+        tvCalories = findViewById(R.id.tvCalories);
+        tvCarbohydrate = findViewById(R.id.tvCarbohydrate);
+        tvProtein = findViewById(R.id.tvProtein);
+        tvTotalFat = findViewById(R.id.tvTotalFat);
+        tvSaturatedFat = findViewById(R.id.tvSaturatedFat);
+        tvFiber = findViewById(R.id.tvFiber);
+        tvIron = findViewById(R.id.tvIron);
+        tvSugar = findViewById(R.id.tvSugar);
+        tvSodium = findViewById(R.id.tvSodium);
+        tvCalcium = findViewById(R.id.tvCalcium);
+        tvMagnesium = findViewById(R.id.tvMagnesium);
+        tvVitaminA = findViewById(R.id.tvVitaminA);
+        tvVitaminB6 = findViewById(R.id.tvVitaminB6);
+        tvVitaminB12 = findViewById(R.id.tvVitaminB12);
+        tvVitaminC = findViewById(R.id.tvVitaminC);
+    }
+
+    private void initDailyDataDAO() {
+        dailyDataDAO = new DailyDataDAOImpl();
+    }
+
+    /********************************* SET UP TEXT WATCHER ****************************************/
     void setUpTextWatcherForServingSize() {
         etServingSize.addTextChangedListener(new TextWatcher() {
             @Override
@@ -141,62 +163,13 @@ public class NutritionDisplayActivity extends AppCompatActivity {
         tvVitaminC.setText(String.format(Locale.ENGLISH, "%.1f", currentFood.getVitamin_c() * percentage));
     }
 
-    void setTextsToUI() {
-        if (currentFood != null) {
-            etServingSize.setText(String.valueOf(currentFood.getServing_size()));
-            tvCalories.setText(String.valueOf(currentFood.getCalories()));
-            tvCarbohydrate.setText(String.valueOf(currentFood.getCarbohydrate()));
-            tvProtein.setText(String.valueOf(currentFood.getProtein()));
-            tvTotalFat.setText(String.valueOf(currentFood.getTotal_fat()));
-            tvSaturatedFat.setText(String.valueOf(currentFood.getSaturated_fat()));
-            tvFiber.setText(String.valueOf(currentFood.getFiber()));
-            tvIron.setText(String.valueOf(currentFood.getIron()));
-            tvSugar.setText(String.valueOf(currentFood.getSugars()));
-            tvSodium.setText(String.valueOf(currentFood.getSodium()));
-            tvCalcium.setText(String.valueOf(currentFood.getCalcium()));
-            tvMagnesium.setText(String.valueOf(currentFood.getMagnesium()));
-            tvVitaminA.setText(String.valueOf(currentFood.getVitamin_a()));
-            tvVitaminB6.setText(String.valueOf(currentFood.getVitamin_b6()));
-            tvVitaminB12.setText(String.valueOf(currentFood.getVitamin_b12()));
-            tvVitaminC.setText(String.valueOf(currentFood.getVitamin_c()));
-        }
-    }
-
-    private void setUpViews() {
-        mContext = NutritionDisplayActivity.this;
-        etServingSize = findViewById(R.id.etServingSize);
-        tvCalories = findViewById(R.id.tvCalories);
-        tvCarbohydrate = findViewById(R.id.tvCarbohydrate);
-        tvProtein = findViewById(R.id.tvProtein);
-        tvTotalFat = findViewById(R.id.tvTotalFat);
-        tvSaturatedFat = findViewById(R.id.tvSaturatedFat);
-        tvFiber = findViewById(R.id.tvFiber);
-        tvIron = findViewById(R.id.tvIron);
-        tvSugar = findViewById(R.id.tvSugar);
-        tvSodium = findViewById(R.id.tvSodium);
-        tvCalcium = findViewById(R.id.tvCalcium);
-        tvMagnesium = findViewById(R.id.tvMagnesium);
-        tvVitaminA = findViewById(R.id.tvVitaminA);
-        tvVitaminB6 = findViewById(R.id.tvVitaminB6);
-        tvVitaminB12 = findViewById(R.id.tvVitaminB12);
-        tvVitaminC = findViewById(R.id.tvVitaminC);
-    }
-
-
-    private void setToolbar() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        //set title
-        toolbar.setTitle(currentFood.getName());
-        setSupportActionBar(toolbar);
-        //set back button
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        //set save button
+    /********************************* SET UP LISTENERS *******************************************/
+    private void setUpSaveBtnListener() {
         ImageView saveImageView = findViewById(R.id.ivSave);
         saveImageView.setOnClickListener(v -> save());
     }
 
+    /********************************* SAVE RECIPE ************************************************/
     void save() {
         if (date != null && !date.equals(currentDate)) {
             dailyDataDAO.get(date).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -253,7 +226,7 @@ public class NutritionDisplayActivity extends AppCompatActivity {
             if (task.isSuccessful()) {
                 Log.d(TAG, "Data: Updated " + meal + " for " + currentDate);
                 if (date != null) {
-                    Intent intent = new Intent(mContext, DashboardActivity.class);
+                    Intent intent = new Intent(context, DashboardActivity.class);
                     intent.putExtra("NAVIGATE_TO_DIARY_FRAGMENT", true);
                     startActivity(intent);
                 } else {
@@ -278,32 +251,6 @@ public class NutritionDisplayActivity extends AppCompatActivity {
             default:
                 return new ArrayList<>();
         }
-    }
-
-    Food createFoodItemFromUI() {
-        Food food = new Food();
-        food.setName(currentFood.getName());
-        food.setServing_size(Double.parseDouble(etServingSize.getText().toString()));
-        food.setCalories(Double.parseDouble(tvCalories.getText().toString()));
-        food.setCarbohydrate(Double.parseDouble(tvCarbohydrate.getText().toString()));
-        food.setProtein(Double.parseDouble(tvProtein.getText().toString()));
-        food.setTotal_fat(Double.parseDouble(tvTotalFat.getText().toString()));
-        food.setSaturated_fat(Double.parseDouble(tvSaturatedFat.getText().toString()));
-        food.setFiber(Double.parseDouble(tvFiber.getText().toString()));
-        food.setIron(Double.parseDouble(tvIron.getText().toString()));
-        food.setSugars(Double.parseDouble(tvSugar.getText().toString()));
-        food.setSodium(Double.parseDouble(tvSodium.getText().toString()));
-        food.setCalcium(Double.parseDouble(tvCalcium.getText().toString()));
-        food.setMagnesium(Double.parseDouble(tvMagnesium.getText().toString()));
-        food.setVitamin_a(Double.parseDouble(tvVitaminA.getText().toString()));
-        food.setVitamin_b6(Double.parseDouble(tvVitaminB6.getText().toString()));
-        food.setVitamin_b12(Double.parseDouble(tvVitaminB12.getText().toString()));
-        food.setVitamin_c(Double.parseDouble(tvVitaminC.getText().toString()));
-        return food;
-    }
-
-    Recipe createRecipeFromFood(Food food, List<Food> foods) {
-        return new Recipe(food.getName(), foods, food.getServing_size(), food.getCalories());
     }
 
     private void updateDailyDataWithRecipeList(String meal, List<Recipe> recipeList, DailyData dailyData) {
@@ -333,7 +280,7 @@ public class NutritionDisplayActivity extends AppCompatActivity {
         dailyDataDAO.update(dailyData, date).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 Log.d(TAG, "Data: Updated " + meal + " for " + date);
-                Intent intent = new Intent(mContext, DashboardActivity.class);
+                Intent intent = new Intent(context, DashboardActivity.class);
                 intent.putExtra("NAVIGATE_TO_DIARY_FRAGMENT", true);
                 startActivity(intent);
 
@@ -342,6 +289,45 @@ public class NutritionDisplayActivity extends AppCompatActivity {
             }
         });
     }
+
+    Food createFoodItemFromUI() {
+        Food food = new Food();
+        food.setName(currentFood.getName());
+        food.setServing_size(Double.parseDouble(etServingSize.getText().toString()));
+        food.setCalories(Double.parseDouble(tvCalories.getText().toString()));
+        food.setCarbohydrate(Double.parseDouble(tvCarbohydrate.getText().toString()));
+        food.setProtein(Double.parseDouble(tvProtein.getText().toString()));
+        food.setTotal_fat(Double.parseDouble(tvTotalFat.getText().toString()));
+        food.setSaturated_fat(Double.parseDouble(tvSaturatedFat.getText().toString()));
+        food.setFiber(Double.parseDouble(tvFiber.getText().toString()));
+        food.setIron(Double.parseDouble(tvIron.getText().toString()));
+        food.setSugars(Double.parseDouble(tvSugar.getText().toString()));
+        food.setSodium(Double.parseDouble(tvSodium.getText().toString()));
+        food.setCalcium(Double.parseDouble(tvCalcium.getText().toString()));
+        food.setMagnesium(Double.parseDouble(tvMagnesium.getText().toString()));
+        food.setVitamin_a(Double.parseDouble(tvVitaminA.getText().toString()));
+        food.setVitamin_b6(Double.parseDouble(tvVitaminB6.getText().toString()));
+        food.setVitamin_b12(Double.parseDouble(tvVitaminB12.getText().toString()));
+        food.setVitamin_c(Double.parseDouble(tvVitaminC.getText().toString()));
+        return food;
+    }
+
+    Recipe createRecipeFromFood(Food food, List<Food> foods) {
+        return new Recipe(food.getName(), foods, food.getServing_size(), food.getCalories());
+    }
+
+    /********************************* TOOLBAR ****************************************************/
+    private void setToolbar() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        //set title
+        toolbar.setTitle(currentFood.getName());
+        setSupportActionBar(toolbar);
+        //set back button
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+    }
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
@@ -351,4 +337,31 @@ public class NutritionDisplayActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /********************************* LIFECYCLE OVERRIDES ****************************************************/
+    @Override
+    protected void onStart() {
+        super.onStart();
+        setTextsToUI();
+    }
+
+    void setTextsToUI() {
+        if (currentFood != null) {
+            etServingSize.setText(String.valueOf(currentFood.getServing_size()));
+            tvCalories.setText(String.valueOf(currentFood.getCalories()));
+            tvCarbohydrate.setText(String.valueOf(currentFood.getCarbohydrate()));
+            tvProtein.setText(String.valueOf(currentFood.getProtein()));
+            tvTotalFat.setText(String.valueOf(currentFood.getTotal_fat()));
+            tvSaturatedFat.setText(String.valueOf(currentFood.getSaturated_fat()));
+            tvFiber.setText(String.valueOf(currentFood.getFiber()));
+            tvIron.setText(String.valueOf(currentFood.getIron()));
+            tvSugar.setText(String.valueOf(currentFood.getSugars()));
+            tvSodium.setText(String.valueOf(currentFood.getSodium()));
+            tvCalcium.setText(String.valueOf(currentFood.getCalcium()));
+            tvMagnesium.setText(String.valueOf(currentFood.getMagnesium()));
+            tvVitaminA.setText(String.valueOf(currentFood.getVitamin_a()));
+            tvVitaminB6.setText(String.valueOf(currentFood.getVitamin_b6()));
+            tvVitaminB12.setText(String.valueOf(currentFood.getVitamin_b12()));
+            tvVitaminC.setText(String.valueOf(currentFood.getVitamin_c()));
+        }
+    }
 }

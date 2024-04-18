@@ -14,23 +14,23 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.caloriecounter.model.DAO.DailyData;
-import com.example.caloriecounter.model.DAO.DailyDataDAO;
-import com.example.caloriecounter.model.DAO.DailyDataDAOImpl;
-import com.example.caloriecounter.model.DAO.Food;
-import com.example.caloriecounter.model.DAO.FoodDAO;
-import com.example.caloriecounter.model.DAO.FoodDAOImpl;
-import com.example.caloriecounter.model.DAO.GoalDAOImpl;
-import com.example.caloriecounter.model.DAO.GoalData;
-import com.example.caloriecounter.model.DAO.GoalDataDAO;
-import com.example.caloriecounter.model.DAO.UserDAO;
-import com.example.caloriecounter.model.DAO.UserDAOImpl;
-import com.example.caloriecounter.model.DAO.UserDetails;
-import com.example.caloriecounter.model.dataHolder.DailyDataHolder;
-import com.example.caloriecounter.model.dataHolder.FoodListHolder;
-import com.example.caloriecounter.model.dataHolder.GoalDataHolder;
-import com.example.caloriecounter.model.dataHolder.UserDetailsHolder;
-import com.example.caloriecounter.model.dataHolder.WorkoutListHolder;
+import com.example.caloriecounter.models.dao.DailyData;
+import com.example.caloriecounter.models.dao.DailyDataDAO;
+import com.example.caloriecounter.models.dao.DailyDataDAOImpl;
+import com.example.caloriecounter.models.dao.Food;
+import com.example.caloriecounter.models.dao.FoodDAO;
+import com.example.caloriecounter.models.dao.FoodDAOImpl;
+import com.example.caloriecounter.models.dao.GoalDAOImpl;
+import com.example.caloriecounter.models.dao.GoalData;
+import com.example.caloriecounter.models.dao.GoalDataDAO;
+import com.example.caloriecounter.models.dao.UserDAO;
+import com.example.caloriecounter.models.dao.UserDAOImpl;
+import com.example.caloriecounter.models.dao.UserDetails;
+import com.example.caloriecounter.models.dataHolders.DailyDataHolder;
+import com.example.caloriecounter.models.dataHolders.FoodListHolder;
+import com.example.caloriecounter.models.dataHolders.GoalDataHolder;
+import com.example.caloriecounter.models.dataHolders.UserDetailsHolder;
+import com.example.caloriecounter.models.dataHolders.WorkoutListHolder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -43,21 +43,30 @@ import java.util.Objects;
 @SuppressLint("CustomSplashScreen")
 public class SplashActivity extends AppCompatActivity {
 
-    private int dataRetrievalCount = 0;
     private static final int TOTAL_DATA_RETRIEVAL_TASKS = 4;
-    private ProgressBar progressBar;
-
-    private Context mContext;
     private final String TAG = "SplashActivity";
+    private Context context;
+    private int dataRetrievalCount = 0;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-
+        initContext();
         setUpViews();
         checkLoggedUser();
     }
+
+    /********************************* INIT ACTIVITY **********************************************/
+    private void initContext() {
+        context = SplashActivity.this;
+    }
+
+    private void setUpViews() {
+        progressBar = findViewById(R.id.progressBar);
+    }
+
 
     private void checkLoggedUser() {
         FirebaseAuth authProfile = FirebaseAuth.getInstance();
@@ -68,26 +77,30 @@ public class SplashActivity extends AppCompatActivity {
             Log.d(TAG, "User is not connected. Starting MainActivity..");
             progressBar.setVisibility(View.GONE);
             new Handler().postDelayed(() -> {
-                Intent intent = new Intent(mContext, MainActivity.class);
+                Intent intent = new Intent(context, MainActivity.class);
                 startActivity(intent);
                 finish();
             }, 3000);
         }
     }
 
-    private void setUpViews() {
-        progressBar = findViewById(R.id.progressBar);
-        mContext = SplashActivity.this;
-    }
 
     private void checkAndStartNewIntent() {
         dataRetrievalCount++;
         if (dataRetrievalCount == TOTAL_DATA_RETRIEVAL_TASKS) {
             // All data retrieval tasks are completed, start the new intent
-            Intent intent = new Intent(mContext, MainActivity.class);
+            Intent intent = new Intent(context, MainActivity.class);
             startActivity(intent);
             finish(); // Finish the splash activity to prevent going back to it
         }
+    }
+
+    /********************************* INIT APP DATA **********************************************/
+    private void initAppData() {
+        initUserDetails();
+        initGoalData();
+        initFoodList();
+        initDailyData();
     }
 
     private void initFoodList() {
@@ -128,7 +141,7 @@ public class SplashActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(mContext, "Something went wrong!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Something went wrong!", Toast.LENGTH_SHORT).show();
                 Log.d(TAG, "Goal data failed to initiate.");
             }
         });
@@ -150,7 +163,7 @@ public class SplashActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(mContext, "Something went wrong!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Something went wrong!", Toast.LENGTH_SHORT).show();
                 Log.d(TAG, "User data failed to initiate.");
             }
         });
@@ -167,7 +180,7 @@ public class SplashActivity extends AppCompatActivity {
                     String imageUrl = dataSnapshot.getValue(String.class);
                     Log.d(TAG, "User profile picture retrieved.");
                     if (imageUrl != null && !imageUrl.isEmpty()) {
-                        SharedPreferences sharedPreferences = Objects.requireNonNull(mContext).getSharedPreferences(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid(), Context.MODE_PRIVATE);
+                        SharedPreferences sharedPreferences = Objects.requireNonNull(context).getSharedPreferences(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid(), Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
 
                         editor.putString("imageUrl", imageUrl);
@@ -204,12 +217,5 @@ public class SplashActivity extends AppCompatActivity {
                 Log.d(TAG, "Daily data failed to initialize.");
             }
         });
-    }
-
-    private void initAppData() {
-        initUserDetails();
-        initGoalData();
-        initFoodList();
-        initDailyData();
     }
 }
