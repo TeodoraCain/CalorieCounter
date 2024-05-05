@@ -1,13 +1,13 @@
 package com.example.caloriecounter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -62,6 +62,7 @@ public class WeightLogActivity extends AppCompatActivity {
 
     private DataPoint[] dataPoints;
     private PointsGraphSeries<DataPoint> series;
+    private List<WeightLog> weightLogs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,9 +161,11 @@ public class WeightLogActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 List<DataPoint> dpList = new ArrayList<>();
+                weightLogs = new ArrayList<>();
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     WeightLog weightLog = dataSnapshot.getValue(WeightLog.class);
+                    weightLogs.add(weightLog);
                     try {
                         Date date = dateFormat.parse(Objects.requireNonNull(dataSnapshot.getKey()));
                         if (date != null) {
@@ -171,6 +174,7 @@ public class WeightLogActivity extends AppCompatActivity {
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
+
                 }
 
                 dpList.sort(Comparator.comparingDouble(DataPoint::getX));
@@ -196,7 +200,20 @@ public class WeightLogActivity extends AppCompatActivity {
 
     private void setUpPointsGraph() {
         series = new PointsGraphSeries<>(dataPoints);
-        series.setOnDataPointTapListener((series, dataPoint) -> Toast.makeText(WeightLogActivity.this.getApplicationContext(), "Series1: On Data Point clicked: " + dataPoint, Toast.LENGTH_SHORT).show());
+        series.setOnDataPointTapListener((series, dataPoint) -> {
+            //Toast.makeText(WeightLogActivity.this.getApplicationContext(), "Series1: On Data Point clicked: " + dataPoint, Toast.LENGTH_SHORT).show();
+
+            for(WeightLog weightLog: weightLogs){
+                if(weightLog.getDate().equals(new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH).format(dataPoint.getX()))){
+                    Intent intent = new Intent(context, WeightLogDisplay.class);
+                    intent.putExtra("WEIGHT_LOG", weightLog);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                    break;
+                }
+            }
+
+        });
         series.setSize(9);
         series.setColor(ContextCompat.getColor(context, R.color.pistachio));
     }

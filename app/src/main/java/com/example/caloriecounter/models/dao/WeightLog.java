@@ -1,12 +1,17 @@
 package com.example.caloriecounter.models.dao;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
 @SuppressWarnings("unused")
-public class WeightLog {
+public class WeightLog implements Parcelable {
     private String date;
     private double weight;
 
@@ -72,5 +77,39 @@ public class WeightLog {
 
     public void setWeight(double weight) {
         this.weight = weight;
+    }
+
+    protected WeightLog(Parcel in){
+        this.date = in.readString();
+        this.weight = in.readDouble();
+        this.frontPictureUri = in.readString();
+        this.sidePictureUri = in.readString();
+        this.backPictureUri = in.readString();
+    }
+
+    public static final Creator<WeightLog> CREATOR = new Creator<WeightLog>() {
+        @Override
+        public WeightLog createFromParcel(Parcel in) {
+            return new WeightLog(in);
+        }
+
+        @Override
+        public WeightLog[] newArray(int size) {
+            return new WeightLog[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeString(date);
+        dest.writeDouble(weight);
+        dest.writeString(frontPictureUri);
+        dest.writeString(sidePictureUri);
+        dest.writeString(backPictureUri);
     }
 }

@@ -26,19 +26,23 @@ public class MainActivity extends AppCompatActivity {
         setUpViews();
         setOnclickListeners();
     }
+
     /********************************* INIT ACTIVITY **********************************************/
     private void initContext() {
         context = MainActivity.this;
     }
+
     private void setUpViews() {
         loginBtn = findViewById(R.id.btnLogin);
         signupBtn = findViewById(R.id.btnSignUp);
     }
+
     /********************************* SET UP LISTENERS *******************************************/
     private void setOnclickListeners() {
         loginBtn.setOnClickListener(this::onStartLoginPage);
         signupBtn.setOnClickListener(this::onStartSignUpPage);
     }
+
     @SuppressWarnings("unused")
     public void onStartLoginPage(View view) {
         Log.d(TAG, "Logging in..");
@@ -60,7 +64,9 @@ public class MainActivity extends AppCompatActivity {
 
         FirebaseAuth authProfile = FirebaseAuth.getInstance();
         if (authProfile.getCurrentUser() != null) {
-            startActivity(new Intent(context, DashboardActivity.class));
+            Intent intent = new Intent(context, DashboardActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
         }
     }
 

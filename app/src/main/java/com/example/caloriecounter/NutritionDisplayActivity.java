@@ -192,7 +192,7 @@ public class NutritionDisplayActivity extends AppCompatActivity {
                     recipeList.add(recipe);
                     // update db with the new recipeList
                     updateDailyDataWithRecipeList(meal, recipeList, dailyData);
-                    updateTotalCaloriesConsumed(currentFood.getCalories(), dailyData);
+                    //updateTotalCaloriesConsumed(currentFood.getCalories(), dailyData);
                     saveDailyDataToDBByDate(dailyData, date);
                 }
 
@@ -214,7 +214,7 @@ public class NutritionDisplayActivity extends AppCompatActivity {
             Recipe recipe = createRecipeFromFood(currentFood, foods);
             recipeList.add(recipe);
             updateDailyDataWithRecipeList(meal, recipeList, dailyData);
-            updateTotalCaloriesConsumed(currentFood.getCalories(), dailyData);
+            //updateTotalCaloriesConsumed(currentFood.getCalories(), dailyData);
 
             saveDailyDataToDB(dailyData);
             DailyDataHolder.getInstance().setData(dailyData);
@@ -230,6 +230,9 @@ public class NutritionDisplayActivity extends AppCompatActivity {
                     intent.putExtra("NAVIGATE_TO_DIARY_FRAGMENT", true);
                     startActivity(intent);
                 } else {
+                    Intent intent = new Intent(this, DashboardActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
                     finish();
                 }
             } else {
@@ -270,11 +273,11 @@ public class NutritionDisplayActivity extends AppCompatActivity {
         }
     }
 
-    private void updateTotalCaloriesConsumed(double calories, DailyData dailyData) {
-        int caloriesConsumed = dailyData.getCaloriesConsumed();
-        caloriesConsumed += calories;
-        dailyData.setCaloriesConsumed(caloriesConsumed);
-    }
+//    private void updateTotalCaloriesConsumed(double calories, DailyData dailyData) {
+//        int caloriesConsumed = dailyData.getCaloriesConsumed();
+//        caloriesConsumed += calories;
+//        dailyData.setCaloriesConsumed(caloriesConsumed);
+//    }
 
     void saveDailyDataToDBByDate(DailyData dailyData, String date) {
         dailyDataDAO.update(dailyData, date).addOnCompleteListener(task -> {
@@ -331,6 +334,9 @@ public class NutritionDisplayActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
+            Intent intent = new Intent(this, DashboardActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
             this.finish();
             return true;
         }

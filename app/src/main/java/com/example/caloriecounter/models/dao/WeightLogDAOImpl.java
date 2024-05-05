@@ -38,4 +38,5 @@ public class WeightLogDAOImpl implements WeightLogDAO {
     public Task<Void> delete() {
         return null;
     }
+
 }

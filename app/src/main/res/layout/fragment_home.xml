@@ -95,31 +95,27 @@
                             android:textColor="@color/gray"
                             android:textSize="@dimen/text_size"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.5"
-                            app:layout_constraintStart_toEndOf="@+id/pbTotalCalories"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
                             android:id="@+id/tvTotalFoodCalories"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="76dp"
                             android:fontFamily="@font/lora_font"
+                            android:layout_marginTop="8dp"
                             android:gravity="start"
                             android:padding="16dp"
                             android:text="@string/food_0_kcal"
                             android:textColor="@color/gray"
                             android:textSize="@dimen/text_size"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.5"
-                            app:layout_constraintStart_toEndOf="@+id/pbTotalCalories"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toBottomOf="@id/tvGoalCalories" />
 
                         <TextView
                             android:id="@+id/tvTotalExerciseCalories"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="140dp"
+                            android:layout_marginTop="8dp"
                             android:fontFamily="@font/lora_font"
                             android:gravity="start"
                             android:padding="16dp"
@@ -127,9 +123,7 @@
                             android:textColor="@color/gray"
                             android:textSize="@dimen/text_size"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.5"
-                            app:layout_constraintStart_toEndOf="@+id/pbTotalCalories"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toBottomOf="@+id/tvTotalFoodCalories"/>
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </androidx.cardview.widget.CardView>

@@ -64,7 +64,29 @@ public class DailyData {
     }
 
     public int getCaloriesConsumed() {
-        return caloriesConsumed;
+        int calories = 0;
+        if (breakfast != null)
+            for (Recipe recipe : breakfast) {
+                calories += recipe.getCalories();
+            }
+        if (lunch != null)
+            for (Recipe recipe : lunch) {
+                calories += recipe.getCalories();
+            }
+        if (dinner != null)
+            for (Recipe recipe : dinner) {
+                calories += recipe.getCalories();
+            }
+        if (snacks != null)
+            for (Recipe recipe : snacks) {
+                calories += recipe.getCalories();
+            }
+        if (workouts != null)
+            for (Workout workout : workouts) {
+                calories -= workout.getCaloriesBurned();
+            }
+
+        return calories;
     }
 
     public void setCaloriesConsumed(int caloriesConsumed) {

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".WeightLogDisplay">
+    <!--    toolbar    -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/eatwellgreen"
+        android:elevation="4dp"
+        android:foregroundTint="@color/white"
+        android:popupTheme="@style/Theme.CalorieCounter"
+        android:theme="@style/Theme.AppCompat.Light"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:subtitleTextColor="@color/white"
+        app:title="Weight Log"
+        app:titleMarginStart="100dp"
+        app:titleTextAppearance="@style/Theme.CalorieCounter"
+        app:titleTextColor="@color/white" />
+
+    <!--    date of weighing    -->
+    <TextView
+        android:id="@+id/tvDate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="36dp"
+        android:background="@drawable/custom_input_text"
+        android:importantForAutofill="no"
+        android:padding="8dp"
+        android:text="17-04-2024"
+        android:textAlignment="textStart"
+        android:textColor="@color/gray"
+        android:textSize="@dimen/big_text_size"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        tools:ignore="LabelFor,TextContrastCheck" />
+
+    <!--    weight    -->
+    <TextView
+        android:id="@+id/tvWeight"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginVertical="36dp"
+        android:hint="56kg"
+        android:importantForAutofill="no"
+        android:padding="8dp"
+        android:textAlignment="textEnd"
+        android:textColor="@color/gray"
+        android:textSize="@dimen/big_text_size"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        tools:ignore="LabelFor,TextContrastCheck" />
+
+    <!--    photos    -->
+    <TextView
+        android:id="@+id/tvNoPhotos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginVertical="36dp"
+        android:importantForAutofill="no"
+        android:padding="8dp"
+        android:text="@string/no_photos_to_show"
+        android:textAlignment="center"
+        android:textColor="@color/gray"
+        android:textSize="26sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvWeight" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/vpWeightLogSlider"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:paddingStart="80dp"
+        android:paddingEnd="80dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvWeight" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginHorizontal="56dp"
+        android:indeterminateTint="@color/eatwellgreen"
+        android:padding="8dp"
+        android:progressBackgroundTint="@color/eatwellgreen"
+        android:progressDrawable="@drawable/progress_bar"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5"
+        tools:layout_editor_absoluteX="56dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,6 +3,7 @@ package com.example.caloriecounter.view.fragments.dashboard;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.example.caloriecounter.AddExerciseActivity;
@@ -44,13 +46,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-
 public class DiaryFragment extends Fragment {
 
-    private static final int DAYS_TO_MOVE = 1;
+    private final int DAYS_TO_MOVE = 1;
+    private final String TAG = "DiaryFragment";
     private Context context;
     //views
-    private View view;
     private TextView tvTotalCaloriesExercise;
     private TextView tvTotalBreakfastCalories;
     private TextView tvTotalLunchCalories;
@@ -80,29 +81,24 @@ public class DiaryFragment extends Fragment {
     private float gramsOfFat, gramsOfProtein, gramsOfCarbs;
     private String diaryDate;
     private DailyData dailyData;
+    private DailyDataDAO dailyDataDAO;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_diary, container, false);
-        setUpViews();
+        View view = inflater.inflate(R.layout.fragment_diary, container, false);
+        setUpViews(view);
         getCalorieGoal();
         initMacroValues();
         setMaxMacrosToUI();
-        addListeners();
+        addListeners(view);
         updateFoodDiary(getCurrentDate());
 
         return view;
     }
 
-    @NonNull
-    private Date getCurrentDate() {
-        calendar = Calendar.getInstance();
-        return calendar.getTime();
-    }
-
     /********************************* INIT VIEW ***************************************************/
-    private void setUpViews() {
+    private void setUpViews(View view) {
         tvTotalCaloriesExercise = view.findViewById(R.id.tvTotalExerciseCalories);
         tvTotalBreakfastCalories = view.findViewById(R.id.tvTotalBreakfastCalories);
         tvTotalLunchCalories = view.findViewById(R.id.tvTotalLunchCalories);
@@ -121,6 +117,7 @@ public class DiaryFragment extends Fragment {
         lvWorkoutHistory = view.findViewById(R.id.lvWorkoutHistory);
 
         dailyData = DailyDataHolder.getInstance().getData();
+        calendar = Calendar.getInstance();
 
         tvDiaryDate = view.findViewById(R.id.tvDiaryDate);
         tvAddBreakfast = view.findViewById(R.id.addBreakfast);
@@ -162,15 +159,134 @@ public class DiaryFragment extends Fragment {
         pbFat.setMax(maxGramsOfFat);
     }
 
-    private void addListeners() {
-        ivNext.setOnClickListener(v -> moveForward());
-        ivPrevious.setOnClickListener(v -> moveBackward());
+    private void addListeners(View view) {
+        ivNext.setOnClickListener(v -> moveForward(view));
+        ivPrevious.setOnClickListener(v -> moveBackward(view));
 
         tvAddBreakfast.setOnClickListener(v -> addFood("Breakfast"));
         tvAddLunch.setOnClickListener(v -> addFood("Lunch"));
         tvAddDinner.setOnClickListener(v -> addFood("Dinner"));
         tvAddSnacks.setOnClickListener(v -> addFood("Snacks"));
         tvAddExercise.setOnClickListener(v -> addExercise());
+//        //delete from list
+        lvWorkoutHistory.setOnItemLongClickListener((parent, v, position, id) -> {
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
+            alertDialog.setMessage("Are you sure you want to delete this workout?");
+            alertDialog.setPositiveButton("ok", (dialog, which) -> {
+                List<Workout> workoutList = dailyData.getWorkouts();
+                workoutList.remove(position);
+                dailyData.setWorkouts(workoutList);
+                setWorkouts();
+                saveChanges();
+            });
+            alertDialog.setNegativeButton("cancel", (dialog, which) -> {
+            });
+            alertDialog.create().show();
+            return true;
+        });
+
+        lvBreakfast.setOnItemLongClickListener((parent, v, position, id) -> {
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
+            alertDialog.setMessage("Are you sure you want to delete this recipe?");
+            alertDialog.setPositiveButton("ok", (dialog, which) -> {
+                List<Recipe> recipeList = dailyData.getBreakfast();
+                recipeList.remove(position);
+                dailyData.setBreakfast(recipeList);
+                setFoodList(recipeList, tvTotalBreakfastCalories, lvBreakfast);
+                saveChanges();
+            });
+            alertDialog.setNegativeButton("cancel", (dialog, which) -> {
+            });
+            alertDialog.create().show();
+            return true;
+        });
+        lvLunch.setOnItemLongClickListener((parent, v, position, id) -> {
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
+            alertDialog.setMessage("Are you sure you want to delete this recipe?");
+            alertDialog.setPositiveButton("ok", (dialog, which) -> {
+                List<Recipe> recipeList = dailyData.getLunch();
+                recipeList.remove(position);
+                dailyData.setLunch(recipeList);
+                setFoodList(recipeList, tvTotalLunchCalories, lvLunch);
+                saveChanges();
+            });
+            alertDialog.setNegativeButton("cancel", (dialog, which) -> {
+            });
+            alertDialog.create().show();
+            return true;
+        });
+        lvDinner.setOnItemLongClickListener((parent, v, position, id) -> {
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
+            alertDialog.setMessage("Are you sure you want to delete this recipe?");
+            alertDialog.setPositiveButton("ok", (dialog, which) -> {
+                List<Recipe> recipeList = dailyData.getDinner();
+                recipeList.remove(position);
+                dailyData.setDinner(recipeList);
+                setFoodList(recipeList, tvTotalDinnerCalories, lvDinner);
+                saveChanges();
+            });
+            alertDialog.setNegativeButton("cancel", (dialog, which) -> {
+            });
+            alertDialog.create().show();
+            return true;
+        });
+
+        lvSnacks.setOnItemLongClickListener((parent, v, position, id) -> {
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
+            alertDialog.setMessage("Are you sure you want to delete this recipe?");
+            alertDialog.setPositiveButton("ok", (dialog, which) -> {
+                List<Recipe> recipeList = dailyData.getSnacks();
+                recipeList.remove(position);
+                dailyData.setSnacks(recipeList);
+                setFoodList(recipeList, tvTotalSnackCalories, lvSnacks);
+                saveChanges();
+            });
+            alertDialog.setNegativeButton("cancel", (dialog, which) -> {
+            });
+            alertDialog.create().show();
+            return true;
+        });
+
+    }
+
+    private void saveChanges() {
+
+
+        String currentDate = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH).format(getCurrentDate());
+        if (diaryDate.equals(currentDate)) {
+            updateDailyDataToDB();
+        } else {
+            updateDailyDataToDB(diaryDate);
+        }
+    }
+
+    @NonNull
+    private Date getCurrentDate() {
+        Calendar calendar = Calendar.getInstance();
+        return calendar.getTime();
+    }
+
+    /********************************* DATABASE ACCESS ********************************************/
+    private void updateDailyDataToDB(String diaryDate) {
+        dailyDataDAO.update(dailyData, diaryDate).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DailyDataHolder.getInstance().setData(dailyData);
+                Log.d(TAG, "Daily data updated successfully!");
+            } else {
+                Log.d(TAG, "Daily data update went wrong!");
+            }
+        });
+    }
+
+    private void updateDailyDataToDB() {
+        dailyDataDAO.update(dailyData).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DailyDataHolder.getInstance().setData(dailyData);
+                Log.d(TAG, "Daily data updated successfully!");
+            } else {
+                Log.d(TAG, "Daily data update went wrong!");
+            }
+        });
     }
 
     /********************************* INIT DATA ***************************************************/
@@ -182,7 +298,6 @@ public class DiaryFragment extends Fragment {
     }
 
     private void getDailyData(String date) {
-        DailyDataDAO dailyDataDAO = new DailyDataDAOImpl();
         dailyDataDAO.get(date).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -317,24 +432,23 @@ public class DiaryFragment extends Fragment {
     }
 
     /********************************* VIEW ACTIONS ************************************************/
-    private void moveForward() {
-        playPageTransitionAnimation(AnimationUtils.loadAnimation(DiaryFragment.this.getContext(), R.anim.slide_right));
+    private void moveForward(View view) {
+        playPageTransitionAnimation(AnimationUtils.loadAnimation(DiaryFragment.this.getContext(), R.anim.slide_right), view);
         calendar.add(Calendar.DAY_OF_YEAR, DAYS_TO_MOVE);
         Date newDate = calendar.getTime();
         updateFoodDiary(newDate);
     }
 
-    private void moveBackward() {
-        playPageTransitionAnimation(AnimationUtils.loadAnimation(DiaryFragment.this.getContext(), R.anim.slide_left));
+    private void moveBackward(View view) {
+        playPageTransitionAnimation(AnimationUtils.loadAnimation(DiaryFragment.this.getContext(), R.anim.slide_left), view);
         calendar.add(Calendar.DAY_OF_YEAR, -DAYS_TO_MOVE);
         Date newDate = calendar.getTime();
         updateFoodDiary(newDate);
     }
 
-    private void playPageTransitionAnimation(Animation animation) {
+    private void playPageTransitionAnimation(Animation animation, View view) {
         view.startAnimation(animation);
     }
-
 
     /*********************************** LIFECYCLE OVERRIDES ***************************************/
     @Override
@@ -349,5 +463,6 @@ public class DiaryFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         this.context = context;
+        this.dailyDataDAO = new DailyDataDAOImpl();
     }
 }

@@ -10,6 +10,7 @@ import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +32,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.Objects;
@@ -51,6 +53,7 @@ public class ProfileActivity extends AppCompatActivity implements ChangeProfileI
     TextView tvCountry;
     private TextView tvPassword;
     private CircleImageView ivProfilePicture;
+    private ProgressBar progressBar;
     // attributes
     private String gender;
     private boolean imagePickerOpen = false;
@@ -62,6 +65,7 @@ public class ProfileActivity extends AppCompatActivity implements ChangeProfileI
     private StorageReference storageReference;
     private FirebaseUser firebaseUser;
     private Context context;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +97,8 @@ public class ProfileActivity extends AppCompatActivity implements ChangeProfileI
         tvPassword = findViewById(R.id.tvPassword);
         tvCountry = findViewById(R.id.tvCountry);
         ivProfilePicture = findViewById(R.id.ivProfilePicture);
+        progressBar = findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.VISIBLE);
     }
 
     private void setUpFirebase() {
@@ -282,9 +288,21 @@ public class ProfileActivity extends AppCompatActivity implements ChangeProfileI
             Picasso.get()
                     .load(imageUrl)
                     .rotate(90)
-                    .into(ivProfilePicture);
+                    .into(ivProfilePicture, new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            progressBar.setVisibility(View.GONE);
+                        }
+
+                        @Override
+                        public void onError(Exception e) {
+                            setBaseProfileImage(gender);
+                            progressBar.setVisibility(View.GONE);
+                        }
+                    });
         } else {
             setBaseProfileImage(gender);
+            progressBar.setVisibility(View.GONE);
         }
 
     }

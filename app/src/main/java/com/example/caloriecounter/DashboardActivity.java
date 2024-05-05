@@ -206,7 +206,7 @@ public class DashboardActivity extends AppCompatActivity {
 
     public static void redirectActivity(Activity activity, Class<?> destinationActivity) {
         Intent intent = new Intent(activity, destinationActivity);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
         activity.startActivity(intent);
     }
 
@@ -225,7 +225,7 @@ public class DashboardActivity extends AppCompatActivity {
         mAuth.signOut();
 
         Intent mainActivity = new Intent(mContext, MainActivity.class);
-        mainActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        mainActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(mainActivity);
         finish();
     }
@@ -314,6 +314,7 @@ public class DashboardActivity extends AppCompatActivity {
         Log.d(TAG, "Starting FoodActivity..");
         Intent intent = new Intent(mContext, AddFoodActivity.class);
         intent.putExtra("MEAL", meal);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 

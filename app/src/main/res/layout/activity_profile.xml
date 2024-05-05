@@ -22,165 +22,184 @@
         app:titleTextAppearance="@style/Theme.CalorieCounter"
         app:titleTextColor="@color/white" />
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <!--        <ImageView-->
-        <!--            android:layout_width="150dp"-->
-        <!--            android:layout_height="150dp"-->
-        <!--            android:id="@+id/ivProfilePicture"-->
-        <!--            android:layout_gravity="center"-->
-        <!--            android:background="@drawable/profile_icon_female"-->
-        <!--            android:layout_marginTop="30dp"-->
-        <!--            android:contentDescription="@string/profile_picture">-->
-        <!--        </ImageView>-->
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/ivProfilePicture"
-            android:layout_width="140dp"
-            android:layout_height="140dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="30dp"
-            android:contentDescription="@string/loading"
-           />
-
-        <!--   name   -->
-        <TextView
-            android:id="@+id/tvName"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="28dp"
-            android:autofillHints=""
-            android:background="@drawable/custom_input_text"
-            android:drawablePadding="8dp"
-            android:fontFamily="@font/lora_font"
-            android:hint="@string/loading"
-            android:minHeight="48dp"
-            android:padding="8dp"
-            android:textColor="@color/gray"
-            android:textColorHint="@color/gray"
-            android:textSize="@dimen/text_size"
-            app:drawableEndCompat="@drawable/ic_edit"
-            app:drawableStartCompat="@drawable/ic_user" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <!--    email   -->
-        <TextView
-            android:id="@+id/tvEmail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="21dp"
-            android:autofillHints=""
-            android:background="@drawable/custom_input_text"
-            android:drawablePadding="8dp"
-            android:fontFamily="@font/lora_font"
-            android:hint="@string/loading"
-            android:minHeight="48dp"
-            android:padding="8dp"
-            android:textColor="@color/gray"
-            android:textColorHint="@color/gray"
-            android:textSize="@dimen/text_size"
-            app:drawableEndCompat="@drawable/ic_edit"
-            app:drawableStartCompat="@drawable/ic_email" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-        <!--    password    -->
-        <TextView
-            android:id="@+id/tvPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="21dp"
-            android:autofillHints=""
-            android:background="@drawable/custom_input_text"
-            android:drawablePadding="8dp"
-            android:fontFamily="@font/lora_font"
-            android:hint="@string/loading"
-            android:longClickable="false"
-            android:minHeight="48dp"
-            android:padding="8dp"
-            android:textColor="@color/gray"
-            android:textColorHint="@color/gray"
-            android:textSize="@dimen/text_size"
-            app:drawableEndCompat="@drawable/ic_edit"
-            app:drawableStartCompat="@drawable/ic_password" />
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/ivProfilePicture"
+                    android:layout_width="140dp"
+                    android:layout_height="140dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="30dp"
+                    android:contentDescription="@string/loading"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-        <!--    DOB   -->
-        <TextView
-            android:id="@+id/tvDOB"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="21dp"
-            android:autofillHints=""
-            android:background="@drawable/custom_input_text"
-            android:drawablePadding="8dp"
-            android:fontFamily="@font/lora_font"
-            android:hint="@string/loading"
-            android:minHeight="48dp"
-            android:padding="8dp"
-            android:textColor="@color/gray"
-            android:textColorHint="@color/gray"
-            android:textSize="@dimen/text_size"
-            app:drawableEndCompat="@drawable/ic_edit"
-            app:drawableStartCompat="@drawable/ic_date" />
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginHorizontal="56dp"
+                    android:indeterminateTint="@color/eatwellgreen"
+                    android:padding="8dp"
+                    android:progressBackgroundTint="@color/eatwellgreen"
+                    android:progressDrawable="@drawable/progress_bar"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-        <!--    gender   -->
-        <TextView
-            android:id="@+id/tvGender"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="21dp"
-            android:autofillHints=""
-            android:background="@drawable/custom_input_text"
-            android:drawablePadding="8dp"
-            android:fontFamily="@font/lora_font"
-            android:hint="@string/loading"
-            android:minHeight="48dp"
-            android:padding="8dp"
-            android:textColor="@color/gray"
-            android:textColorHint="@color/gray"
-            android:textSize="@dimen/text_size"
-            app:drawableEndCompat="@drawable/ic_edit"
-            app:drawableStartCompat="@drawable/ic_gender" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <!--    country   -->
-        <TextView
-            android:id="@+id/tvCountry"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="21dp"
-            android:autofillHints=""
-            android:background="@drawable/custom_input_text"
-            android:drawablePadding="8dp"
-            android:fontFamily="@font/lora_font"
-            android:hint="@string/loading"
-            android:minHeight="48dp"
-            android:padding="8dp"
-            android:textColor="@color/gray"
-            android:textColorHint="@color/gray"
-            android:textSize="@dimen/text_size"
-            app:drawableEndCompat="@drawable/ic_edit"
-            app:drawableStartCompat="@drawable/ic_location" />
+            <!--   name   -->
+            <TextView
+                android:id="@+id/tvName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="28dp"
+                android:autofillHints=""
+                android:background="@drawable/custom_input_text"
+                android:drawablePadding="8dp"
+                android:fontFamily="@font/lora_font"
+                android:hint="@string/loading"
+                android:minHeight="48dp"
+                android:padding="8dp"
+                android:textColor="@color/gray"
+                android:textColorHint="@color/gray"
+                android:textSize="@dimen/text_size"
+                app:drawableEndCompat="@drawable/ic_edit"
+                app:drawableStartCompat="@drawable/ic_user" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnSave"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="48dp"
-            android:background="@drawable/button_animation"
-            android:fontFamily="@font/lora_font"
-            android:maxWidth="78dip"
-            android:minWidth="48dip"
-            android:onClick="onSaveProfileData"
-            android:text="@string/save"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="@dimen/text_size" />
+            <!--    email   -->
+            <TextView
+                android:id="@+id/tvEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="21dp"
+                android:autofillHints=""
+                android:background="@drawable/custom_input_text"
+                android:drawablePadding="8dp"
+                android:fontFamily="@font/lora_font"
+                android:hint="@string/loading"
+                android:minHeight="48dp"
+                android:padding="8dp"
+                android:textColor="@color/gray"
+                android:textColorHint="@color/gray"
+                android:textSize="@dimen/text_size"
+                app:drawableEndCompat="@drawable/ic_edit"
+                app:drawableStartCompat="@drawable/ic_email" />
 
-    </LinearLayout>
+            <!--    password    -->
+            <TextView
+                android:id="@+id/tvPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="21dp"
+                android:autofillHints=""
+                android:background="@drawable/custom_input_text"
+                android:drawablePadding="8dp"
+                android:fontFamily="@font/lora_font"
+                android:hint="@string/loading"
+                android:longClickable="false"
+                android:minHeight="48dp"
+                android:padding="8dp"
+                android:textColor="@color/gray"
+                android:textColorHint="@color/gray"
+                android:textSize="@dimen/text_size"
+                app:drawableEndCompat="@drawable/ic_edit"
+                app:drawableStartCompat="@drawable/ic_password" />
+
+            <!--    DOB   -->
+            <TextView
+                android:id="@+id/tvDOB"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="21dp"
+                android:autofillHints=""
+                android:background="@drawable/custom_input_text"
+                android:drawablePadding="8dp"
+                android:fontFamily="@font/lora_font"
+                android:hint="@string/loading"
+                android:minHeight="48dp"
+                android:padding="8dp"
+                android:textColor="@color/gray"
+                android:textColorHint="@color/gray"
+                android:textSize="@dimen/text_size"
+                app:drawableEndCompat="@drawable/ic_edit"
+                app:drawableStartCompat="@drawable/ic_date" />
+
+            <!--    gender   -->
+            <TextView
+                android:id="@+id/tvGender"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="21dp"
+                android:autofillHints=""
+                android:background="@drawable/custom_input_text"
+                android:drawablePadding="8dp"
+                android:fontFamily="@font/lora_font"
+                android:hint="@string/loading"
+                android:minHeight="48dp"
+                android:padding="8dp"
+                android:textColor="@color/gray"
+                android:textColorHint="@color/gray"
+                android:textSize="@dimen/text_size"
+                app:drawableEndCompat="@drawable/ic_edit"
+                app:drawableStartCompat="@drawable/ic_gender" />
+
+            <!--    country   -->
+            <TextView
+                android:id="@+id/tvCountry"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="21dp"
+                android:autofillHints=""
+                android:background="@drawable/custom_input_text"
+                android:drawablePadding="8dp"
+                android:fontFamily="@font/lora_font"
+                android:hint="@string/loading"
+                android:minHeight="48dp"
+                android:padding="8dp"
+                android:textColor="@color/gray"
+                android:textColorHint="@color/gray"
+                android:textSize="@dimen/text_size"
+                app:drawableEndCompat="@drawable/ic_edit"
+                app:drawableStartCompat="@drawable/ic_location" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnSave"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="48dp"
+                android:background="@drawable/button_animation"
+                android:fontFamily="@font/lora_font"
+                android:maxWidth="78dip"
+                android:minWidth="48dip"
+                android:minHeight="48dp"
+                android:onClick="onSaveProfileData"
+                android:text="@string/save"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size" />
+
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

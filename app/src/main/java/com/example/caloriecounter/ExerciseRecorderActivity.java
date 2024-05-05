@@ -58,7 +58,6 @@ public class ExerciseRecorderActivity extends AppCompatActivity {
         initActivity();
         setUpSaveButtonListener();
         setUpTabsAndViewPager();
-
     }
 
     /********************************* SET UP VIEWS ***********************************************/

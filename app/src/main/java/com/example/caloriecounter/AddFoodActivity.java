@@ -28,13 +28,13 @@ public class AddFoodActivity extends AppCompatActivity {
 
     private final String TAG = "AddFoodActivity";
     private Context context;
-    
+
     private String meal;
     private List<Food> foods;
-    
+
     private RecyclerView rvFoods;
     private EditText etSearchFoods;
- 
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,9 +114,10 @@ public class AddFoodActivity extends AppCompatActivity {
         intent.putExtra("MEAL", meal);
         intent.putExtra("FOOD", food);
         intent.putExtra("DATE", date);
-
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
+
 
     /********************************* SET UP TOOLBAR *********************************************/
     private void setToolbar() {
