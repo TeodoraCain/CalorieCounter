@@ -7,10 +7,12 @@
     <uses-permission android:name="android.permission.SENSOR_ACCELEROMETER" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 
-    <attribution
-        android:label="@string/app_name"
-        android:tag="calorieCounter" />
+<!--    <attribution-->
+<!--        android:label="@string/app_name"-->
+<!--        android:tag="calorieCounter" />-->
 
     <uses-feature
         android:name="android.hardware.sensor.accelerometer"
@@ -27,6 +29,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CalorieCounter"
         tools:targetApi="31">
+        <activity
+            android:name=".AddFromCameraActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
         <activity
             android:name=".SettingsActivity"
             android:exported="false">
@@ -77,7 +86,14 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".RecipeCreationActivity"
+            android:name=".CreateRecipeActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".AddRecipeActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

@@ -34,6 +34,8 @@ import com.example.caloriecounter.models.dao.Recipe;
 import com.example.caloriecounter.models.dao.Workout;
 import com.example.caloriecounter.models.dataHolders.DailyDataHolder;
 import com.example.caloriecounter.models.dataHolders.GoalDataHolder;
+import com.example.caloriecounter.models.dataModel.IntentKeys;
+import com.example.caloriecounter.models.dataModel.Meal;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -163,10 +165,10 @@ public class DiaryFragment extends Fragment {
         ivNext.setOnClickListener(v -> moveForward(view));
         ivPrevious.setOnClickListener(v -> moveBackward(view));
 
-        tvAddBreakfast.setOnClickListener(v -> addFood("Breakfast"));
-        tvAddLunch.setOnClickListener(v -> addFood("Lunch"));
-        tvAddDinner.setOnClickListener(v -> addFood("Dinner"));
-        tvAddSnacks.setOnClickListener(v -> addFood("Snacks"));
+        tvAddBreakfast.setOnClickListener(v -> addFood(Meal.BREAKFAST));
+        tvAddLunch.setOnClickListener(v -> addFood(Meal.LUNCH));
+        tvAddDinner.setOnClickListener(v -> addFood(Meal.DINNER));
+        tvAddSnacks.setOnClickListener(v -> addFood(Meal.SNACKS));
         tvAddExercise.setOnClickListener(v -> addExercise());
 //        //delete from list
         lvWorkoutHistory.setOnItemLongClickListener((parent, v, position, id) -> {
@@ -250,8 +252,6 @@ public class DiaryFragment extends Fragment {
     }
 
     private void saveChanges() {
-
-
         String currentDate = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH).format(getCurrentDate());
         if (diaryDate.equals(currentDate)) {
             updateDailyDataToDB();
@@ -419,15 +419,15 @@ public class DiaryFragment extends Fragment {
     /********************************* ONCLICK ACTIONS *********************************************/
     private void addExercise() {
         Intent intent = new Intent(context, AddExerciseActivity.class);
-        intent.putExtra("FROMDIARY", true);
-        intent.putExtra("DATE", diaryDate);
+        intent.putExtra(IntentKeys.FROMDIARY, true);
+        intent.putExtra(IntentKeys.DATE, diaryDate);
         startActivity(intent);
     }
 
     private void addFood(String meal) {
         Intent intent = new Intent(context, AddFoodActivity.class);
-        intent.putExtra("MEAL", meal);
-        intent.putExtra("DATE", diaryDate);
+        intent.putExtra(IntentKeys.MEAL, meal);
+        intent.putExtra(IntentKeys.DATE, diaryDate);
         startActivity(intent);
     }
 

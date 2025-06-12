@@ -73,9 +73,9 @@ public class WeightLogDisplay extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
     }
 
-    private void initContext() {
-       // context = WeightLogDisplay.this;
-    }
+//    private void initContext() {
+//       // context = WeightLogDisplay.this;
+//    }
 
     private void parseIntentExtras() {
         Intent intent = this.getIntent();

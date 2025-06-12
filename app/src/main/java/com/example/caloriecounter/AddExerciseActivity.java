@@ -19,6 +19,7 @@ import com.example.caloriecounter.adapters.FirebaseExerciseRecyclerViewerAdapter
 import com.example.caloriecounter.models.dao.Exercise;
 import com.example.caloriecounter.models.dao.ExerciseDAO;
 import com.example.caloriecounter.models.dao.ExerciseDAOImpl;
+import com.example.caloriecounter.models.dataModel.IntentKeys;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 
 import java.util.Objects;
@@ -89,18 +90,13 @@ public class AddExerciseActivity extends AppCompatActivity implements FirebaseEx
     /********************************* RecyclerViewInterface OVERRIDE *****************************/
     @Override
     public void onItemClick(int position) {
-        final String EXERCISE = "EXERCISE";
-        final String CALORIES = "CALORIES";
-        final String FROMDIARY = "FROMDIARY";
-        final String DATE = "DATE";
-
         Log.d(TAG, "ItemClick: Clicked on " + rvAdapter.getItem(position).getName());
 
         Intent intent = new Intent(context, ExerciseRecorderActivity.class);
-        intent.putExtra(FROMDIARY, this.getIntent().getBooleanExtra(FROMDIARY, false));
-        intent.putExtra("DATE", this.getIntent().getStringExtra(DATE));
-        intent.putExtra(EXERCISE, rvAdapter.getItem(position).getName());
-        intent.putExtra(CALORIES, String.valueOf(rvAdapter.getItem(position).getCalories()));
+        intent.putExtra(IntentKeys.FROMDIARY, this.getIntent().getBooleanExtra(IntentKeys.FROMDIARY, false));
+        intent.putExtra(IntentKeys.DATE, this.getIntent().getStringExtra(IntentKeys.DATE));
+        intent.putExtra(IntentKeys.EXERCISE, rvAdapter.getItem(position).getName());
+        intent.putExtra(IntentKeys.CALORIES, String.valueOf(rvAdapter.getItem(position).getCalories()));
 
         startActivity(intent);
         this.finish();

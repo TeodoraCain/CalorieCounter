@@ -43,6 +43,7 @@ import com.example.caloriecounter.models.dao.UserDetails;
 import com.example.caloriecounter.models.dataHolders.DailyDataHolder;
 import com.example.caloriecounter.models.dataHolders.GoalDataHolder;
 import com.example.caloriecounter.models.dataHolders.UserDetailsHolder;
+import com.example.caloriecounter.view.dialog.SelectMealTypeDialog;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
@@ -75,7 +76,7 @@ public class HomeFragment extends Fragment implements SensorEventListener {
     private TextView tvGoalCalories, tvStepGoal, tvTotalCalories, tvTotalFoodCalories, tvTotalExerciseCalories, tvCaloriesConsumedExercise, tvTimeElapsedExercise, tvBreakfastCalories, tvLunchCalories, tvDinnerCalories, tvSnacksCalories;
     private TextView tvStepCount;
     private TextView tvTotalWaterIntake;
-    private ImageView ivAddWaterIntake, ivAddWeight, ivAddExercise;
+    private ImageView ivAddFoodCalories, ivAddWaterIntake, ivAddWeight, ivAddExercise;
     private ProgressBar pbTotalCalories;
     private ProgressBar pbSteps;
 
@@ -135,6 +136,7 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         stepHistory = view.findViewById(R.id.stepHistory);
         waterHistory = view.findViewById(R.id.waterHistory);
 
+        ivAddFoodCalories = view.findViewById(R.id.ivAddFoodCalories);
         ivAddExercise = view.findViewById(R.id.ivAddExercise);
         ivAddWaterIntake = view.findViewById(R.id.ivAddWater);
         ivAddWeight = view.findViewById(R.id.ivAddWeight);
@@ -155,8 +157,15 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         stepHistory.setOnClickListener(v -> goToActivity(StepLogActivity.class));
         waterHistory.setOnClickListener(v -> goToActivity(WaterLogActivity.class));
         ivAddWeight.setOnClickListener(v -> goToActivity(AddWeightActivity.class));
+        ivAddFoodCalories.setOnClickListener(v ->onShowMealTypeDialog());
+        //ivAddFoodCalories.setOnClickListener(v -> goToActivity(AddFoodActivity.class));
         ivAddExercise.setOnClickListener(v -> goToActivity(AddExerciseActivity.class));
         ivAddWaterIntake.setOnClickListener(v -> addWaterIntake());
+    }
+
+    private void onShowMealTypeDialog() {
+        SelectMealTypeDialog selectMealTypeDialog = new SelectMealTypeDialog();
+        selectMealTypeDialog.show(requireActivity().getSupportFragmentManager(), "Select Meal Type");
     }
 
     private void initUserData() {
@@ -214,9 +223,17 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         }
 
         weightUnit = userDetails.getWeightUnit();
-        int height = Integer.parseInt(userDetails.getHeight());
         heightUnit = userDetails.getHeightUnit();
-        bmi = calculateBMI(height, weight);
+
+        int height;
+        bmi = 0;
+        try {
+            height = Integer.parseInt(userDetails.getHeight());
+            bmi = calculateBMI(height, weight);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+
         setWeightChart();
     }
 

@@ -23,12 +23,16 @@ import com.example.caloriecounter.models.dao.FoodDAOImpl;
 import com.example.caloriecounter.models.dao.GoalDAOImpl;
 import com.example.caloriecounter.models.dao.GoalData;
 import com.example.caloriecounter.models.dao.GoalDataDAO;
+import com.example.caloriecounter.models.dao.Recipe;
+import com.example.caloriecounter.models.dao.RecipeDAO;
+import com.example.caloriecounter.models.dao.RecipeDAOImpl;
 import com.example.caloriecounter.models.dao.UserDAO;
 import com.example.caloriecounter.models.dao.UserDAOImpl;
 import com.example.caloriecounter.models.dao.UserDetails;
 import com.example.caloriecounter.models.dataHolders.DailyDataHolder;
 import com.example.caloriecounter.models.dataHolders.FoodListHolder;
 import com.example.caloriecounter.models.dataHolders.GoalDataHolder;
+import com.example.caloriecounter.models.dataHolders.RecipeListHolder;
 import com.example.caloriecounter.models.dataHolders.UserDetailsHolder;
 import com.example.caloriecounter.models.dataHolders.WorkoutListHolder;
 import com.google.firebase.auth.FirebaseAuth;
@@ -101,6 +105,30 @@ public class SplashActivity extends AppCompatActivity {
         initGoalData();
         initFoodList();
         initDailyData();
+        initRecipeData();
+    }
+
+    private void initRecipeData() {
+        RecipeDAO recipeDAO = new RecipeDAOImpl();
+        recipeDAO.get().addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Log.d(TAG, "Recipe data initiated.");
+                List<Recipe> recipeList = new ArrayList<>();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    Recipe recipe = dataSnapshot.getValue(Recipe.class);
+                    recipeList.add(recipe);
+                }
+                RecipeListHolder.getInstance().setData(recipeList);
+                checkAndStartNewIntent();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(context, "Something went wrong!", Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "Recipe data failed to initiate.");
+            }
+        });
     }
 
     private void initFoodList() {

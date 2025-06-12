@@ -15,27 +15,27 @@ import java.util.List;
 
 public class WorkoutAdapter extends ArrayAdapter<Workout> {
 
-    private final Context mContext;
-    private final List<Workout> mWorkoutList;
+    private final Context context;
+    private final List<Workout> workoutList;
 
     public WorkoutAdapter(Context context, List<Workout> workoutList) {
         super(context, 0, workoutList);
-        mContext = context;
-        mWorkoutList = workoutList;
+        this.context = context;
+        this.workoutList = workoutList;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View listItem = convertView;
         if (listItem == null) {
-            listItem = LayoutInflater.from(mContext).inflate(R.layout.cutom_diary_workout_list_item, parent, false);
+            listItem = LayoutInflater.from(context).inflate(R.layout.cutom_list_item, parent, false);
         }
 
-        Workout currentWorkout = mWorkoutList.get(position);
+        Workout currentWorkout = workoutList.get(position);
 
-        TextView workoutName = listItem.findViewById(R.id.tvWorkoutName);
-        TextView minutesElapsed = listItem.findViewById(R.id.tvMinutesElapsed);
-        TextView caloriesConsumed = listItem.findViewById(R.id.tvCaloriesConsumed);
+        TextView workoutName = listItem.findViewById(R.id.tvItemName);
+        TextView minutesElapsed = listItem.findViewById(R.id.tvItemDetail1);
+        TextView caloriesConsumed = listItem.findViewById(R.id.tvItemDetail2);
         // Customize how you want to display each Workout object
         if (currentWorkout != null) {
             workoutName.setText(currentWorkout.getName()); // For example, display the name of the workout

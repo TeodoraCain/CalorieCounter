@@ -1,10 +1,15 @@
 package com.example.caloriecounter.models.dao;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("unused")
-public class Recipe {
+public class Recipe implements Parcelable {
     private String name;
     private List<Food> ingredients;
     private double serving_size;
@@ -17,11 +22,19 @@ public class Recipe {
         this.calories = 0;
     }
 
-    public Recipe(String name, List<Food> ingredients, double serving_size, double calories) {
+    public Recipe(String name, List<Food> ingredients, double serving_size) {
         this.name = name;
         this.ingredients = ingredients;
         this.serving_size = serving_size;
-        this.calories = calories;
+        this.calories = calculateRecipeCalories(ingredients);
+    }
+
+    private double calculateRecipeCalories(List<Food> ingredients) {
+        double totalCalories = 0;
+        for(Food food : ingredients){
+            totalCalories+= food.getCalories();
+        }
+        return  totalCalories;
     }
 
     public double getServing_size() {
@@ -55,4 +68,39 @@ public class Recipe {
     public void setIngredients(List<Food> ingredients) {
         this.ingredients = ingredients;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeTypedList(ingredients);
+        dest.writeDouble(serving_size);
+        dest.writeDouble(calories);
+
+    }
+
+    public static final Creator<Recipe> CREATOR = new Creator<Recipe>() {
+        @Override
+        public Recipe createFromParcel(Parcel in) {
+            return new Recipe(in);
+        }
+
+        @Override
+        public Recipe[] newArray(int size) {
+            return new Recipe[size];
+        }
+    };
+
+    protected Recipe(Parcel in) {
+        this.name = in.readString();
+        this.ingredients = in.createTypedArrayList(Food.CREATOR);
+        this.serving_size = in.readDouble();
+        this.calories = in.readDouble();
+
+    }
+
 }

@@ -8,20 +8,20 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.caloriecounter.R;
-import com.example.caloriecounter.models.dao.Recipe;
+import com.example.caloriecounter.models.dao.Food;
 
 import java.text.MessageFormat;
 import java.util.List;
 
-public class RecipeAdapter extends ArrayAdapter<Recipe> {
+public class FoodAdapter extends ArrayAdapter<Food> {
 
     private final Context context;
-    private final List<Recipe> recipeList;
+    private final List<Food> foodList;
 
-    public RecipeAdapter(Context context, List<Recipe> recipeList) {
-        super(context, 0, recipeList);
+    public FoodAdapter(Context context, List<Food> foodList) {
+        super(context, 0, foodList);
         this.context = context;
-        this.recipeList = recipeList;
+        this.foodList = foodList;
     }
 
     @Override
@@ -31,16 +31,16 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
             listItem = LayoutInflater.from(context).inflate(R.layout.cutom_list_item, parent, false);
         }
 
-        Recipe recipe = recipeList.get(position);
+        Food food = foodList.get(position);
 
-        TextView tvWorkoutName = listItem.findViewById(R.id.tvItemName);
+        TextView tvFoodName = listItem.findViewById(R.id.tvItemName);
         TextView tvServingSize = listItem.findViewById(R.id.tvItemDetail1);
         TextView tvCalories = listItem.findViewById(R.id.tvItemDetail2);
 
-        if (recipe != null) {
-            tvWorkoutName.setText(recipe.getName());
-            tvServingSize.setText(MessageFormat.format("{0} grams", recipe.getServing_size()));
-            tvCalories.setText(MessageFormat.format("{0} kcal", recipe.getCalories()));
+        if (food != null) {
+            tvFoodName.setText(food.getName());
+            tvServingSize.setText(MessageFormat.format("{0} grams", food.getServing_size()));
+            tvCalories.setText(MessageFormat.format("{0} kcal", food.getCalories()));
         }
 
         return listItem;

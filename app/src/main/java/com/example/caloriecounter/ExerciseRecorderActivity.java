@@ -24,6 +24,7 @@ import com.example.caloriecounter.models.dao.DailyDataDAO;
 import com.example.caloriecounter.models.dao.DailyDataDAOImpl;
 import com.example.caloriecounter.models.dao.Workout;
 import com.example.caloriecounter.models.dataHolders.DailyDataHolder;
+import com.example.caloriecounter.models.dataModel.IntentKeys;
 import com.example.caloriecounter.view.fragments.exercise.ExerciseRecordFragment;
 import com.example.caloriecounter.view.fragments.exercise.ExerciseTimerFragment;
 import com.google.android.material.tabs.TabLayout;
@@ -237,14 +238,11 @@ public class ExerciseRecorderActivity extends AppCompatActivity {
     /********************************* TOOLBAR ****************************************************/
     private void setToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
-        final String EXERCISE = "EXERCISE";
-        final String FROMDIARY = "FROMDIARY";
-        final String DATE = "DATE";
 
         Intent intent = this.getIntent();
-        fromDiary = intent.getBooleanExtra(FROMDIARY, false);
-        exercise = intent.getStringExtra(EXERCISE);
-        date = intent.getStringExtra(DATE);
+        fromDiary = intent.getBooleanExtra(IntentKeys.FROMDIARY, false);
+        exercise = intent.getStringExtra(IntentKeys.EXERCISE);
+        date = intent.getStringExtra(IntentKeys.DATE);
         toolbar.setTitle(exercise);
         setSupportActionBar(toolbar);
 

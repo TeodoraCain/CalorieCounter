@@ -63,7 +63,7 @@ public class NutritionDisplayActivityTest {
         activity.tvVitaminC = tvVitaminC;
 
         currentFood = new Food("Apple", 100.0, 52.0, 0.2, 0.0, 1.0, 54.0, 0.0, 0.0, 8.4, 0.0, 0.1, 5.0, 11.0, 0.2, 5.0, 107.0, 0.0, 13.8, 10.4, 2.4);
-        activity.currentFood = currentFood;
+        activity.setSelectedFood(currentFood);
     }
 
     //severitate medie

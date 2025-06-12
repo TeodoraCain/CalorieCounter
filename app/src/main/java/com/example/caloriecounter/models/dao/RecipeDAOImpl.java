@@ -6,6 +6,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.List;
 import java.util.Objects;
 
 @SuppressWarnings("unused")
@@ -26,16 +27,21 @@ public class RecipeDAOImpl implements RecipeDAO {
 
     @Override
     public Task<Void> add(Recipe recipe) {
-        return recipesDatabaseReference.setValue(recipe);
+        return null;
     }
 
     @Override
     public Task<Void> update(Recipe recipe) {
-        return recipesDatabaseReference.setValue(recipe);
+        return null;
     }
 
     @Override
     public Task<Void> delete() {
-        return recipesDatabaseReference.removeValue();
+        return null;
+    }
+
+    @Override
+    public Task<Void> update(List<Recipe> recipes) {
+        return recipesDatabaseReference.setValue(recipes);
     }
 }

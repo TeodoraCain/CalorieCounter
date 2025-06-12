@@ -49,12 +49,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     /********************************* INIT ACTIVITY **********************************************/
-    private void setUpFirebase() {
-        authProfile = FirebaseAuth.getInstance();
-    }
-
     private void initContext() {
         context = LoginActivity.this;
+    }
+    private void setUpFirebase() {
+        authProfile = FirebaseAuth.getInstance();
     }
 
     private void setUpViews() {

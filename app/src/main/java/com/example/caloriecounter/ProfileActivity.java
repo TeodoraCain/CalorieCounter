@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.MenuItem;
@@ -35,6 +37,9 @@ import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -118,7 +123,20 @@ public class ProfileActivity extends AppCompatActivity implements ChangeProfileI
                 Intent data = result.getData();
                 if (data != null && data.getData() != null) {
                     selectedImageUri = data.getData();
-                    ivProfilePicture.setImageURI(selectedImageUri);
+//                    ivProfilePicture.setImageURI(selectedImageUri);
+                    String mimeType = getContentResolver().getType(selectedImageUri);
+                    if (mimeType != null && mimeType.equalsIgnoreCase("image/heic")) {
+                        File jpgFile = null;
+                        try {
+                            jpgFile = convertHeicToJpg(selectedImageUri);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        selectedImageUri = Uri.fromFile(jpgFile);
+                    }
+                        ivProfilePicture.setImageURI(selectedImageUri);
+
+
                 }
             }
         });
@@ -157,6 +175,19 @@ public class ProfileActivity extends AppCompatActivity implements ChangeProfileI
 
         alertDialog.create().show();
     }
+
+    private File convertHeicToJpg(Uri heicUri) throws IOException {
+        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), heicUri);
+
+        File jpgFile = new File(getCacheDir(), "converted_" + System.currentTimeMillis() + ".jpg");
+
+        FileOutputStream outputStream = new FileOutputStream(jpgFile);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+        outputStream.close();
+
+        return jpgFile;
+    }
+
 
     /********************************* DATABASE ACCESS ********************************************/
     @SuppressWarnings("unused")
