@@ -1,39 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bottom_sheet_background"
     android:orientation="vertical">
 
-    <LinearLayout
+    <!--    toolbar    -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        tools:ignore="UseCompoundDrawables">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="5dp"
-            android:padding="8dp"
-            android:text="@string/add_image_from"
-            android:textAlignment="viewStart"
-            android:textColor="@color/eatwellgreen"
-            android:textSize="@dimen/big_text_size" />
-
-        <ImageView
-            android:id="@+id/cancelButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="160dp"
-            android:layout_marginTop="16dp"
-            android:contentDescription="@string/close"
-            android:src="@drawable/ic_close"
-            />
-    </LinearLayout>
+        android:layout_height="56dp"
+        android:background="@color/eatwellgreen"
+        android:elevation="4dp"
+        android:foregroundTint="@color/white"
+        android:popupTheme="@style/Theme.CalorieCounter"
+        android:theme="@style/Theme.AppCompat.Light"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:subtitleTextColor="@color/white"
+        app:title="Add food from image"
+        app:titleMarginStart="80dp"
+        android:layout_marginBottom="8dp"
+        app:titleTextAppearance="@style/Theme.CalorieCounter"
+        app:titleTextColor="@color/white" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
@@ -48,10 +38,10 @@
             android:id="@+id/ivCamera"
             android:layout_width="0dp"
             android:layout_height="120dp"
-            android:layout_marginTop="8dp"
-            android:padding="8dp"
+            android:layout_marginTop="16dp"
             android:background="@color/white"
             android:contentDescription="@string/side_picture"
+            android:padding="8dp"
             android:src="@drawable/ic_camera"
             android:tooltipText="@string/camera"
             app:layout_constraintEnd_toEndOf="parent"
@@ -63,8 +53,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/camera"
             android:layout_marginBottom="8dp"
+            android:text="@string/camera"
             android:textColor="@color/eatwellgreen"
             app:layout_constraintEnd_toEndOf="@+id/ivCamera"
             app:layout_constraintHorizontal_bias="0.5"
@@ -77,10 +67,10 @@
             android:id="@+id/ivGallery"
             android:layout_width="0dp"
             android:layout_height="120dp"
-            android:layout_marginTop="8dp"
-            android:padding="8dp"
+            android:layout_marginTop="16dp"
             android:background="@color/white"
             android:contentDescription="@string/side_picture"
+            android:padding="8dp"
             android:src="@drawable/ic_gallery"
             android:tooltipText="@string/gallery"
             app:layout_constraintEnd_toEndOf="parent"
@@ -90,10 +80,11 @@
             app:layout_constraintWidth_percent=".4" />
 
         <TextView
+            android:id="@+id/tvGallery"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/gallery"
             android:layout_marginBottom="8dp"
+            android:text="@string/gallery"
             android:textColor="@color/eatwellgreen"
             app:layout_constraintEnd_toEndOf="@+id/ivGallery"
             app:layout_constraintHorizontal_bias="0.5"
@@ -101,6 +92,56 @@
             app:layout_constraintTop_toBottomOf="@+id/ivGallery"
             app:layout_constraintVertical_bias="1"
             app:layout_constraintWidth_percent=".3" />
+
+        <ImageView
+            android:id="@+id/ivPreview"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="16dp"
+            android:padding="16dp"
+            android:scaleType="centerCrop"
+            android:adjustViewBounds="true"
+            app:layout_constraintTop_toBottomOf="@+id/tvGallery"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/llResult"
+            android:contentDescription="@string/image_preview" />
+
+<!--        <TextView-->
+<!--            android:id="@+id/tvResult"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:padding="16dp"-->
+<!--            android:text="Result here:"-->
+<!--            android:textAlignment="center"-->
+<!--            android:textColor="@color/gray"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/tvGallery" />-->
+        <LinearLayout
+            android:id="@+id/llResult"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+      />
+
+<!--        <ScrollView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="0dp"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/ivPreview"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent">-->
+
+<!--            <LinearLayout-->
+<!--                android:id="@+id/llResult"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="vertical"-->
+<!--                android:padding="16dp"/>-->
+<!--        </ScrollView>-->
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

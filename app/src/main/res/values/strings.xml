@@ -225,4 +225,12 @@
     <string name="add_a_recipe">Add a recipe</string>
     <string name="portions">Portions:</string>
     <string name="_1">1</string>
+    <string name="add_recipe_Caps">ADD RECIPE</string>
+    <string name="calories_sp">Calories</string>
+    <string name="protein_sp">Protein</string>
+    <string name="steps">steps</string>
+    <string name="step_goal_reminder">Step goal reminder</string>
+    <string name="water_reminder">Water reminder</string>
+    <string name="camera_icon">Camera icon</string>
+    <string name="image_preview">Image Preview</string>
 </resources>

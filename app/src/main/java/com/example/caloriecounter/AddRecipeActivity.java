@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -41,7 +43,7 @@ public class AddRecipeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_recipe);
+        setContentView(R.layout.activity_add_recipe);
 
         initActivity();
         setUpActivity();
@@ -155,17 +157,15 @@ public class AddRecipeActivity extends AppCompatActivity {
     }
 
     public void onRecipeSelected(Recipe recipe) {
-        //TODO: save recipe to diary or create new page to display recipe
-//        String date = getIntent().getStringExtra(IntentKeys.DATE);
-//        String meal = getIntent().getStringExtra(IntentKeys.MEAL);
         Log.d(TAG, "ItemClick: Clicked on " + recipe.getName());
-//
-//        Intent intent = new Intent(context, NutritionDisplayActivity.class);
-//        intent.putExtra(IntentKeys.MEAL, meal);
-//        intent.putExtra(IntentKeys.RECIPE, recipe);
-//        intent.putExtra(IntentKeys.DATE, date);
-//        //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//        startActivity(intent);
+
+        Intent intent = new Intent(context, NutritionDisplayActivity.class);
+        intent.putExtra(IntentKeys.MEAL, selectedMeal);
+        intent.putExtra(IntentKeys.DATE, diaryDate);
+        intent.putExtra(IntentKeys.RECIPE, recipe);
+        intent.putExtra(IntentKeys.IS_RECIPE, true);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 
     /**
@@ -180,6 +180,18 @@ public class AddRecipeActivity extends AppCompatActivity {
         super.onResume();
         initData();
         searchByQuery("");
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            Intent intent = new Intent(this, DashboardActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            this.finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 

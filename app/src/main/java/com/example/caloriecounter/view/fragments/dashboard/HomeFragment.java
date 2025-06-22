@@ -43,6 +43,8 @@ import com.example.caloriecounter.models.dao.UserDetails;
 import com.example.caloriecounter.models.dataHolders.DailyDataHolder;
 import com.example.caloriecounter.models.dataHolders.GoalDataHolder;
 import com.example.caloriecounter.models.dataHolders.UserDetailsHolder;
+import com.example.caloriecounter.models.dataModel.DefaultValue;
+import com.example.caloriecounter.utils.UserUtils;
 import com.example.caloriecounter.view.dialog.SelectMealTypeDialog;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.Entry;
@@ -53,7 +55,6 @@ import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
-import com.google.firebase.auth.FirebaseAuth;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -81,15 +82,10 @@ public class HomeFragment extends Fragment implements SensorEventListener {
     private ProgressBar pbSteps;
 
     // attributes
-    private Typeface typeface;
-
     private int waterIntake;
     private int waterGoal;
-    private int totalSteps = 0;
-    private int previousTotalSteps = 0;
     private double weight;
     private double bmi;
-    private String firebaseUID;
     private String weightUnit;
     private String heightUnit;
 
@@ -104,20 +100,14 @@ public class HomeFragment extends Fragment implements SensorEventListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_home, container, false);
-        setUpViews();
 
-        initUserData();
-        loadStepDataFromSharedPrefs();
-        setDataToUI();
-        initStepper();
-        setWaterIntake();
-        resetSteps();
-        setUpListeners();
+        initFragment();
+        setUpFragment();
         return view;
     }
 
-    /********************************* INIT DATA ***************************************************/
-    private void setUpViews() {
+    //region Init Fragment
+    private void initViews() {
         tvStepGoal = view.findViewById(R.id.tvStepGoal);
         tvGoalCalories = view.findViewById(R.id.tvGoalCalories);
         tvTotalCalories = view.findViewById(R.id.tvTotalCalories);
@@ -144,28 +134,6 @@ public class HomeFragment extends Fragment implements SensorEventListener {
 
         pbTotalCalories = view.findViewById(R.id.pbTotalCalories);
         pbSteps = view.findViewById(R.id.pbSteps);
-
-        firebaseUID = FirebaseAuth.getInstance().getUid();
-    }
-
-    private void initAttributionContext() {
-        attributionContext = Objects.requireNonNull(getActivity()).createAttributionContext("calorieCounter");
-    }
-
-    private void setUpListeners() {
-        weightHistory.setOnClickListener(v -> goToActivity(WeightLogActivity.class));
-        stepHistory.setOnClickListener(v -> goToActivity(StepLogActivity.class));
-        waterHistory.setOnClickListener(v -> goToActivity(WaterLogActivity.class));
-        ivAddWeight.setOnClickListener(v -> goToActivity(AddWeightActivity.class));
-        ivAddFoodCalories.setOnClickListener(v ->onShowMealTypeDialog());
-        //ivAddFoodCalories.setOnClickListener(v -> goToActivity(AddFoodActivity.class));
-        ivAddExercise.setOnClickListener(v -> goToActivity(AddExerciseActivity.class));
-        ivAddWaterIntake.setOnClickListener(v -> addWaterIntake());
-    }
-
-    private void onShowMealTypeDialog() {
-        SelectMealTypeDialog selectMealTypeDialog = new SelectMealTypeDialog();
-        selectMealTypeDialog.show(requireActivity().getSupportFragmentManager(), "Select Meal Type");
     }
 
     private void initUserData() {
@@ -174,17 +142,26 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         userDetails = UserDetailsHolder.getInstance().getData() != null ? UserDetailsHolder.getInstance().getData() : new UserDetails();
     }
 
-    private void setDataToUI() {
-        setGoalDataToUI();
-        setUserDataToUI();
-        setDailyDataToUI();
-        setWaterIntake();
+    private void initAttributionContext() {
+        attributionContext = Objects.requireNonNull(getActivity()).createAttributionContext("calorieCounter");
     }
 
+    //endregion
+    private void initFragment() {
+        initViews();
+        initUserData();
+    }
+
+    //region Set Up Fragment
+    //region Set Up UI
     private void setGoalDataToUI() {
+        int calGoal = DefaultValue.CALORIE_GOAL;
+        int maxCal = DefaultValue.CALORIE_GOAL;
+        int maxSteps = DefaultValue.STEP_GOAL;
+
         if (goalData == null) return;
         tvStepGoal.setText(MessageFormat.format("Goal: {0} steps", Integer.parseInt(goalData.getStepGoal())));
-        int calGoal = 2000;
+
         try {
             calGoal = Integer.parseInt(goalData.getCalorieGoal());
         } catch (Exception e) {
@@ -192,18 +169,16 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         }
         tvGoalCalories.setText(MessageFormat.format("Goal: {0} kcal", calGoal));
         tvTotalCalories.setText(R.string.total_calories_0);
-        int maxCal = 2000;
+
         try {
             maxCal = Integer.parseInt(goalData.getCalorieGoal().replaceAll("[^0-9]", ""));
         } catch (Exception e) {
             Log.d("error", "Could not parse Calorie goal data");
         }
-
         pbTotalCalories.setMax(maxCal);
         pbTotalCalories.setProgress(0);
 
-        int maxSteps = 6000;
-        waterGoal = 2000;
+        waterGoal = DefaultValue.WATER_GOAL;
         try {
             maxSteps = Integer.parseInt(goalData.getStepGoal().replaceAll("[^0-9]", ""));
             waterGoal = Integer.parseInt(goalData.getWaterIntakeGoal().replaceAll("[^0-9]", ""));
@@ -239,35 +214,14 @@ public class HomeFragment extends Fragment implements SensorEventListener {
 
     private void setDailyDataToUI() {
         int caloriesConsumed = dailyData.getCaloriesConsumed();
-        int caloriesBurned = dailyData.getWorkoutCalories();
-        int minutes = dailyData.getWorkoutTime();
+        int caloriesBurned = dailyData.getCaloriesBurned();
+        int minutes = dailyData.calculateWorkoutTime();
 
-        int breakfastCalories = 0;
-        List<Recipe> breakfast = dailyData.getBreakfast();
-        if (breakfast != null) for (Recipe recipe : breakfast) {
-            breakfastCalories += recipe.getCalories();
-        }
+        int breakfastCalories = calculateMealCalories(dailyData.getBreakfast());
+        int lunchCalories = calculateMealCalories(dailyData.getLunch());
+        int dinnerCalories = calculateMealCalories(dailyData.getDinner());
+        int snackCalories = calculateMealCalories(dailyData.getSnacks());
 
-        int lunchCalories = 0;
-        List<Recipe> lunch = dailyData.getLunch();
-        if (lunch != null) for (Recipe recipe : lunch) {
-            lunchCalories += recipe.getCalories();
-        }
-
-        int dinnerCalories = 0;
-        List<Recipe> dinner = dailyData.getDinner();
-        if (dinner != null) for (Recipe recipe : dinner) {
-            dinnerCalories += recipe.getCalories();
-        }
-
-        int snackCalories = 0;
-        List<Recipe> snacks = dailyData.getSnacks();
-        if (snacks != null) for (Recipe recipe : snacks) {
-            snackCalories += recipe.getCalories();
-        }
-        if (caloriesConsumed == 0) {
-            caloriesConsumed = breakfastCalories + lunchCalories + dinnerCalories + snackCalories;
-        }
         int totalCalories = caloriesConsumed - caloriesBurned;
 
         tvTotalCalories.setText(String.valueOf(totalCalories));
@@ -283,7 +237,82 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         waterIntake = dailyData.getWaterDrank();
     }
 
-    private void setWaterIntake() {
+    private int calculateMealCalories(List<Recipe> meals) {
+        int calculatedCalories = 0;
+        if (meals != null)
+            for (Recipe recipe : meals) {
+                calculatedCalories += recipe.getCalories();
+            }
+        return calculatedCalories;
+    }
+
+    //endregion
+    private void setUpUI() {
+        setGoalDataToUI();
+        setUserDataToUI();
+        setDailyDataToUI();
+    }
+
+    //region Set Up Listeners
+    private void goToActivity(Class<?> activity) {
+        Intent exerciseActivity = new Intent(context, activity);
+        startActivity(exerciseActivity);
+    }
+
+    private void onShowMealTypeDialog() {
+        SelectMealTypeDialog selectMealTypeDialog = new SelectMealTypeDialog();
+        selectMealTypeDialog.show(requireActivity().getSupportFragmentManager(), "Select Meal Type");
+    }
+
+    private void addWaterIntake() {
+        //water intake management
+        waterIntake += DefaultValue.WATER_UNIT;
+        if (waterIntake >= waterGoal) {
+            Toast.makeText(context, "Awesome! You reached your water goal for today!", Toast.LENGTH_SHORT).show();
+        } else
+            Toast.makeText(context, MessageFormat.format("Good job! {0}ml added", DefaultValue.WATER_UNIT), Toast.LENGTH_SHORT).show();
+
+        dailyData.setWaterDrank(waterIntake);
+        saveDailyDataToDB();
+        setUpWaterIntake();
+    }
+
+    //endregion
+    private void setUpListeners() {
+        weightHistory.setOnClickListener(v -> goToActivity(WeightLogActivity.class));
+        stepHistory.setOnClickListener(v -> goToActivity(StepLogActivity.class));
+        waterHistory.setOnClickListener(v -> goToActivity(WaterLogActivity.class));
+        ivAddWeight.setOnClickListener(v -> goToActivity(AddWeightActivity.class));
+        ivAddFoodCalories.setOnClickListener(v -> onShowMealTypeDialog());
+        ivAddExercise.setOnClickListener(v -> goToActivity(AddExerciseActivity.class));
+        ivAddWaterIntake.setOnClickListener(v -> addWaterIntake());
+    }
+
+    //region Step Counter
+    private void initStepCounter() {
+        sensorManager = (SensorManager) attributionContext.getSystemService(SENSOR_SERVICE);
+        stepSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        SharedPreferences prefs = requireContext().getSharedPreferences("step_prefs", Context.MODE_PRIVATE);
+        int todaySteps = prefs.getInt("today_steps_" + UserUtils.getFirebaseUID(), 0);
+        tvStepCount.setText(MessageFormat.format("{0} steps", todaySteps));
+        pbSteps.setProgress(todaySteps);
+
+        dailyData.setSteps(todaySteps);
+        DailyDataHolder.getInstance().setData(dailyData);
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
+
+    //endregion
+
+    private void setUpWaterIntake() {
         tvTotalWaterIntake.setText(MessageFormat.format("Total: {0} ml / {1} ml", waterIntake, Integer.parseInt(goalData.getWaterIntakeGoal())));
 
         for (int i = 0; i < imageGroup.getChildCount(); i++) {
@@ -304,89 +333,16 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         }
     }
 
-    /**************************************** STEP COUNTER *****************************************/
-    private void initStepper() {
-        sensorManager = (SensorManager) attributionContext.getSystemService(SENSOR_SERVICE);
-        stepSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+    //endregion
+    private void setUpFragment() {
+        setUpUI();
+        setUpListeners();
+        initStepCounter();
+        setUpWaterIntake();
+        updateStepCountDisplay();
     }
 
-    private void resetSteps() {
-        tvStepCount.setOnClickListener(v -> Toast.makeText(context, "Long press to reset steps", Toast.LENGTH_SHORT).show());
-        tvStepCount.setOnLongClickListener(v -> {
-            resetStepCount();
-            return true;
-        });
-    }
-
-    private void resetStepCount() {
-        previousTotalSteps = totalSteps;
-        tvStepCount.setText(R.string.step_count_0);
-        pbSteps.setProgress(0);
-        saveStepsToSharedPrefs();
-        dailyData.setSteps(0);
-        saveDailyDataToDB();
-    }
-
-    private void saveStepsToSharedPrefs() {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(firebaseUID, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        //save to shared preferences
-        editor.putString("steps", String.valueOf(previousTotalSteps));
-        editor.apply();
-    }
-
-    private void loadStepDataFromSharedPrefs() {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(firebaseUID, Context.MODE_PRIVATE);
-        String savedSteps = sharedPreferences.getString("steps", "0");
-        previousTotalSteps = Integer.parseInt(savedSteps);
-    }
-
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        if (event.sensor.getType() == Sensor.TYPE_STEP_COUNTER) {
-            totalSteps = (int) event.values[0];
-            if (dailyData.getSteps() == 0) {
-                resetStepCount();
-            }
-            Log.d(TAG, "steps: " + dailyData.getSteps());
-
-            int currentSteps = totalSteps - previousTotalSteps;
-            tvStepCount.setText(MessageFormat.format("{0} steps", currentSteps));
-            pbSteps.setProgress(currentSteps);
-
-            dailyData.setSteps(currentSteps + 1);
-            saveDailyDataToDB();
-            saveStepsToSharedPrefs();
-        }
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-    }
-
-    /************************************* ONCLICK ACTIONS *****************************************/
-    private void addWaterIntake() {
-        //water intake management
-        int waterUnits = 200;
-        waterIntake += waterUnits;
-        if (waterIntake >= waterGoal) {
-            Toast.makeText(context, "Awesome! You reached your water goal for today!", Toast.LENGTH_SHORT).show();
-        } else
-            Toast.makeText(context, MessageFormat.format("Good job! {0}ml added", waterUnits), Toast.LENGTH_SHORT).show();
-
-        dailyData.setWaterDrank(waterIntake);
-        saveDailyDataToDB();
-        setWaterIntake();
-    }
-
-    private void goToActivity(Class<?> activity) {
-        Intent exerciseActivity = new Intent(context, activity);
-        startActivity(exerciseActivity);
-    }
-
-    /************************************* DB ACCESS ***********************************************/
+    //region DB Access
     private void saveDailyDataToDB() {
         DailyDataDAO dailyDataDAO = new DailyDataDAOImpl();
         dailyDataDAO.update(dailyData).addOnCompleteListener(task -> {
@@ -395,8 +351,49 @@ public class HomeFragment extends Fragment implements SensorEventListener {
             }
         });
     }
+    //endregion
 
-    /************************************** WEIGHT/BMI CHART ***************************************/
+
+    /*********************************** LIFECYCLE OVERRIDES ***************************************/
+    @Override
+    public void onResume() {
+        super.onResume();
+        goalData = GoalDataHolder.getInstance().getData();
+        setUserDataToUI();
+
+        dailyData = DailyDataHolder.getInstance().getData();
+        if (dailyData != null) {
+            setDailyDataToUI();
+        } else {
+            dailyData = new DailyData();
+            DailyDataHolder.getInstance().setData(dailyData);
+        }
+        sensorManager.registerListener(this, stepSensor, SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        saveDailyDataToDB();
+        sensorManager.unregisterListener(this);
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        Log.d(TAG, "Fragment attached..");
+        this.context = context;
+        initAttributionContext();
+    }
+
+    private void updateStepCountDisplay() {
+        SharedPreferences prefs = requireContext().getSharedPreferences("step_prefs", Context.MODE_PRIVATE);
+        int todaySteps = prefs.getInt("today_steps_" + UserUtils.getFirebaseUID(), 0);
+
+        tvStepCount.setText(String.format(Locale.ENGLISH, "%d steps", todaySteps));
+    }
+
+    //region WEIGHT/BMI CHART
     private void setWeightChart() {
         if (!isAdded()) {
             return;
@@ -405,7 +402,7 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         weightCategory = view.findViewById(R.id.tvWeightCategory);
         String[] weightCategories = getResources().getStringArray(R.array.weight_categories_array);
 
-        typeface = ResourcesCompat.getFont(view.getContext(), R.font.lora_font);
+        Typeface typeface = ResourcesCompat.getFont(view.getContext(), R.font.lora_font);
 
         moveOffScreen(weightChart);
         weightChart.setUsePercentValues(false);
@@ -424,7 +421,7 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         weightChart.setEntryLabelTextSize(11f);
         weightChart.setEntryLabelTypeface(typeface);
 
-        setChartData(weightCategories.length, weightChart, weightCategories);
+        setChartData(weightCategories.length, weightChart, weightCategories, typeface);
         weightCategory.setTypeface(typeface);
         weightCategory.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 
@@ -474,7 +471,7 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         weightCategory.setTextSize(16.0f);
     }
 
-    private void setChartData(int count, PieChart chart, String[] categories) {
+    private void setChartData(int count, PieChart chart, String[] categories, Typeface typeface) {
         ArrayList<PieEntry> values = new ArrayList<>();
 
         for (int i = 0; i < count; i++) {
@@ -503,9 +500,7 @@ public class HomeFragment extends Fragment implements SensorEventListener {
     }
 
     private void moveOffScreen(PieChart chart) {
-        //Display display = context.getDisplay().getRealMetrics(metrics);//Objects.requireNonNull(this.getActivity()).getWindowManager().getDefaultDisplay();
         DisplayMetrics metrics = new DisplayMetrics();
-//        Objects.requireNonNull(this.getActivity()).getWindowManager().getDefaultDisplay().getMetrics(metrics);
         context.getDisplay().getRealMetrics(metrics);
         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) chart.getLayoutParams();
         params.setMargins(0, 0, 0, -200);
@@ -523,38 +518,6 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         }
         return 0;
     }
-
-    /*********************************** LIFECYCLE OVERRIDES ***************************************/
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        goalData = GoalDataHolder.getInstance().getData();
-        setUserDataToUI();
-
-        dailyData = DailyDataHolder.getInstance().getData();
-        if (dailyData != null) {
-            setDailyDataToUI();
-        } else {
-            dailyData = new DailyData();
-            DailyDataHolder.getInstance().setData(dailyData);
-        }
-        sensorManager.registerListener(this, stepSensor, SensorManager.SENSOR_DELAY_NORMAL);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        //saveDailyDataToDB();
-        sensorManager.unregisterListener(this);
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        Log.d(TAG, "Fragment attached..");
-        this.context = context;
-        initAttributionContext();
-    }
+    //endregion
 
 }

@@ -21,6 +21,7 @@ import com.example.caloriecounter.models.dao.WeightLogDAO;
 import com.example.caloriecounter.models.dao.WeightLogDAOImpl;
 import com.example.caloriecounter.models.dataHolders.GoalDataHolder;
 import com.example.caloriecounter.models.dataHolders.UserDetailsHolder;
+import com.example.caloriecounter.models.dataModel.IntentKeys;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -203,10 +204,10 @@ public class WeightLogActivity extends AppCompatActivity {
         series.setOnDataPointTapListener((series, dataPoint) -> {
             //Toast.makeText(WeightLogActivity.this.getApplicationContext(), "Series1: On Data Point clicked: " + dataPoint, Toast.LENGTH_SHORT).show();
 
-            for(WeightLog weightLog: weightLogs){
-                if(weightLog.getDate().equals(new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH).format(dataPoint.getX()))){
+            for (WeightLog weightLog : weightLogs) {
+                if (weightLog.getDate().equals(new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH).format(dataPoint.getX()))) {
                     Intent intent = new Intent(context, WeightLogDisplay.class);
-                    intent.putExtra("WEIGHT_LOG", weightLog);
+                    intent.putExtra(IntentKeys.WEIGHT_LOG, weightLog);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                     break;
@@ -226,10 +227,15 @@ public class WeightLogActivity extends AppCompatActivity {
     }
 
     private void formatGraphDate() {
-        final SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM", Locale.ENGLISH);
+        final SimpleDateFormat dateFormat = new SimpleDateFormat("MMMyy", Locale.ENGLISH);
 
         GridLabelRenderer gridLabelRenderer = weightChart.getGridLabelRenderer();
         gridLabelRenderer.setGridStyle(GridLabelRenderer.GridStyle.BOTH);
+        gridLabelRenderer.setHorizontalLabelsAngle(25);
+        gridLabelRenderer.setLabelVerticalWidth(100);
+
+        gridLabelRenderer.setNumHorizontalLabels(6);
+
         gridLabelRenderer.setLabelFormatter(new DefaultLabelFormatter() {
             @Override
             public String formatLabel(double value, boolean isValueX) {
@@ -244,15 +250,19 @@ public class WeightLogActivity extends AppCompatActivity {
     private void setScrollableAndScalable() {
         Viewport viewport = weightChart.getViewport();
         viewport.setScrollable(true);
-        viewport.scrollToEnd();
+        viewport.setScalable(true);
+        viewport.setScalableY(false);
 
-        int lastIndex = dataPoints.length - 1;
-        int firstIndex = Math.max(0, lastIndex - 6);
+        if (dataPoints.length > 0) {
+            double maxX = dataPoints[dataPoints.length - 1].getX();
+            double minX = dataPoints[0].getX();
 
-        // Set the visible range
-        viewport.setXAxisBoundsManual(true);
-        viewport.setMinX(dataPoints[firstIndex].getX());
-        viewport.setMaxX(dataPoints[lastIndex].getX());
+            double extra = (maxX - minX) * 0.1;
+
+            viewport.setXAxisBoundsManual(true);
+            viewport.setMinX(minX - extra);
+            viewport.setMaxX(maxX + extra);
+        }
     }
 
     /********************************* TOOLBAR *****************************************************/

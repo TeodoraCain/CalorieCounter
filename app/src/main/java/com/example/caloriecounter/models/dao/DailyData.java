@@ -81,10 +81,10 @@ public class DailyData {
             for (Recipe recipe : snacks) {
                 calories += recipe.getCalories();
             }
-        if (workouts != null)
-            for (Workout workout : workouts) {
-                calories -= workout.getCaloriesBurned();
-            }
+//        if (workouts != null)
+//            for (Workout workout : workouts) {
+//                calories -= workout.getCaloriesBurned();
+//            }
 
         return calories;
     }
@@ -94,7 +94,13 @@ public class DailyData {
     }
 
     public int getCaloriesBurned() {
-        return caloriesBurned;
+        int calories = 0;
+        if (workouts != null) {
+            for (Workout workout : workouts) {
+                calories += workout.getCaloriesBurned();
+            }
+        }
+        return calories;
     }
 
     public void setCaloriesBurned(int caloriesBurned) {
@@ -132,18 +138,18 @@ public class DailyData {
     public void setSnacks(List<Recipe> snacks) {
         this.snacks = snacks;
     }
-
-    public int getWorkoutCalories() {
-        int calories = 0;
-        if (workouts == null)
-            return 0;
-        for (Workout workout : workouts) {
-            calories += workout.getCaloriesBurned();
-        }
-        return calories;
-    }
-
-    public int getWorkoutTime() {
+//
+//    public int getWorkoutCalories() {
+//        int calories = 0;
+//        if (workouts == null)
+//            return 0;
+//        for (Workout workout : workouts) {
+//            calories += workout.getCaloriesBurned();
+//        }
+//        return calories;
+//    }
+//
+    public int calculateWorkoutTime() {
         int minutes = 0;
         if (workouts == null)
             return 0;

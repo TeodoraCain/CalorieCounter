@@ -69,18 +69,19 @@
                 android:paddingHorizontal="8dp">
 
                 <EditText
+                    android:id="@+id/etServingSizeTxt"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:background="@drawable/custom_input_text"
                     android:enabled="false"
                     android:importantForAutofill="no"
-                    android:inputType="none"
+                    android:inputType="text"
                     android:text="@string/serving_size"
                     android:textColor="@color/gray"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="LabelFor,TouchTargetSizeCheck" />
+                    tools:ignore="LabelFor,TextFields,TouchTargetSizeCheck" />
 
                 <EditText
                     android:id="@+id/etServingSize"

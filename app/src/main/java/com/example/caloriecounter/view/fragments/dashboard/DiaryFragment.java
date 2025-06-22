@@ -22,6 +22,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.caloriecounter.AddExerciseActivity;
 import com.example.caloriecounter.AddFoodActivity;
+import com.example.caloriecounter.AddRecipeActivity;
 import com.example.caloriecounter.R;
 import com.example.caloriecounter.adapters.RecipeAdapter;
 import com.example.caloriecounter.adapters.WorkoutAdapter;
@@ -34,6 +35,7 @@ import com.example.caloriecounter.models.dao.Recipe;
 import com.example.caloriecounter.models.dao.Workout;
 import com.example.caloriecounter.models.dataHolders.DailyDataHolder;
 import com.example.caloriecounter.models.dataHolders.GoalDataHolder;
+import com.example.caloriecounter.models.dataModel.DefaultValue;
 import com.example.caloriecounter.models.dataModel.IntentKeys;
 import com.example.caloriecounter.models.dataModel.Meal;
 import com.google.firebase.database.DataSnapshot;
@@ -72,7 +74,9 @@ public class DiaryFragment extends Fragment {
     private ListView lvDinner;
     private ListView lvSnacks;
     private TextView tvAddBreakfast, tvAddLunch,
-            tvAddDinner, tvAddSnacks, tvAddExercise;
+            tvAddDinner, tvAddSnacks, tvAddExercise,
+            tvAddBreakfastRecipe, tvAddLunchRecipe,
+            tvAddDinnerRecipe, tvAddSnacksRecipe;
     private ProgressBar pbProtein, pbFat, pbCarbs, pbCalories;
     // attributes
     private int maxGramsOfProtein;
@@ -128,6 +132,11 @@ public class DiaryFragment extends Fragment {
         tvAddSnacks = view.findViewById(R.id.addSnacks);
         tvAddExercise = view.findViewById(R.id.addExercise);
 
+        tvAddBreakfastRecipe = view.findViewById(R.id.addBreakfastRecipe);
+        tvAddLunchRecipe = view.findViewById(R.id.addLunchRecipe);
+        tvAddDinnerRecipe = view.findViewById(R.id.addDinnerRecipe);
+        tvAddSnacksRecipe = view.findViewById(R.id.addSnacksRecipe);
+
         ivNext = view.findViewById(R.id.ivNext);
         ivPrevious = view.findViewById(R.id.ivPrevious);
 
@@ -143,7 +152,7 @@ public class DiaryFragment extends Fragment {
         if (goalData != null) {
             calorieGoal = Integer.parseInt(goalData.getCalorieGoal());
         } else {
-            calorieGoal = 2000;
+            calorieGoal = DefaultValue.CALORIE_GOAL;
         }
     }
 
@@ -170,6 +179,11 @@ public class DiaryFragment extends Fragment {
         tvAddDinner.setOnClickListener(v -> addFood(Meal.DINNER));
         tvAddSnacks.setOnClickListener(v -> addFood(Meal.SNACKS));
         tvAddExercise.setOnClickListener(v -> addExercise());
+
+        tvAddBreakfastRecipe.setOnClickListener(v -> addRecipe(Meal.BREAKFAST));
+        tvAddLunchRecipe.setOnClickListener(v -> addRecipe(Meal.LUNCH));
+        tvAddDinnerRecipe.setOnClickListener(v -> addRecipe(Meal.DINNER));
+        tvAddSnacksRecipe.setOnClickListener(v -> addRecipe(Meal.SNACKS));
 //        //delete from list
         lvWorkoutHistory.setOnItemLongClickListener((parent, v, position, id) -> {
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
@@ -426,6 +440,13 @@ public class DiaryFragment extends Fragment {
 
     private void addFood(String meal) {
         Intent intent = new Intent(context, AddFoodActivity.class);
+        intent.putExtra(IntentKeys.MEAL, meal);
+        intent.putExtra(IntentKeys.DATE, diaryDate);
+        startActivity(intent);
+    }
+
+    private void addRecipe(String meal) {
+        Intent intent = new Intent(context, AddRecipeActivity.class);
         intent.putExtra(IntentKeys.MEAL, meal);
         intent.putExtra(IntentKeys.DATE, diaryDate);
         startActivity(intent);

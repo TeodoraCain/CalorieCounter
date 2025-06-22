@@ -1,6 +1,7 @@
 package com.example.caloriecounter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -17,6 +18,8 @@ import com.example.caloriecounter.models.dao.DailyData;
 import com.example.caloriecounter.models.dao.GoalData;
 import com.example.caloriecounter.models.dataHolders.DailyDataHolder;
 import com.example.caloriecounter.models.dataHolders.GoalDataHolder;
+import com.example.caloriecounter.models.dataModel.DefaultValue;
+import com.example.caloriecounter.utils.UserUtils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -113,7 +116,8 @@ public class StepLogActivity extends AppCompatActivity {
                         try {
                             Date date = dateFormat.parse(Objects.requireNonNull(dataSnapshot.getKey()));
                             if (date != null) {
-                                dpList.add(new DataPoint(date, Objects.requireNonNull(dailyDataLog).getSteps()));
+                                if (Objects.requireNonNull(dailyDataLog).getSteps() > 0)
+                                    dpList.add(new DataPoint(date, Objects.requireNonNull(dailyDataLog).getSteps()));
                             }
                         } catch (ParseException e) {
                             e.printStackTrace();
@@ -144,19 +148,25 @@ public class StepLogActivity extends AppCompatActivity {
     private void setDataToUI() {
         if (dailyData == null) return;
 
-        int stepGoal = 6000;
+        int stepGoal = DefaultValue.STEP_GOAL;
         if (goalData != null) {
             stepGoal = Integer.parseInt(goalData.getStepGoal());
         }
         pbSteps.setMax(stepGoal);
         tvGoalSteps.setText(MessageFormat.format("Goal: {0} steps", stepGoal));
 
-        int steps = dailyData.getSteps() - 1;
-        pbSteps.setProgress(steps);
-        tvCurrentSteps.setText(MessageFormat.format("Now {0} steps", steps));
-        tvSummarySteps.setText(MessageFormat.format("{0} steps", steps));
-        tvSummaryDistance.setText(MessageFormat.format("{0} km", stepsToKilometers(steps)));
-        tvSummaryCalories.setText(MessageFormat.format("{0} kcal", calculateCaloriesBurned(steps)));
+        int todaySteps = getStepsFromPrefs();
+
+        pbSteps.setProgress(todaySteps);
+        tvCurrentSteps.setText(MessageFormat.format("Now {0} steps", todaySteps));
+        tvSummarySteps.setText(MessageFormat.format("{0} steps", todaySteps));
+        tvSummaryDistance.setText(MessageFormat.format("{0} km", stepsToKilometers(todaySteps)));
+        tvSummaryCalories.setText(MessageFormat.format("{0} kcal", calculateCaloriesBurned(todaySteps)));
+    }
+
+    private int getStepsFromPrefs() {
+        SharedPreferences prefs = getSharedPreferences("step_prefs", MODE_PRIVATE);
+        return prefs.getInt("today_steps_"+ UserUtils.getFirebaseUID(), 0);
     }
 
     public double stepsToKilometers(int steps) {
@@ -180,6 +190,7 @@ public class StepLogActivity extends AppCompatActivity {
     private void setScrollableAndScalable() {
         Viewport viewport = stepChart.getViewport();
         viewport.setScrollable(true);
+        viewport.setScalable(true);
         viewport.scrollToEnd();
 
         int lastIndex = dataPoints.length - 1;
@@ -192,9 +203,9 @@ public class StepLogActivity extends AppCompatActivity {
     }
 
     private void formatGraphDate() {
-        final SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM", Locale.ENGLISH);
-
+        final SimpleDateFormat dateFormat = new SimpleDateFormat("MMMyy", Locale.ENGLISH);
         GridLabelRenderer gridLabelRenderer = stepChart.getGridLabelRenderer();
+        gridLabelRenderer.setHorizontalLabelsAngle(25);
         gridLabelRenderer.setGridStyle(GridLabelRenderer.GridStyle.BOTH);
         gridLabelRenderer.setLabelFormatter(new DefaultLabelFormatter() {
             @Override
@@ -208,8 +219,9 @@ public class StepLogActivity extends AppCompatActivity {
     }
 
     private void setUpPointsGraph() {
+        final SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMMyy", Locale.ENGLISH);
         series = new PointsGraphSeries<>(dataPoints);
-        series.setOnDataPointTapListener((series, dataPoint) -> Toast.makeText(context, "Series1: On Data Point clicked: " + dataPoint, Toast.LENGTH_SHORT).show());
+        series.setOnDataPointTapListener((series, dataPoint) -> Toast.makeText(context, "Date: " + dateFormat.format(dataPoint.getX()) + "\nSteps:" + dataPoint.getY(), Toast.LENGTH_SHORT).show());
         series.setSize(9);
         series.setColor(ContextCompat.getColor(context, R.color.pistachio));
     }

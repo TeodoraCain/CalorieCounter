@@ -21,6 +21,7 @@ import com.example.caloriecounter.models.dao.DailyDataDAOImpl;
 import com.example.caloriecounter.models.dao.Food;
 import com.example.caloriecounter.models.dao.Recipe;
 import com.example.caloriecounter.models.dataHolders.DailyDataHolder;
+import com.example.caloriecounter.models.dataModel.DefaultValue;
 import com.example.caloriecounter.models.dataModel.IntentKeys;
 import com.example.caloriecounter.models.dataModel.IntentResults;
 import com.example.caloriecounter.models.dataModel.Meal;
@@ -36,6 +37,20 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
+/**
+ * Activity to display detailed nutritional information for a selected food item or recipe.
+ * <p>
+ * This screen allows users to:
+ * - View and edit serving size.
+ * - See updated nutritional values in real-time.
+ * - Add food or recipe to a selected meal on a given date.
+ * <p>
+ * Handles different use-cases:
+ * - Displaying a single food.
+ * - Displaying a recipe composed of multiple ingredients.
+ * - Adding ingredients to a new recipe.
+ * - Saving data for today or a different diary date.
+ */
 public class NutritionDisplayActivity extends AppCompatActivity {
 
     // attributes
@@ -60,10 +75,12 @@ public class NutritionDisplayActivity extends AppCompatActivity {
     private Context context;
     private DailyDataDAO dailyDataDAO;
     //passed from intent
+    private Recipe selectedRecipe;
     private Food selectedFood;
     private String selectedMeal;
     private String diaryDate;
     private boolean isRecipeIngredient;
+    private boolean isRecipe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,12 +96,18 @@ public class NutritionDisplayActivity extends AppCompatActivity {
         context = NutritionDisplayActivity.this;
     }
 
+    /**
+     * Parses data from the intent to determine selected food/recipe,
+     * diary date, meal type, and usage context (e.g., ingredient or full recipe).
+     */
     private void parseIntentExtras() {
         Intent intent = getIntent();
         selectedFood = intent.getParcelableExtra(IntentKeys.FOOD);
         selectedMeal = intent.getStringExtra(IntentKeys.MEAL);
         diaryDate = intent.getStringExtra(IntentKeys.DATE);
         isRecipeIngredient = intent.getBooleanExtra(IntentKeys.IS_RECIPE_INGREDIENT, false);
+        isRecipe = intent.getBooleanExtra(IntentKeys.IS_RECIPE, false);
+        selectedRecipe = intent.getParcelableExtra(IntentKeys.RECIPE);
     }
 
     private void initDailyDataDAO() {
@@ -99,25 +122,39 @@ public class NutritionDisplayActivity extends AppCompatActivity {
     }
 
     //region Set Up Activity
-    private String getCurrentDate() {
-        Calendar calendar = Calendar.getInstance();
-        Date date = calendar.getTime();
-        return new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH).format(date);
-    }
 
+    /**
+     * Configures the toolbar with title and back button.
+     */
     private void setToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
+
         //set title
-        toolbar.setTitle(selectedFood.getName());
-        setSupportActionBar(toolbar);
+        String title = getString(R.string.food);
+        if (selectedFood != null) {
+            title = selectedFood.getName();
+        } else if (selectedRecipe != null) {
+            title = selectedRecipe.getName();
+        }
+        toolbar.setTitle(title);
+
         //set back button
+        setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
+    /**
+     * Initializes view references and sets up listener for save button.
+     */
     private void setUpViews() {
+        if (isRecipe) {
+            EditText etServingSizeTxt = findViewById(R.id.etServingSizeTxt);
+            etServingSizeTxt.setText(R.string.portions);
+        }
         etServingSize = findViewById(R.id.etServingSize);
+        etServingSize.setOnClickListener(v -> clearInput());
         tvCalories = findViewById(R.id.tvCalories);
         tvCarbohydrate = findViewById(R.id.tvCarbohydrate);
         tvProtein = findViewById(R.id.tvProtein);
@@ -138,57 +175,147 @@ public class NutritionDisplayActivity extends AppCompatActivity {
         saveImageView.setOnClickListener(v -> onSave());
     }
 
+    private void clearInput() {
+        etServingSize.setText("");
+    }
 
-    /********************************* SET UP TEXT WATCHER ****************************************/
+    /**
+     * Sets up a text watcher for serving size to recalculate nutrition values in real-time.
+     */
     void setUpTextWatcherForServingSize() {
         etServingSize.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                double servingSize = 100.0;
-                if (s.length() > 0) {
-                    servingSize = Double.parseDouble(s.toString());
-                }
-                double percentage;
-                if (servingSize > 0) {
-                    try {
-                        percentage = 1 + (servingSize - 100) / 100;
-                    } catch (NumberFormatException e) {
-                        e.printStackTrace();
-                        percentage = 1;
+                try {
+                    double imputedServingSize = s.length() > 0 ? Double.parseDouble(s.toString()) : DefaultValue.DEFAULT_SERVING_SIZE;
+                    double servingSize = DefaultValue.DEFAULT_SERVING_SIZE, percentage;
+                    if (selectedFood != null) {
+                        servingSize = selectedFood.getServing_size();
+                    } else if (selectedRecipe != null) {
+                        servingSize = selectedRecipe.getServing_size();
                     }
+                    if (servingSize == 0) {
+                        return;
+                    }
+
+                    percentage = ((imputedServingSize * 100) / servingSize) / 100;
                     setModifiedTexts(percentage);
+                } catch (NumberFormatException e) {
+                    Log.e(TAG, "Invalid serving size input", e);
                 }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-
             }
         });
 
     }
 
+    /**
+     * Updates the UI with scaled nutrition values based on serving size input.
+     *
+     * @param percentage multiplier derived from the serving size entered by user
+     */
     void setModifiedTexts(double percentage) {
-        tvCalories.setText(String.format(Locale.ENGLISH, "%.1f", selectedFood.getCalories() * percentage));
-        tvCarbohydrate.setText(String.format(Locale.ENGLISH, "%.1f", selectedFood.getCarbohydrate() * percentage));
-        tvProtein.setText(String.format(Locale.ENGLISH, "%.1f", selectedFood.getProtein() * percentage));
-        tvTotalFat.setText(String.format(Locale.ENGLISH, "%.1f", selectedFood.getTotal_fat() * percentage));
-        tvSaturatedFat.setText(String.format(Locale.ENGLISH, "%.1f", selectedFood.getSaturated_fat() * percentage));
-        tvFiber.setText(String.format(Locale.ENGLISH, "%.1f", selectedFood.getFiber() * percentage));
-        tvIron.setText(String.format(Locale.ENGLISH, "%.1f", selectedFood.getIron() * percentage));
-        tvSugar.setText(String.format(Locale.ENGLISH, "%.1f", selectedFood.getSugars() * percentage));
-        tvSodium.setText(String.format(Locale.ENGLISH, "%.1f", selectedFood.getSodium() * percentage));
-        tvCalcium.setText(String.format(Locale.ENGLISH, "%.1f", selectedFood.getCalcium() * percentage));
-        tvMagnesium.setText(String.format(Locale.ENGLISH, "%.1f", selectedFood.getMagnesium() * percentage));
-        tvVitaminA.setText(String.format(Locale.ENGLISH, "%.1f", selectedFood.getVitamin_a() * percentage));
-        tvVitaminB6.setText(String.format(Locale.ENGLISH, "%.1f", selectedFood.getVitamin_b6() * percentage));
-        tvVitaminB12.setText(String.format(Locale.ENGLISH, "%.1f", selectedFood.getVitamin_b12() * percentage));
-        tvVitaminC.setText(String.format(Locale.ENGLISH, "%.1f", selectedFood.getVitamin_c() * percentage));
+        double calories = 0, carbs = 0, protein = 0, totalFat = 0, satFat = 0;
+        double fiber = 0, iron = 0, sugar = 0, sodium = 0, calcium = 0, magnesium = 0;
+        double vitaminA = 0, vitaminB6 = 0, vitaminB12 = 0, vitaminC = 0;
+
+        if (selectedFood != null) {
+            Food food = getScaledFood(selectedFood, percentage);
+            calories = food.getCalories();
+            carbs = food.getCarbohydrate();
+            protein = food.getProtein();
+            totalFat = food.getTotal_fat();
+            satFat = food.getSaturated_fat();
+            fiber = food.getFiber();
+            iron = food.getIron();
+            sugar = food.getSugars();
+            sodium = food.getSodium();
+            calcium = food.getCalcium();
+            magnesium = food.getMagnesium();
+            vitaminA = food.getVitamin_a();
+            vitaminB6 = food.getVitamin_b6();
+            vitaminB12 = food.getVitamin_b12();
+            vitaminC = food.getVitamin_c();
+
+        } else if (selectedRecipe != null && selectedRecipe.getIngredients() != null) {
+            List<Food> modifiedIngredients = new ArrayList<>();
+            for (Food food : selectedRecipe.getIngredients()) {
+                food = getScaledFood(food, percentage);
+                calories += food.getCalories();
+                carbs += food.getCarbohydrate();
+                protein += food.getProtein();
+                totalFat += food.getTotal_fat();
+                satFat += food.getSaturated_fat();
+                fiber += food.getFiber();
+                iron += food.getIron();
+                sugar += food.getSugars();
+                sodium += food.getSodium();
+                calcium += food.getCalcium();
+                magnesium += food.getMagnesium();
+                vitaminA += food.getVitamin_a();
+                vitaminB6 += food.getVitamin_b6();
+                vitaminB12 += food.getVitamin_b12();
+                vitaminC += food.getVitamin_c();
+                modifiedIngredients.add(food);
+            }
+            selectedRecipe.setServing_size(selectedRecipe.getServing_size() * percentage);
+            selectedRecipe.setIngredients(modifiedIngredients);
+        }
+
+        tvCalories.setText(String.format(Locale.ENGLISH, "%.1f", calories));
+        tvCarbohydrate.setText(String.format(Locale.ENGLISH, "%.1f", carbs));
+        tvProtein.setText(String.format(Locale.ENGLISH, "%.1f", protein));
+        tvTotalFat.setText(String.format(Locale.ENGLISH, "%.1f", totalFat));
+        tvSaturatedFat.setText(String.format(Locale.ENGLISH, "%.1f", satFat));
+        tvFiber.setText(String.format(Locale.ENGLISH, "%.1f", fiber));
+        tvIron.setText(String.format(Locale.ENGLISH, "%.1f", iron));
+        tvSugar.setText(String.format(Locale.ENGLISH, "%.1f", sugar));
+        tvSodium.setText(String.format(Locale.ENGLISH, "%.1f", sodium));
+        tvCalcium.setText(String.format(Locale.ENGLISH, "%.1f", calcium));
+        tvMagnesium.setText(String.format(Locale.ENGLISH, "%.1f", magnesium));
+        tvVitaminA.setText(String.format(Locale.ENGLISH, "%.1f", vitaminA));
+        tvVitaminB6.setText(String.format(Locale.ENGLISH, "%.1f", vitaminB6));
+        tvVitaminB12.setText(String.format(Locale.ENGLISH, "%.1f", vitaminB12));
+        tvVitaminC.setText(String.format(Locale.ENGLISH, "%.1f", vitaminC));
+    }
+
+    /**
+     * Scales a Food object based on the provided multiplier.
+     *
+     * @param original   the original food object
+     * @param percentage the scale factor
+     * @return a new scaled Food object
+     */
+    private Food getScaledFood(Food original, double percentage) {
+        Food scaled = new Food();
+
+        scaled.setCalories(original.getCalories() * percentage);
+        scaled.setCarbohydrate(original.getCarbohydrate() * percentage);
+        scaled.setProtein(original.getProtein() * percentage);
+        scaled.setTotal_fat(original.getTotal_fat() * percentage);
+        scaled.setSaturated_fat(original.getSaturated_fat() * percentage);
+        scaled.setFiber(original.getFiber() * percentage);
+        scaled.setIron(original.getIron() * percentage);
+        scaled.setSugars(original.getSugars() * percentage);
+        scaled.setSodium(original.getSodium() * percentage);
+        scaled.setCalcium(original.getCalcium() * percentage);
+        scaled.setMagnesium(original.getMagnesium() * percentage);
+        scaled.setVitamin_a(original.getVitamin_a() * percentage);
+        scaled.setVitamin_b6(original.getVitamin_b6() * percentage);
+        scaled.setVitamin_b12(original.getVitamin_b12() * percentage);
+        scaled.setVitamin_c(original.getVitamin_c() * percentage);
+
+        scaled.setName(original.getName());
+        scaled.setServing_size(original.getServing_size() * percentage);
+
+        return scaled;
     }
 
     //endregion
@@ -198,14 +325,16 @@ public class NutritionDisplayActivity extends AppCompatActivity {
         setUpTextWatcherForServingSize();
     }
 
-    public void setSelectedFood(Food selectedFood) {
-        this.selectedFood = selectedFood;
-    }
+    //region Save Recipe
 
-    /********************************* SAVE RECIPE ************************************************/
+    /**
+     * Saves the current food or recipe to the diary or recipe being created.
+     * Handles saving for both today and other selected dates.
+     */
     void onSave() {
         // Adding ingredient to new recipe list
         if (isRecipeIngredient) {
+            Log.d(TAG, "Adding ingredient to recipe and returning to intent...");
             Food food = createFoodItemFromUI();
 
             Intent recipeIntent = new Intent();
@@ -217,79 +346,80 @@ public class NutritionDisplayActivity extends AppCompatActivity {
         }
         // Adding food in diary for a different date than the current one
         if (diaryDate != null && !diaryDate.equals(getCurrentDate())) {
+            Log.d(TAG, "Saving food to diary for date " + diaryDate + " ...");
             dailyDataDAO.get(diaryDate).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     DailyData dailyData = snapshot.getValue(DailyData.class);
-                    if (dailyData == null) {
-                        dailyData = new DailyData();
-                    }
+                    dailyData = (dailyData == null) ? new DailyData() : dailyData;
 
-                    // get the recipe list based on the user selection BREAKFAST, LUNCH, DINNER, SNACKS
-                    List<Recipe> recipeList = getRecipeListByMealType(selectedMeal, dailyData);
-                    // create a new food item based on the new food serving size
-                    Food currentFood = createFoodItemFromUI();
-                    // create a new list of foods and add the food retrieved from UI
-                    List<Food> foods = new ArrayList<>();
-                    foods.add(currentFood);
-                    // create new recipe based on current food and add it to the recipeList
-                    Recipe recipe = createRecipeFromFood(currentFood, foods);
-                    recipeList.add(recipe);
-                    // update db with the new recipeList
-                    updateDailyDataWithRecipeList(selectedMeal, recipeList, dailyData);
-                    //updateTotalCaloriesConsumed(currentFood.getCalories(), dailyData);
+                    updateDailyDataRecipes(dailyData);
                     saveDailyDataToDBByDate(dailyData, diaryDate);
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
-                    Log.d(TAG, "Diary data update failed: " + error.getMessage());
-
+                    Log.e(TAG, "Diary data update failed: " + error.getMessage());
                 }
             });
         } else { // Adding food to today's food diary (from both diary and home page)
+            Log.d(TAG, "Saving food to diary for date " + diaryDate + " ...");
             DailyData dailyData = DailyDataHolder.getInstance().getData();
-            List<Recipe> recipeList = getRecipeListByMealType(selectedMeal, dailyData);
-            List<Food> foods = new ArrayList<>();
+            dailyData = (dailyData == null) ? new DailyData() : dailyData;
 
-            if (dailyData == null) {
-                dailyData = new DailyData();
-            }
-
-            Food currentFood = createFoodItemFromUI();
-            foods.add(currentFood);
-            Recipe recipe = createRecipeFromFood(currentFood, foods);
-            recipeList.add(recipe);
-
-            updateDailyDataWithRecipeList(selectedMeal, recipeList, dailyData);
-            //updateTotalCaloriesConsumed(currentFood.getCalories(), dailyData);
-
+            updateDailyDataRecipes(dailyData);
             saveDailyDataToDB(dailyData);
             DailyDataHolder.getInstance().setData(dailyData);
         }
     }
 
-    private void saveDailyDataToDB(DailyData dailyData) {
-        dailyDataDAO.update(dailyData).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                Log.d(TAG, "Data: Updated " + selectedMeal + " for " + getCurrentDate());
-
-                Intent intent;
-                if (diaryDate != null) {
-                    intent = new Intent(context, DashboardActivity.class);
-                    intent.putExtra("NAVIGATE_TO_DIARY_FRAGMENT", true);
-                } else {
-                    intent = new Intent(this, DashboardActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                }
-                startActivity(intent);
-                finish();
-            } else {
-                Log.e("SaveData", "Failed to update data", task.getException());
-            }
-        });
+    /**
+     * Returns the current date in a "dd-MM-yyyy" format.
+     */
+    private String getCurrentDate() {
+        Calendar calendar = Calendar.getInstance();
+        Date date = calendar.getTime();
+        return new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH).format(date);
     }
 
+    /**
+     * Updates the list of recipe for a specific diary entry.
+     *
+     * @param dailyData the daily data for which the recipe update should happen
+     */
+    private void updateDailyDataRecipes(DailyData dailyData) {
+        List<Recipe> recipeList = getRecipeListByMealType(selectedMeal, dailyData);
+        if (isRecipe && selectedRecipe != null) {
+            recipeList.add(selectedRecipe);
+        } else {
+            Food currentFood = createFoodItemFromUI();
+            List<Food> foods = new ArrayList<>();
+            foods.add(currentFood);
+
+            Recipe recipe = createRecipeFromFood(currentFood, foods);
+            recipeList.add(recipe);
+        }
+        updateDailyDataWithRecipeList(selectedMeal, recipeList, dailyData);
+    }
+
+    /**
+     * Creates a one-item recipe from a Food object.
+     *
+     * @param food  the base food
+     * @param foods list containing the food (for consistency)
+     * @return new Recipe instance
+     */
+    Recipe createRecipeFromFood(Food food, List<Food> foods) {
+        return new Recipe(food.getName(), foods, food.getServing_size());
+    }
+
+    /**
+     * Returns the list of recipes based on the selected meal type from the DailyData object.
+     *
+     * @param meal      meal category string
+     * @param dailyData user's daily data
+     * @return list of recipes for the meal
+     */
     private List<Recipe> getRecipeListByMealType(String meal, DailyData dailyData) {
         switch (meal.toUpperCase()) {
             case Meal.BREAKFAST:
@@ -305,6 +435,34 @@ public class NutritionDisplayActivity extends AppCompatActivity {
         }
     }
 
+    private void saveDailyDataToDB(DailyData dailyData) {
+        dailyDataDAO.update(dailyData).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Log.d(TAG, "Data: Updated " + selectedMeal + " for " + getCurrentDate());
+
+                Intent intent;
+                if (diaryDate != null) {
+                    intent = new Intent(context, DashboardActivity.class);
+                    intent.putExtra(IntentKeys.NAVIGATE_TO_DIARY_FRAGMENT, true);
+                } else {
+                    intent = new Intent(this, DashboardActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                }
+                startActivity(intent);
+                finish();
+            } else {
+                Log.e("SaveData", "Failed to update data", task.getException());
+            }
+        });
+    }
+
+    /**
+     * Updates the DailyData object with the modified recipe list based on meal type.
+     *
+     * @param meal       the meal category (breakfast, lunch, etc.)
+     * @param recipeList list of recipes for the meal
+     * @param dailyData  the full DailyData object to be updated
+     */
     private void updateDailyDataWithRecipeList(String meal, List<Recipe> recipeList, DailyData dailyData) {
         switch (meal.toUpperCase()) {
             case Meal.BREAKFAST:
@@ -322,19 +480,19 @@ public class NutritionDisplayActivity extends AppCompatActivity {
         }
     }
 
-//    private void updateTotalCaloriesConsumed(double calories, DailyData dailyData) {
-//        int caloriesConsumed = dailyData.getCaloriesConsumed();
-//        caloriesConsumed += calories;
-//        dailyData.setCaloriesConsumed(caloriesConsumed);
-//    }
-
+    /**
+     * Saves updated daily data to Firebase for a specific date.
+     *
+     * @param dailyData the data to save
+     * @param date      the diary date to update
+     */
     void saveDailyDataToDBByDate(DailyData dailyData, String date) {
         dailyDataDAO.update(dailyData, date).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 Log.d(TAG, "Data: Updated " + selectedMeal + " for " + date);
 
                 Intent intent = new Intent(context, DashboardActivity.class);
-                intent.putExtra("NAVIGATE_TO_DIARY_FRAGMENT", true);
+                intent.putExtra(IntentKeys.NAVIGATE_TO_DIARY_FRAGMENT, true);
                 startActivity(intent);
 
             } else {
@@ -342,7 +500,15 @@ public class NutritionDisplayActivity extends AppCompatActivity {
             }
         });
     }
+    //endregion
 
+    //region UI Transformations
+
+    /**
+     * Creates a Food object from current UI values.
+     *
+     * @return constructed Food object
+     */
     Food createFoodItemFromUI() {
         Food food = new Food();
         food.setName(selectedFood.getName());
@@ -365,17 +531,76 @@ public class NutritionDisplayActivity extends AppCompatActivity {
         return food;
     }
 
-    Recipe createRecipeFromFood(Food food, List<Food> foods) {
-        return new Recipe(food.getName(), foods, food.getServing_size());
+    void setTextsToUI() {
+        double servingSize = 0, calories = 0, carbs = 0, protein = 0, totalFat = 0, satFat = 0;
+        double fiber = 0, iron = 0, sugar = 0, sodium = 0, calcium = 0, magnesium = 0;
+        double vitaminA = 0, vitaminB6 = 0, vitaminB12 = 0, vitaminC = 0;
+
+        if (selectedFood != null) {
+            servingSize = selectedFood.getServing_size();
+            calories = selectedFood.getCalories();
+            carbs = selectedFood.getCarbohydrate();
+            protein = selectedFood.getProtein();
+            totalFat = selectedFood.getTotal_fat();
+            satFat = selectedFood.getSaturated_fat();
+            fiber = selectedFood.getFiber();
+            iron = selectedFood.getIron();
+            sugar = selectedFood.getSugars();
+            sodium = selectedFood.getSodium();
+            calcium = selectedFood.getCalcium();
+            magnesium = selectedFood.getMagnesium();
+            vitaminA = selectedFood.getVitamin_a();
+            vitaminB6 = selectedFood.getVitamin_b6();
+            vitaminB12 = selectedFood.getVitamin_b12();
+            vitaminC = selectedFood.getVitamin_c();
+
+        } else if (selectedRecipe != null && selectedRecipe.getIngredients() != null) {
+            servingSize += selectedRecipe.getServing_size();
+            for (Food food : selectedRecipe.getIngredients()) {
+                calories += food.getCalories();
+                carbs += food.getCarbohydrate();
+                protein += food.getProtein();
+                totalFat += food.getTotal_fat();
+                satFat += food.getSaturated_fat();
+                fiber += food.getFiber();
+                iron += food.getIron();
+                sugar += food.getSugars();
+                sodium += food.getSodium();
+                calcium += food.getCalcium();
+                magnesium += food.getMagnesium();
+                vitaminA += food.getVitamin_a();
+                vitaminB6 += food.getVitamin_b6();
+                vitaminB12 += food.getVitamin_b12();
+                vitaminC += food.getVitamin_c();
+            }
+        }
+        etServingSize.setText(String.format(Locale.ENGLISH, "%.0f", servingSize));
+        tvCalories.setText(String.format(Locale.ENGLISH, "%.1f", calories));
+        tvCarbohydrate.setText(String.format(Locale.ENGLISH, "%.1f", carbs));
+        tvProtein.setText(String.format(Locale.ENGLISH, "%.1f", protein));
+        tvTotalFat.setText(String.format(Locale.ENGLISH, "%.1f", totalFat));
+        tvSaturatedFat.setText(String.format(Locale.ENGLISH, "%.1f", satFat));
+        tvFiber.setText(String.format(Locale.ENGLISH, "%.1f", fiber));
+        tvIron.setText(String.format(Locale.ENGLISH, "%.1f", iron));
+        tvSugar.setText(String.format(Locale.ENGLISH, "%.1f", sugar));
+        tvSodium.setText(String.format(Locale.ENGLISH, "%.1f", sodium));
+        tvCalcium.setText(String.format(Locale.ENGLISH, "%.1f", calcium));
+        tvMagnesium.setText(String.format(Locale.ENGLISH, "%.1f", magnesium));
+        tvVitaminA.setText(String.format(Locale.ENGLISH, "%.1f", vitaminA));
+        tvVitaminB6.setText(String.format(Locale.ENGLISH, "%.1f", vitaminB6));
+        tvVitaminB12.setText(String.format(Locale.ENGLISH, "%.1f", vitaminB12));
+        tvVitaminC.setText(String.format(Locale.ENGLISH, "%.1f", vitaminC));
+    }
+    //endregion
+
+    public void setSelectedFood(Food selectedFood) {
+        this.selectedFood = selectedFood;
     }
 
     /********************************* LIFECYCLE OVERRIDES ****************************************************/
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            Intent intent = new Intent(this, DashboardActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
             this.finish();
             return true;
         }
@@ -388,24 +613,5 @@ public class NutritionDisplayActivity extends AppCompatActivity {
         setTextsToUI();
     }
 
-    void setTextsToUI() {
-        if (selectedFood != null) {
-            etServingSize.setText(String.valueOf(selectedFood.getServing_size()));
-            tvCalories.setText(String.valueOf(selectedFood.getCalories()));
-            tvCarbohydrate.setText(String.valueOf(selectedFood.getCarbohydrate()));
-            tvProtein.setText(String.valueOf(selectedFood.getProtein()));
-            tvTotalFat.setText(String.valueOf(selectedFood.getTotal_fat()));
-            tvSaturatedFat.setText(String.valueOf(selectedFood.getSaturated_fat()));
-            tvFiber.setText(String.valueOf(selectedFood.getFiber()));
-            tvIron.setText(String.valueOf(selectedFood.getIron()));
-            tvSugar.setText(String.valueOf(selectedFood.getSugars()));
-            tvSodium.setText(String.valueOf(selectedFood.getSodium()));
-            tvCalcium.setText(String.valueOf(selectedFood.getCalcium()));
-            tvMagnesium.setText(String.valueOf(selectedFood.getMagnesium()));
-            tvVitaminA.setText(String.valueOf(selectedFood.getVitamin_a()));
-            tvVitaminB6.setText(String.valueOf(selectedFood.getVitamin_b6()));
-            tvVitaminB12.setText(String.valueOf(selectedFood.getVitamin_b12()));
-            tvVitaminC.setText(String.valueOf(selectedFood.getVitamin_c()));
-        }
-    }
+
 }

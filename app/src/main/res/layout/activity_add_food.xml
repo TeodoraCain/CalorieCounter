@@ -1,62 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".AddFoodActivity">
 
     <!--   toolbar   -->
-<!--    <androidx.appcompat.widget.Toolbar-->
-<!--        android:id="@+id/toolbar"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="56dp"-->
-<!--        android:background="@color/eatwellgreen"-->
-<!--        android:elevation="4dp"-->
-<!--        android:foregroundTint="@color/white"-->
-<!--        android:popupTheme="@style/Theme.CalorieCounter"-->
-<!--        android:theme="@style/Theme.AppCompat.Light"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:subtitleTextColor="@color/white"-->
-<!--        app:navigationIcon="@drawable/ic_check"-->
-<!--        app:titleMarginStart="16dp"-->
-<!--        app:titleTextAppearance="@style/Theme.CalorieCounter"-->
-<!--        app:titleTextColor="@color/white" />-->
+    <!--    <androidx.appcompat.widget.Toolbar-->
+    <!--        android:id="@+id/toolbar"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="56dp"-->
+    <!--        android:background="@color/eatwellgreen"-->
+    <!--        android:elevation="4dp"-->
+    <!--        android:foregroundTint="@color/white"-->
+    <!--        android:popupTheme="@style/Theme.CalorieCounter"-->
+    <!--        android:theme="@style/Theme.AppCompat.Light"-->
+    <!--        app:layout_constraintTop_toTopOf="parent"-->
+    <!--        app:subtitleTextColor="@color/white"-->
+    <!--        app:navigationIcon="@drawable/ic_check"-->
+    <!--        app:titleMarginStart="16dp"-->
+    <!--        app:titleTextAppearance="@style/Theme.CalorieCounter"-->
+    <!--        app:titleTextColor="@color/white" />-->
 
-<!--<com.google.android.material.tabs.TabLayout-->
-<!--    android:id="@+id/tabLayout"-->
-<!--    android:layout_width="match_parent"-->
-<!--    android:layout_height="56dp"-->
-<!--    android:layout_marginTop="8dp"-->
-<!--    app:layout_constraintEnd_toEndOf="parent"-->
-<!--    app:layout_constraintHorizontal_bias="0.5"-->
-<!--    app:layout_constraintStart_toStartOf="parent"-->
-<!--    app:layout_constraintTop_toBottomOf="@id/toolbar"-->
-<!--    app:tabTextAppearance="@style/Theme.CalorieCounter">-->
+    <!--<com.google.android.material.tabs.TabLayout-->
+    <!--    android:id="@+id/tabLayout"-->
+    <!--    android:layout_width="match_parent"-->
+    <!--    android:layout_height="56dp"-->
+    <!--    android:layout_marginTop="8dp"-->
+    <!--    app:layout_constraintEnd_toEndOf="parent"-->
+    <!--    app:layout_constraintHorizontal_bias="0.5"-->
+    <!--    app:layout_constraintStart_toStartOf="parent"-->
+    <!--    app:layout_constraintTop_toBottomOf="@id/toolbar"-->
+    <!--    app:tabTextAppearance="@style/Theme.CalorieCounter">-->
 
-<!--    <com.google.android.material.tabs.TabItem-->
-<!--        android:id="@+id/tiFood"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="@string/food"/>-->
+    <!--    <com.google.android.material.tabs.TabItem-->
+    <!--        android:id="@+id/tiFood"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:text="@string/food"/>-->
 
-<!--    <com.google.android.material.tabs.TabItem-->
-<!--        android:id="@+id/tiRecipe"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="@string/recipe"/>-->
+    <!--    <com.google.android.material.tabs.TabItem-->
+    <!--        android:id="@+id/tiRecipe"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:text="@string/recipe"/>-->
 
-<!--</com.google.android.material.tabs.TabLayout>-->
+    <!--</com.google.android.material.tabs.TabLayout>-->
 
-<!--    <androidx.viewpager2.widget.ViewPager2-->
-<!--        android:id="@+id/viewPager"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="0dp"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="@+id/tabLayout"-->
-<!--        app:layout_constraintStart_toStartOf="@+id/tabLayout"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/tabLayout" />-->
+    <!--    <androidx.viewpager2.widget.ViewPager2-->
+    <!--        android:id="@+id/viewPager"-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="0dp"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="@+id/tabLayout"-->
+    <!--        app:layout_constraintStart_toStartOf="@+id/tabLayout"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/tabLayout" />-->
 
     <!--    toolbar    -->
     <androidx.appcompat.widget.Toolbar
@@ -73,9 +73,20 @@
         app:layout_constraintTop_toTopOf="parent"
         app:subtitleTextColor="@color/white"
         app:title="Add Food"
-        app:titleMarginStart="100dp"
+        app:titleMarginStart="80dp"
         app:titleTextAppearance="@style/Theme.CalorieCounter"
-        app:titleTextColor="@color/white" />
+        app:titleTextColor="@color/white">
+
+        <ImageView
+            android:id="@+id/ivToolbarCamera"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="end"
+            android:layout_marginEnd="16dp"
+            android:contentDescription="@string/camera_icon"
+            android:padding="3dp"
+            android:src="@drawable/ic_camera_for_toolbar" />
+    </androidx.appcompat.widget.Toolbar>
 
     <!--   food search    -->
     <EditText
@@ -110,10 +121,10 @@
         android:layout_marginTop="21dp"
         android:layout_marginEnd="1dp"
         android:layout_marginBottom="1dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etSearchFoods"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_bias="0"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etSearchFoods"
+        app:layout_constraintVertical_bias="0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

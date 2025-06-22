@@ -7,13 +7,6 @@
         android:title="@string/home"
         android:icon="@drawable/ic_home"/>
 
-<!--    <item-->
-<!--        android:iconTint="@color/eatwellgreenlight"-->
-<!--        android:id="@+id/shorts"-->
-<!--        android:title="Shorts"-->
-<!--        android:icon="@drawable/ic_about"-->
-<!--        />-->
-
     <item
         android:iconTint="@color/eatwellgreenlight"
         android:title=""/>
@@ -23,10 +16,5 @@
         android:iconTint="@color/eatwellgreenlight"
         android:title="@string/diary"
         android:icon="@drawable/ic_about" />
-<!--    <item-->
-<!--        android:iconTint="@color/eatwellgreenlight"-->
-<!--        android:id="@+id/library"-->
-<!--        android:title="Library"-->
-<!--        android:icon="@drawable/ic_check" />-->
 
 </menu>

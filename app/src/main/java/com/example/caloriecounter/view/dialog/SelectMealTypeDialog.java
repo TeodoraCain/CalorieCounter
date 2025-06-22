@@ -48,7 +48,6 @@ public class SelectMealTypeDialog extends AppCompatDialogFragment {
         rgMealType.setOnCheckedChangeListener((group, checkedId) -> {
             String mealType = getResources().getString(string.breakfast);
 
-            // Check which radio button is selected
             switch (checkedId) {
                 case id.rbBreakfast:
                     mealType = getResources().getString(string.breakfast);
@@ -65,6 +64,7 @@ public class SelectMealTypeDialog extends AppCompatDialogFragment {
             }
             Intent intent = new Intent(context, AddFoodActivity.class);
             intent.putExtra(IntentKeys.MEAL, mealType);
+            dismiss();
             startActivity(intent);
         });
 

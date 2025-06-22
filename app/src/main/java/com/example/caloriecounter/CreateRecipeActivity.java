@@ -84,14 +84,6 @@ public class CreateRecipeActivity extends AppCompatActivity {
         lvIngredientList.setAdapter(adapter);
     }
 
-    private void onGoToAddFood() {
-        Intent intent = new Intent(context, AddFoodActivity.class);
-        intent.putExtra(IntentKeys.IS_RECIPE_INGREDIENT, true);
-
-        launcher.launch(intent);
-        //startActivityForResult(intent, ADD_INGREDIENT_REQUEST_CODE);
-    }
-
     private void setToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -162,12 +154,10 @@ public class CreateRecipeActivity extends AppCompatActivity {
         successDialog.show();
 
         ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-        executorService.schedule(() -> {
-            runOnUiThread(() -> {
-                successDialog.dismiss();
-                finish();
-            });
-        }, 2000, TimeUnit.MILLISECONDS);
+        executorService.schedule(() -> runOnUiThread(() -> {
+            successDialog.dismiss();
+            finish();
+        }), 2000, TimeUnit.MILLISECONDS);
     }
 
 
@@ -183,6 +173,9 @@ public class CreateRecipeActivity extends AppCompatActivity {
     }
 
     private void onGoToAddFood(View v) {
-        onGoToAddFood();
+        Intent intent = new Intent(context, AddFoodActivity.class);
+        intent.putExtra(IntentKeys.IS_RECIPE_INGREDIENT, true);
+
+        launcher.launch(intent);
     }
 }

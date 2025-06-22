@@ -167,10 +167,11 @@ public class WaterLogActivity extends AppCompatActivity {
     }
 
     private void formatGraphDate() {
-        final SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM", Locale.ENGLISH);
+        final SimpleDateFormat dateFormat = new SimpleDateFormat("MMMyy", Locale.ENGLISH);
 
         GridLabelRenderer gridLabelRenderer = waterChart.getGridLabelRenderer();
         gridLabelRenderer.setGridStyle(GridLabelRenderer.GridStyle.BOTH);
+        gridLabelRenderer.setHorizontalLabelsAngle(25);
         gridLabelRenderer.setLabelFormatter(new DefaultLabelFormatter() {
             @Override
             public String formatLabel(double value, boolean isValueX) {
@@ -183,8 +184,9 @@ public class WaterLogActivity extends AppCompatActivity {
     }
 
     private void setUpPointsGraph() {
+        final SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMMyy", Locale.ENGLISH);
         series = new PointsGraphSeries<>(dataPoints);
-        series.setOnDataPointTapListener((series, dataPoint) -> Toast.makeText(context, "Series1: On Data Point clicked: " + dataPoint, Toast.LENGTH_SHORT).show());
+        series.setOnDataPointTapListener((series, dataPoint) -> Toast.makeText(context, "Date: " + dateFormat.format(dataPoint.getX()) + "\nWater:"+dataPoint.getY() +"ml", Toast.LENGTH_SHORT).show());
         series.setSize(9);
         series.setColor(ContextCompat.getColor(context, R.color.pistachio));
     }

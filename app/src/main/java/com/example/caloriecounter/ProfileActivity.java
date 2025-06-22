@@ -27,6 +27,7 @@ import com.example.caloriecounter.models.dao.UserDAO;
 import com.example.caloriecounter.models.dao.UserDAOImpl;
 import com.example.caloriecounter.models.dao.UserDetails;
 import com.example.caloriecounter.models.dataHolders.UserDetailsHolder;
+import com.example.caloriecounter.utils.UserUtils;
 import com.example.caloriecounter.view.dialog.ChangeProfileInfoDialog;
 import com.example.caloriecounter.view.dialog.SuccessDialog;
 import com.google.firebase.auth.FirebaseAuth;
@@ -313,12 +314,11 @@ public class ProfileActivity extends AppCompatActivity implements ChangeProfileI
             tvPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
         }
 
-        SharedPreferences sharedPreferences = getSharedPreferences(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid(), Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences(UserUtils.getFirebaseUID(), Context.MODE_PRIVATE);
         String imageUrl = sharedPreferences.getString("imageUrl", "");
         if (!imageUrl.isEmpty()) {
             Picasso.get()
                     .load(imageUrl)
-                    .rotate(90)
                     .into(ivProfilePicture, new Callback() {
                         @Override
                         public void onSuccess() {

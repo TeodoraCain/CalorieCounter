@@ -8,6 +8,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -31,8 +32,8 @@ import java.util.Objects;
 public class AddFoodActivity extends AppCompatActivity {
 
     private final String TAG = "AddFoodActivity";
-    private boolean isRecipeIngredient;
-    private ActivityResultLauncher<Intent> launcher;
+    private ActivityResultLauncher<Intent> launcherForNutritionActivity;
+    private ActivityResultLauncher<Intent> launcherForCameraActivity;
 
     //    private TabLayout foodTabs;
 //    private ViewPager2 viewPager;
@@ -41,37 +42,23 @@ public class AddFoodActivity extends AppCompatActivity {
     private RecyclerView rvFoods;
     private EditText etSearchFoods;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_food);
 
-        initActivity();
+        initContext();
         setUpActivity();
 
     }
 
-    //region Init Activity
     private void initContext() {
         context = AddFoodActivity.this;
     }
 
-    private void parseIntentExtras() {
-        Intent intent = getIntent();
-        isRecipeIngredient = intent.getBooleanExtra(IntentKeys.IS_RECIPE_INGREDIENT, false);
-    }
-
-    //endregion
-    private void initActivity() {
-        initContext();
-        parseIntentExtras();
-    }
-
-
     //region Set Up Activity
-    private void setUpLauncher() {
-        launcher =
+    private void setUpLaunchers() {
+        launcherForNutritionActivity =
                 registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                         result -> {
                             if (result.getResultCode() == IntentResults.RESULT_ADD_INGREDIENT) {
@@ -85,6 +72,21 @@ public class AddFoodActivity extends AppCompatActivity {
                                 }
                             }
                         });
+
+        launcherForCameraActivity =
+                registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == IntentResults.RESULT_GET_FROM_CAMERA) {
+                        Intent data = result.getData();
+                        if (data != null && data.hasExtra(IntentKeys.FOOD_NAME)) {
+                            String query = data.getStringExtra(IntentKeys.FOOD_NAME);
+
+                            etSearchFoods.setText(query);
+                            searchByQuery(query);
+                        }
+                    }
+                });
+
     }
 
     private void setToolbar() {
@@ -103,11 +105,14 @@ public class AddFoodActivity extends AppCompatActivity {
     }
 
     private void setUpViews() {
-        //foodTabs = findViewById(R.id.tabLayout);
-        //viewPager = findViewById(R.id.viewPager);
         etSearchFoods = findViewById(R.id.etSearchFoods);
         rvFoods = findViewById(R.id.rvFoods);
         foods = FoodListHolder.getInstance().getData();
+        ImageView ivCamera = findViewById(R.id.ivToolbarCamera);
+        ivCamera.setOnClickListener(v -> {
+            Intent intent = new Intent(context, AddFromCameraActivity.class);
+            launcherForCameraActivity.launch(intent);
+        });
     }
 
     private void setUpRecyclerView() {
@@ -142,7 +147,7 @@ public class AddFoodActivity extends AppCompatActivity {
         setUpViews();
         setUpTextWatcherForSearch();
         setUpRecyclerView();
-        setUpLauncher();
+        setUpLaunchers();
         //setUpTabsAndViewPager();
     }
 
@@ -171,12 +176,9 @@ public class AddFoodActivity extends AppCompatActivity {
     }
 
     public void onItemClick(Food food) {
-        onFoodSelected(food);
-    }
-
-    public void onFoodSelected(Food food) {
         String date = getIntent().getStringExtra(IntentKeys.DATE);
         String meal = getIntent().getStringExtra(IntentKeys.MEAL);
+        boolean isRecipeIngredient = getIntent().getBooleanExtra(IntentKeys.IS_RECIPE_INGREDIENT, false);
         Log.d(TAG, "ItemClick: Clicked on " + food.getName());
 
         Intent intent = new Intent(context, NutritionDisplayActivity.class);
@@ -188,40 +190,9 @@ public class AddFoodActivity extends AppCompatActivity {
             startActivity(intent);
         } else {
             intent.putExtra(IntentKeys.IS_RECIPE_INGREDIENT, isRecipeIngredient);
-            launcher.launch(intent);
+            launcherForNutritionActivity.launch(intent);
         }
     }
-
-//    private void setUpTabsAndViewPager() {
-//        Log.d(TAG, "Setting up the View Pager and Tabs..");
-//        ViewPagerAdapter viewPagerAdapter = new AddFoodActivity.ViewPagerAdapter(this);
-//        viewPager.setAdapter(viewPagerAdapter);
-//
-//        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-//            @Override
-//            public void onPageSelected(int position) {
-//                super.onPageSelected(position);
-//                Objects.requireNonNull(foodTabs.getTabAt(position)).select();
-//            }
-//        });
-//
-//        foodTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-//            @Override
-//            public void onTabSelected(TabLayout.Tab tab) {
-//                viewPager.setCurrentItem(tab.getPosition());
-//            }
-//
-//            @Override
-//            public void onTabUnselected(TabLayout.Tab tab) {
-//
-//            }
-//
-//            @Override
-//            public void onTabReselected(TabLayout.Tab tab) {
-//
-//            }
-//        });
-//    }
 
     /********************************* LIFECYCLE OVERRIDES ***********************************************/
     @Override
@@ -234,23 +205,4 @@ public class AddFoodActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-//    /********************************* TAB VIEW PAGER ADAPTER *************************************/
-//    public static class ViewPagerAdapter extends FragmentStateAdapter {
-//
-//        public ViewPagerAdapter(@NonNull FragmentActivity fragmentActivity) {
-//            super(fragmentActivity);
-//        }
-//
-//        @NonNull
-//        @Override
-//        public Fragment createFragment(int position) {
-//            if (position == 0) return new AddSimpleFoodFragment();
-//            else return new AddRecipeFragment();
-//        }
-//
-//        @Override
-//        public int getItemCount() {
-//            return 2;
-//        }
-//    }
 }

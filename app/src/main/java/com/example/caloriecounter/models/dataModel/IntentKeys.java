@@ -10,6 +10,11 @@ public final class IntentKeys {
     public static final String FROMDIARY = "FROM_DIARY";
     public static final String INGREDIENT = "INGREDIENT";
     public static final String IS_RECIPE_INGREDIENT = "IS_RECIPE_INGREDIENT";
+    public static final String IS_RECIPE = "IS_RECIPE";
+    public static final String NAVIGATE_TO_DIARY_FRAGMENT = "NAVIGATE_TO_DIARY_FRAGMENT";
+    public static final String WEIGHT_LOG = "WEIGHT_LOG";
+    public static final String FOOD_NAME = "FOOD_NAME";
 
-    private IntentKeys() {}
+    private IntentKeys() {
+    }
 }

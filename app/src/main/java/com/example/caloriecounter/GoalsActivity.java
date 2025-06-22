@@ -4,7 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,12 +31,8 @@ import java.util.concurrent.TimeUnit;
 public class GoalsActivity extends AppCompatActivity implements ChangeGoalsDialog.GoalsDialogListener {
 
     private final String TAG = "GoalsActivity";
-    GoalData goalData;
-    TextView tvCalorieGoal,
-            tvExerciseGoal,
-            tvWeightGoal,
-            tvWaterGoal,
-            tvStepGoal;
+    private GoalData goalData;
+    private TextView tvCalorieGoal, tvExerciseGoal, tvWeightGoal, tvWaterGoal, tvStepGoal;
     private Context context;
     private boolean savedChanges = true;
 
@@ -45,25 +41,14 @@ public class GoalsActivity extends AppCompatActivity implements ChangeGoalsDialo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_goals);
         initContext();
-        setToolbar();
-        setUpViews();
-        setOnClickListeners();
-
+        setUpActivity();
     }
 
-    /********************************* INIT ACTIVITY **********************************************/
     private void initContext() {
         context = GoalsActivity.this;
     }
 
-    void setUpViews() {
-        tvCalorieGoal = findViewById(R.id.tvCalorieGoal);
-        tvExerciseGoal = findViewById(R.id.tvExerciseGoal);
-        tvWeightGoal = findViewById(R.id.tvWeightGoal);
-        tvWaterGoal = findViewById(R.id.tvWaterGoal);
-        tvStepGoal = findViewById(R.id.tvStepGoal);
-    }
-
+    //region Set Up Activity
     void setGoalDataToUI() {
         goalData = GoalDataHolder.getInstance().getData();
         UserDetails userDetails = UserDetailsHolder.getInstance().getData();
@@ -85,9 +70,41 @@ public class GoalsActivity extends AppCompatActivity implements ChangeGoalsDialo
         }
     }
 
-    /********************************* SET UP LISTENERS *******************************************/
-    @SuppressWarnings("unused")
-    public void onSaveProfileData(View view) {
+    private void setToolbar() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+    }
+
+    void setUpViews() {
+        tvCalorieGoal = findViewById(R.id.tvCalorieGoal);
+        tvExerciseGoal = findViewById(R.id.tvExerciseGoal);
+        tvWeightGoal = findViewById(R.id.tvWeightGoal);
+        tvWaterGoal = findViewById(R.id.tvWaterGoal);
+        tvStepGoal = findViewById(R.id.tvStepGoal);
+    }
+
+    private void openDialog(String message, String tag, TextView textView) {
+        Log.d(TAG, "Opening dialog " + tag);
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setMessage(message);
+        alertDialog.setPositiveButton("ok", (dialog, which) -> {
+            ChangeGoalsDialog changeGoalsDialog = new ChangeGoalsDialog(textView);
+            changeGoalsDialog.show(getSupportFragmentManager(), tag);
+            savedChanges = false;
+        });
+        alertDialog.setNegativeButton("cancel", (dialog, which) -> {
+
+        });
+
+        alertDialog.create().show();
+    }
+
+    //region Save Profile Data
+    public void onSaveProfileData() {
         GoalDataDAO goalDataDAO = new GoalDAOImpl();
         if (!savedChanges) {
             Log.d(TAG, "Saving data to db..");
@@ -112,7 +129,6 @@ public class GoalsActivity extends AppCompatActivity implements ChangeGoalsDialo
         goalData.setStepGoal(tvStepGoal.getText().toString().replaceAll("[^0-9]", ""));
     }
 
-    //<editor-fold desc="Showing success dialog">
     private void showSuccessDialog() {
         SuccessDialog successDialog = new SuccessDialog(context);
         successDialog.show();
@@ -120,7 +136,7 @@ public class GoalsActivity extends AppCompatActivity implements ChangeGoalsDialo
         ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
         executorService.schedule(successDialog::cancel, 2000, TimeUnit.MILLISECONDS);
     }
-    //</editor-fold>
+    //endregion
 
     private void setOnClickListeners() {
         tvCalorieGoal.setOnClickListener(v -> openDialog("Are you sure you want to change your Calorie Goal?", "Change Calorie Goal Dialog", tvCalorieGoal));
@@ -128,33 +144,42 @@ public class GoalsActivity extends AppCompatActivity implements ChangeGoalsDialo
         tvWeightGoal.setOnClickListener(v -> openDialog("Are you sure you want to change your Weight Goal?", "Change Weight Goal Dialog", tvWeightGoal));
         tvWaterGoal.setOnClickListener(v -> openDialog("Are you sure you want to change your Water Goal?", "Change Water Goal Dialog", tvWaterGoal));
         tvStepGoal.setOnClickListener(v -> openDialog("Are you sure you want to change your Step Goal?", "Change Step Goal Dialog", tvStepGoal));
+
+        Button btnSave = findViewById(R.id.btnSave);
+        btnSave.setOnClickListener(v->onSaveProfileData());
+    }
+    //endregion
+    private void setUpActivity() {
+        setToolbar();
+        setUpViews();
+        setOnClickListeners();
     }
 
-    private void openDialog(String message, String tag, TextView textView) {
-        Log.d(TAG, "Opening dialog " + tag);
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-        alertDialog.setMessage(message);
-        alertDialog.setPositiveButton("ok", (dialog, which) -> {
-            ChangeGoalsDialog changeGoalsDialog = new ChangeGoalsDialog(textView);
-            changeGoalsDialog.show(getSupportFragmentManager(), tag);
-            savedChanges = false;
-        });
-        alertDialog.setNegativeButton("cancel", (dialog, which) -> {
-
-        });
-
-        alertDialog.create().show();
+    //region Getters/Setters for Testing
+    public GoalData getGoalData() {
+        return goalData;
     }
 
-    /********************************* TOOLBAR ****************************************************/
-    private void setToolbar() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+    public void setTvCalorieGoal(TextView tvCalorieGoal) {
+        this.tvCalorieGoal = tvCalorieGoal;
     }
+
+    public void setTvExerciseGoal(TextView tvExerciseGoal) {
+        this.tvExerciseGoal = tvExerciseGoal;
+    }
+
+    public void setTvWeightGoal(TextView tvWeightGoal) {
+        this.tvWeightGoal = tvWeightGoal;
+    }
+
+    public void setTvWaterGoal(TextView tvWaterGoal) {
+        this.tvWaterGoal = tvWaterGoal;
+    }
+
+    public void setTvStepGoal(TextView tvStepGoal) {
+        this.tvStepGoal = tvStepGoal;
+    }
+    //endregion
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -177,8 +202,6 @@ public class GoalsActivity extends AppCompatActivity implements ChangeGoalsDialo
             return false;
         }
     }
-
-    /********************************* LISTENER OVERRIDE ******************************************/
 
     @Override
     public void applyText(String text, TextView textView) {

@@ -53,6 +53,7 @@ public class Recipe implements Parcelable {
         this.calories = calories;
     }
 
+
     public String getName() {
         return name;
     }
@@ -67,6 +68,7 @@ public class Recipe implements Parcelable {
 
     public void setIngredients(List<Food> ingredients) {
         this.ingredients = ingredients;
+        this.calories = calculateRecipeCalories(ingredients);
     }
 
     @Override

@@ -179,7 +179,7 @@ public class ExerciseRecorderActivity extends AppCompatActivity {
             if (task.isSuccessful()) {
                 Log.d("SaveData", "Data updated successfully");
                 Intent intent = new Intent(context, DashboardActivity.class);
-                intent.putExtra("NAVIGATE_TO_DIARY_FRAGMENT", true);
+                intent.putExtra(IntentKeys.NAVIGATE_TO_DIARY_FRAGMENT, true);
                 startActivity(intent);
                 //finish();
             } else {

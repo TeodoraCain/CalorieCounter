@@ -36,18 +36,18 @@ public class GoalsActivityTest {
         MockitoAnnotations.openMocks(this);
         goalsActivity = new GoalsActivity();
 
-        goalsActivity.tvCalorieGoal = mockedCalorieGoal;
-        goalsActivity.tvExerciseGoal = mockedExerciseGoal;
-        goalsActivity.tvWeightGoal = mockedWeightGoal;
-        goalsActivity.tvWaterGoal = mockedWaterGoal;
-        goalsActivity.tvStepGoal = mockedStepGoal;
+        goalsActivity.setTvCalorieGoal(mockedCalorieGoal);
+        goalsActivity.setTvExerciseGoal(mockedExerciseGoal);
+        goalsActivity.setTvWeightGoal(mockedWeightGoal);
+        goalsActivity.setTvWaterGoal(mockedWaterGoal);
+        goalsActivity.setTvStepGoal(mockedStepGoal);
     }
 
     // severitate scazuta
     @Test
     public void testGetGoalDataFromView() {
-        GoalData goalData = new GoalData();
-        goalsActivity.goalData = goalData;
+        GoalData goalData;
+        goalData = goalsActivity.getGoalData();
 
         when(mockedCalorieGoal.getText()).thenReturn("2000 kcal");
         when(mockedExerciseGoal.getText()).thenReturn("30 min");

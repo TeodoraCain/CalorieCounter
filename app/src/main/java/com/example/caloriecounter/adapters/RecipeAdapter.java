@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.caloriecounter.R;
+import com.example.caloriecounter.models.dao.Food;
 import com.example.caloriecounter.models.dao.Recipe;
 
 import java.text.MessageFormat;
@@ -38,8 +39,13 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
         TextView tvCalories = listItem.findViewById(R.id.tvItemDetail2);
 
         if (recipe != null) {
+            double servingSize = 0;
+            List<Food> ingredients = recipe.getIngredients();
+            for (Food ingredient : ingredients) {
+                servingSize += ingredient.getServing_size();
+            }
+            tvServingSize.setText(MessageFormat.format("{0} grams", servingSize));
             tvWorkoutName.setText(recipe.getName());
-            tvServingSize.setText(MessageFormat.format("{0} grams", recipe.getServing_size()));
             tvCalories.setText(MessageFormat.format("{0} kcal", recipe.getCalories()));
         }
 

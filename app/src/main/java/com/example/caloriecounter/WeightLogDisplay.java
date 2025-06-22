@@ -20,6 +20,7 @@ import com.example.caloriecounter.adapters.WeightLogSliderItem;
 import com.example.caloriecounter.adapters.WeightLogSliderItemAdapter;
 import com.example.caloriecounter.models.dao.WeightLog;
 import com.example.caloriecounter.models.dataHolders.UserDetailsHolder;
+import com.example.caloriecounter.models.dataModel.IntentKeys;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -29,7 +30,6 @@ import java.util.Objects;
 public class WeightLogDisplay extends AppCompatActivity {
 
     private final String TAG = "WeightLogDisplay";
-    //private Context context;
     private WeightLog weightLog;
     private ViewPager2 viewPager2;
     private TextView tvWeight;
@@ -49,7 +49,6 @@ public class WeightLogDisplay extends AppCompatActivity {
 
     /********************************* INIT ACTIVITY *****************************************************/
     private void initActivity() {
-        //initContext();
         parseIntentExtras();
 
         if (weightLog != null) {
@@ -73,15 +72,10 @@ public class WeightLogDisplay extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
     }
 
-//    private void initContext() {
-//       // context = WeightLogDisplay.this;
-//    }
-
     private void parseIntentExtras() {
         Intent intent = this.getIntent();
-        weightLog = intent.getParcelableExtra("WEIGHT_LOG");
+        weightLog = intent.getParcelableExtra(IntentKeys.WEIGHT_LOG);
     }
-
 
     private void setDataToUI() {
         tvWeight.setText(MessageFormat.format("{0} {1}", String.valueOf(weightLog.getWeight()), UserDetailsHolder.getInstance().getData().getWeightUnit()));

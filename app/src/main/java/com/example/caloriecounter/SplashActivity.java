@@ -1,6 +1,8 @@
 package com.example.caloriecounter;
 
 import android.annotation.SuppressLint;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,6 +15,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.work.Constraints;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
 import com.example.caloriecounter.models.dao.DailyData;
 import com.example.caloriecounter.models.dao.DailyDataDAO;
@@ -35,14 +41,20 @@ import com.example.caloriecounter.models.dataHolders.GoalDataHolder;
 import com.example.caloriecounter.models.dataHolders.RecipeListHolder;
 import com.example.caloriecounter.models.dataHolders.UserDetailsHolder;
 import com.example.caloriecounter.models.dataHolders.WorkoutListHolder;
+import com.example.caloriecounter.services.StepDataUploadWorker;
+import com.example.caloriecounter.services.StepService;
+import com.example.caloriecounter.utils.AlarmUtils;
+import com.example.caloriecounter.utils.UserUtils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 @SuppressLint("CustomSplashScreen")
 public class SplashActivity extends AppCompatActivity {
@@ -60,7 +72,63 @@ public class SplashActivity extends AppCompatActivity {
         initContext();
         setUpViews();
         checkLoggedUser();
+
+        //step counter service
+        Intent intent = new Intent(this, StepService.class);
+        startForegroundService(intent);
+        scheduleDailyStepUpload(this);
+
+        //notifications
+        createNotificationChannel();
+        AlarmUtils.scheduleWaterReminder(this);
     }
+
+    //region Notifications
+    private void createNotificationChannel() {
+        CharSequence name = "WaterReminderChannel";
+        String description = "Channel for Water Intake Reminders";
+        int importance = NotificationManager.IMPORTANCE_HIGH;
+        NotificationChannel channel = new NotificationChannel("WATER_REMINDER_CHANNEL", name, importance);
+        channel.setDescription(description);
+
+        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+        notificationManager.createNotificationChannel(channel);
+    }
+
+    public void scheduleDailyStepUpload(Context context) {
+        Constraints constraints = new Constraints.Builder()
+                .setRequiresBatteryNotLow(true)
+                .build();
+
+        PeriodicWorkRequest workRequest = new PeriodicWorkRequest.Builder(
+                StepDataUploadWorker.class,
+                1, TimeUnit.DAYS)
+                .setConstraints(constraints)
+                .setInitialDelay(calculateInitialDelay(), TimeUnit.MILLISECONDS)
+                .build();
+
+        WorkManager.getInstance(context).enqueueUniquePeriodicWork(
+                "step_upload_work",
+                ExistingPeriodicWorkPolicy.KEEP,
+                workRequest
+        );
+    }
+
+    private long calculateInitialDelay() {
+        Calendar now = Calendar.getInstance();
+        Calendar nextRun = (Calendar) now.clone();
+        nextRun.set(Calendar.HOUR_OF_DAY, 23);
+        nextRun.set(Calendar.MINUTE, 50);
+        nextRun.set(Calendar.SECOND, 0);
+
+        if (nextRun.before(now)) {
+            nextRun.add(Calendar.DAY_OF_MONTH, 1);
+        }
+
+        return nextRun.getTimeInMillis() - now.getTimeInMillis();
+    }
+
+    //endregion
 
     /********************************* INIT ACTIVITY **********************************************/
     private void initContext() {
@@ -208,7 +276,7 @@ public class SplashActivity extends AppCompatActivity {
                     String imageUrl = dataSnapshot.getValue(String.class);
                     Log.d(TAG, "User profile picture retrieved.");
                     if (imageUrl != null && !imageUrl.isEmpty()) {
-                        SharedPreferences sharedPreferences = Objects.requireNonNull(context).getSharedPreferences(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid(), Context.MODE_PRIVATE);
+                        SharedPreferences sharedPreferences = Objects.requireNonNull(context).getSharedPreferences(UserUtils.getFirebaseUID(), Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
 
                         editor.putString("imageUrl", imageUrl);

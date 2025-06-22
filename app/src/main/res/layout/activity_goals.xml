@@ -312,7 +312,6 @@
             android:fontFamily="@font/lora_font"
             android:maxWidth="78dip"
             android:minWidth="48dip"
-            android:onClick="onSaveProfileData"
             android:text="@string/save"
             android:textAllCaps="false"
             android:textColor="@color/white"

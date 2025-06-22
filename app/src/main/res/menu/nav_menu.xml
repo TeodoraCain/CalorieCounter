@@ -10,7 +10,7 @@
             android:title="@string/profile"/>
 
         <item
-            android:id="@+id/nav_settings"
+            android:id="@+id/nav_goals"
             android:icon="@drawable/ic_settings"
             android:title="@string/settings" />
 

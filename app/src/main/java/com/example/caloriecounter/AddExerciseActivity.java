@@ -79,12 +79,17 @@ public class AddExerciseActivity extends AppCompatActivity implements FirebaseEx
         if (query.length() > 0) {
             query = Character.toUpperCase(query.charAt(0)) + query.substring(1);
         }
-        FirebaseRecyclerOptions<Exercise> options = new FirebaseRecyclerOptions.Builder<Exercise>()
-                .setQuery(exerciseDAO.get().orderByChild("name").startAt(query).endAt(query + "~"), Exercise.class).build();
+        try {
+            FirebaseRecyclerOptions<Exercise> options = new FirebaseRecyclerOptions.Builder<Exercise>()
+                    .setQuery(exerciseDAO.get().orderByChild("name").startAt(query).endAt(query + "~"), Exercise.class).build();
 
+Log.d(TAG, options.getSnapshots().toString());
         rvAdapter = new FirebaseExerciseRecyclerViewerAdapter(options, this);
         rvAdapter.startListening();
         rvExercises.setAdapter(rvAdapter);
+        } catch (Exception ex){
+            Log.d(TAG, ex.getMessage());
+        }
     }
 
     /********************************* RecyclerViewInterface OVERRIDE *****************************/

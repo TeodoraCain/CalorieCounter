@@ -40,8 +40,8 @@ public class ExerciseTimerFragment extends Fragment {
     private Chronometer chronometer;
     private TextView tvCalories;
     private Runnable runnable;
-    //TODO: FIX HANDLER
     private Handler handler;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
