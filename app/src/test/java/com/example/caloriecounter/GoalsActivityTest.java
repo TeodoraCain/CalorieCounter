@@ -46,17 +46,16 @@ public class GoalsActivityTest {
     // severitate scazuta
     @Test
     public void testGetGoalDataFromView() {
-        GoalData goalData;
-        goalData = goalsActivity.getGoalData();
-
         when(mockedCalorieGoal.getText()).thenReturn("2000 kcal");
         when(mockedExerciseGoal.getText()).thenReturn("30 min");
         when(mockedWeightGoal.getText()).thenReturn("70 kg");
         when(mockedWaterGoal.getText()).thenReturn("2000 ml");
         when(mockedStepGoal.getText()).thenReturn("10000 steps");
 
-        goalsActivity.getGoalDataFromView();
+        goalsActivity.getGoalDataFromView(); // extragerea datelor din TextView-uri
+        GoalData goalData = goalsActivity.getGoalData();
 
+        // se verifica daca extragerea a fost facuta corect
         assertEquals("2000", goalData.getCalorieGoal());
         assertEquals("30", goalData.getExerciseTimeGoal());
         assertEquals("70", goalData.getWeightGoal());

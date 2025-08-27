@@ -122,6 +122,9 @@ public class GoalsActivity extends AppCompatActivity implements ChangeGoalsDialo
     }
 
     void getGoalDataFromView() {
+        if (goalData == null) {
+            goalData = new GoalData();
+        }
         goalData.setCalorieGoal(tvCalorieGoal.getText().toString().replaceAll("[^0-9]", ""));
         goalData.setExerciseTimeGoal(tvExerciseGoal.getText().toString().replaceAll("[^0-9]", ""));
         goalData.setWeightGoal(tvWeightGoal.getText().toString().replaceAll("[^0-9]", ""));

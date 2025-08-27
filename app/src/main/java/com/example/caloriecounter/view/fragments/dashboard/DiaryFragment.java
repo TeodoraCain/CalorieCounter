@@ -159,8 +159,8 @@ public class DiaryFragment extends Fragment {
     // init total grams of fat, carbs and protein
     private void initMacroValues() {
         maxGramsOfProtein = (int) (calorieGoal * 0.3) / 4;
-        maxGramsOfCarbs = (int) (0.4 * calorieGoal) / 4;
-        maxGramsOfFat = (int) (0.3 * calorieGoal) / 9;
+        maxGramsOfCarbs = (int) (calorieGoal * 0.5) / 4;
+        maxGramsOfFat = (int) (calorieGoal * 0.3) / 9;
     }
 
     private void setMaxMacrosToUI() {

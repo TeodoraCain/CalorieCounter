@@ -233,4 +233,13 @@
     <string name="water_reminder">Water reminder</string>
     <string name="camera_icon">Camera icon</string>
     <string name="image_preview">Image Preview</string>
+    <string name="about_us_intro_1">EatWell is a free-to-use app designed to assist users in food intake tracking and weight management. By leveraging artificial intelligence, the app can automatically recognize a wide range of foods and provide accurate nutritional insights.</string>
+    <string name="about_us_intro_2">Currently, EatWell’s AI model is trained to detect the following categories of foods:</string>
+    <string name="fruits">Fruits</string>
+    <string name="about_us_fruits">Apple, Avocado, Banana, Cherry, Grapes, Kiwi, Lemon, Mango, Orange, Pear, Pineapple, Strawberries, Watermelon</string>
+    <string name="vegetables">Vegetables</string>
+    <string name="about_us_vegetables">Bell Pepper, Broccoli, Carrot, Cauliflower, Cucumber, Eggplant, Garlic, Mushroom, Onion, Potato, Spinach, Sweetcorn, Tomato</string>
+    <string name="other_foods">Other Foods</string>
+    <string name="about_us_other_foods">Burger, Baked Potato, Cheesecake, Fries, Ice Cream, Omelette, Pizza</string>
+    <string name="about_us_outro">EatWell is still in active development, and future updates aim to expand the list of recognized foods, helping users capture an even more complete picture of their diet.</string>
 </resources>

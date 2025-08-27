@@ -1,5 +1,7 @@
 package com.example.caloriecounter.models.dao;
 
+import com.example.caloriecounter.models.dataModel.DefaultValue;
+
 public class GoalData {
     private String waterIntakeGoal;
     private String calorieGoal;
@@ -8,15 +10,11 @@ public class GoalData {
     private String exerciseTimeGoal;
 
     public GoalData() {
-        final String RECOMMENDED_WATER_INTAKE = "2000";
-        final String RECOMMENDED_STEP_GOAL = "6000";
-        final String RECOMMENDED_EXERCISE_TIME_GOAL = "30";
-
         this.calorieGoal = "";
         this.weightGoal = "";
-        this.exerciseTimeGoal = RECOMMENDED_EXERCISE_TIME_GOAL;
-        this.stepGoal = RECOMMENDED_STEP_GOAL;
-        this.waterIntakeGoal = RECOMMENDED_WATER_INTAKE;
+        this.exerciseTimeGoal = String.valueOf(DefaultValue.EXERCISE_TIME_GOAL);
+        this.stepGoal = String.valueOf(DefaultValue.STEP_GOAL);
+        this.waterIntakeGoal = String.valueOf(DefaultValue.WATER_GOAL);
     }
 
     public GoalData(String waterIntakeGoal, String calorieGoal, String stepsDailyGoal, String weightGoal, String exerciseTimeGoal) {

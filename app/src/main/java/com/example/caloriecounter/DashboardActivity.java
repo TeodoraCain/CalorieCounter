@@ -33,7 +33,7 @@ public class DashboardActivity extends AppCompatActivity {
     private static final String TAG = "DashboardActivity";
     private Context context;
     private FirebaseAuth auth;
-    private LinearLayout llMenu, llProfile, llGoals, llLogout;//llShare, llAboutUs,
+    private LinearLayout llMenu, llProfile, llGoals, llAboutUs, llLogout;//llShare,
     // drawer
     private DrawerLayout drawerLayout;
     // bottom navigation
@@ -68,7 +68,7 @@ public class DashboardActivity extends AppCompatActivity {
         llProfile = findViewById(R.id.nav_profile);
         llGoals = findViewById(R.id.nav_goals);
         llLogout = findViewById(R.id.nav_logout);
-        //llShare = findViewById(R.id.nav_share);
+        llAboutUs = findViewById(id.nav_about);
 
         ImageView ivNotifications = findViewById(id.ivNotifications);
         ivNotifications.setOnClickListener(v -> goToActivity(NotificationsActivity.class));
@@ -114,6 +114,7 @@ public class DashboardActivity extends AppCompatActivity {
         llMenu.setOnClickListener(v -> NavigationHelper.openDrawer(drawerLayout));//openDrawer(drawerLayout));
         llProfile.setOnClickListener(v -> goToActivity(ProfileActivity.class));
         llGoals.setOnClickListener(v -> goToActivity(GoalsActivity.class));
+        llAboutUs.setOnClickListener(v-> goToActivity(AboutUsActivity.class));
         llLogout.setOnClickListener(v -> showLogoutConfirmation());
     }
 

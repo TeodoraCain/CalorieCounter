@@ -236,11 +236,10 @@ public class ProfileActivity extends AppCompatActivity implements ChangeProfileI
     private void uploadImageToFirebaseStorage(Uri imageUri) {
         StorageReference storageRef = storageReference.child("profilePicture/" + firebaseUser.getUid() + ".jpg");
 
-        // Upload the image file to Firebase Storage
+        // incarcarea imaginii in Firebase Storage
         storageRef.putFile(imageUri)
                 .addOnSuccessListener(taskSnapshot -> {
-                    // Image uploaded successfully
-                    // Get the download URL of the uploaded image
+                    // imagine incarcata cu succes -> salvarea URL-ului de descarcare
                     storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
                         String imageUrl = uri.toString();
                         userDAO.get().child("imageUrl").setValue(imageUrl);

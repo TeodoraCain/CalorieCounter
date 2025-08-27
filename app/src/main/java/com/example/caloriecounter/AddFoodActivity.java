@@ -198,11 +198,13 @@ public class AddFoodActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
+            Intent intent = new Intent(this, DashboardActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
             this.finish();
             return true;
         }
-
         return super.onOptionsItemSelected(item);
-    }
+        }
 
 }

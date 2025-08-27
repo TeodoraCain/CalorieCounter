@@ -25,6 +25,8 @@ import com.example.caloriecounter.models.dao.GoalData;
 import com.example.caloriecounter.models.dao.GoalDataDAO;
 import com.example.caloriecounter.models.dataModel.DefaultValue;
 import com.example.caloriecounter.utils.UserUtils;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -66,22 +68,29 @@ public class StepService extends Service implements SensorEventListener {
     }
 
     private void retrieveStepGoalFromDB() {
-        GoalDataDAO goalDataDAO = new GoalDAOImpl();
-        goalDataDAO.get().addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                GoalData goalData = snapshot.getValue(GoalData.class);
-                if (goalData == null) {
-                    goalData = new GoalData();
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+
+        if (firebaseUser != null) {
+            GoalDataDAO goalDataDAO = new GoalDAOImpl();
+            goalDataDAO.get().addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    GoalData goalData = snapshot.getValue(GoalData.class);
+                    if (goalData == null) {
+                        goalData = new GoalData();
+                    }
+                    stepGoal = Integer.parseInt(goalData.getStepGoal());
                 }
-                stepGoal = Integer.parseInt(goalData.getStepGoal());
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-            }
-        });
+                }
+            });
+        } else {
+            stepGoal = DefaultValue.STEP_GOAL;
+        }
     }
 
     @Override

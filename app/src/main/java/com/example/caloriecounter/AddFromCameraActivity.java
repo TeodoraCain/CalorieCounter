@@ -163,17 +163,18 @@ public class AddFromCameraActivity extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     private void detectFoodFromImage(Bitmap image) {
         try {
-            image = convertToMutableBitmap(image);
+            image = convertToMutableBitmap(image); // Makes image mutable
             Model1 model = Model1.newInstance(context);
 
             // Creates inputs for reference.
-            TensorBuffer inputFeature0 = TensorBuffer.createFixedSize(new int[]{1, imageSize, imageSize, 3}, DataType.FLOAT32);
-            ByteBuffer byteBuffer = ByteBuffer.allocateDirect(4 * imageSize * imageSize * 3);
+            TensorBuffer inputFeature0 = TensorBuffer.createFixedSize(new int[]{1, imageSize, imageSize, 3}, DataType.FLOAT32); // Model input of size 1 image x size X size on 3 color channels (RGB)
+            ByteBuffer byteBuffer = ByteBuffer.allocateDirect(4 * imageSize * imageSize * 3); // 4 bytes for float, 3 for RGB
             byteBuffer.order(ByteOrder.nativeOrder());
             int[] intValues = new int[imageSize * imageSize];
-            image.getPixels(intValues, 0, imageSize, 0, 0, imageSize, imageSize);
-            int pixel = 0;
+            image.getPixels(intValues, 0, imageSize, 0, 0, imageSize, imageSize);// written in intValues, number of pixels, starting point and dimension of extracted area
 
+            //Extracts RGB values from each pixel and normalizes it into [0,1]
+            int pixel = 0;
             for (int i = 0; i < imageSize; i++) {
                 for (int j = 0; j < imageSize; j++) {
                     int val = intValues[pixel++];
@@ -183,9 +184,9 @@ public class AddFromCameraActivity extends AppCompatActivity {
                 }
             }
 
-            inputFeature0.loadBuffer(byteBuffer);
+            inputFeature0.loadBuffer(byteBuffer); // Passes image to the model
 
-            // Runs model inference and gets result.
+            // Runs model inference and gets result
             Model1.Outputs outputs = model.process(inputFeature0);
             TensorBuffer outputFeature0 = outputs.getOutputFeature0AsTensorBuffer();
 
@@ -197,11 +198,12 @@ public class AddFromCameraActivity extends AppCompatActivity {
                     "Pineapple", "Pizza", "Potato", "Spinach", "Strawberries", "Sweetcorn", "Tomato", "Watermelon"
             };
 
+            // Creates pairs of prediction + confidence
             List<Pair<Integer, Float>> predList = new ArrayList<>();
             for (int i = 0; i < confidence.length; i++) {
                 predList.add(new Pair<>(i, confidence[i]));
             }
-            predList.sort((a, b) -> Float.compare(b.second, a.second));
+            predList.sort((a, b) -> Float.compare(b.second, a.second)); // Sorting the pairs
             llResult.removeAllViews();
             for (int i = 0; i < 3 && i < predList.size(); i++) {
                 int idx = predList.get(i).first;
